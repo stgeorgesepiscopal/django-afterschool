@@ -311,7 +311,7 @@ class SessionMultiCreateView(FormView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.save()
+        #obj.save()
         return super(SessionMultiCreateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

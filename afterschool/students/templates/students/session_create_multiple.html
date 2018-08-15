@@ -64,10 +64,10 @@ $(function() {
 	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
 
 	$('#search').keyup(function(){
-		$('.btn:not(:contains("'+this.value+'"))').hide();
-		$('.btn:contains("'+this.value+'")').show();
+		$('div.btn:not(:contains("'+this.value+'"))').hide();
+		$('div.btn:contains("'+this.value+'")').show();
 		if(this.value==''){
-			$('.btn').show();
+			$('div.btn').show();
 		}
 	});
 
