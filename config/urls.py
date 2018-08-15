@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.contrib.auth.decorators import login_required
 
 from afterschool.students.views.session_views import SessionMultiEndView, SessionMultiCreateView
 
@@ -27,7 +28,7 @@ urlpatterns = [
         SessionMultiEndView.as_view(),
         name="kiosk"),
     path("start",  # NOQA
-        SessionMultiCreateView.as_view(),
+        login_required(SessionMultiCreateView.as_view()),
         name="start"),
     # Your stuff: custom urls includes go here
 ] + static(
