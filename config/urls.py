@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from afterschool.students.views.session_views import SessionMultiEndView, SessionMultiCreateView
+
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
@@ -21,6 +23,12 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("students/", include("afterschool.students.urls",namespace="students")),
+    path("kiosk",  # NOQA
+        SessionMultiEndView.as_view(),
+        name="kiosk"),
+    path("start",  # NOQA
+        SessionMultiCreateView.as_view(),
+        name="start"),
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

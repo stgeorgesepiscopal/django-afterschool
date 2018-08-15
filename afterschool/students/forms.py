@@ -51,7 +51,7 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['name', 'grade']
+        fields = ['name', 'grade', 'schedule']
         exclude = []
         widgets = None
         localized_fields = None
