@@ -9,10 +9,11 @@ from django.http import Http404
 
 from django.contrib import messages
 
+from django.utils import timezone
 from datetime import datetime, timedelta
 
 def ceil_dt(dt, delta):
-    return dt + (datetime.min - dt) % delta
+    return dt + (datetime.min - timezone.make_naive(dt)) % delta
 
 def floor_dt(dt, delta):
     return ceil_dt(dt, delta) - delta

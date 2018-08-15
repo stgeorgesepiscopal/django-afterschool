@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import DayofWeek, Student, Family, Session
 
 from datetime import datetime, timedelta
@@ -6,8 +7,9 @@ from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
 
+
 def ceil_dt(dt, delta):
-    return dt + (datetime.min - dt) % delta
+    return dt + (datetime.min - timezone.make_naive(dt)) % delta
 
 def floor_dt(dt, delta):
     return ceil_dt(dt, delta) - delta
@@ -181,7 +183,7 @@ class MultiSessionForm(forms.Form):
 
     def save(self, commit=True):
         #print(self.cleaned_data)
-        rightnow = datetime.today()
+        rightnow = timezone.now()
         #formtime = self['time']
         #print(formtime)
         rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
@@ -204,7 +206,7 @@ class MultiSessionEndForm(forms.Form):
 
     def save(self, commit=True):
         #print(self.cleaned_data)
-        rightnow = ceil_dt(datetime.today(),timedelta(minutes=15))
+        rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
         #formtime = self['time']
         #print(formtime)
         #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
@@ -228,7 +230,7 @@ class StudentExportForm(forms.Form):
 
     def save(self, commit=True):
         #print(self.cleaned_data)
-        rightnow = ceil_dt(datetime.today(),timedelta(minutes=15))
+        rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
         #formtime = self['time']
         #print(formtime)
         #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)

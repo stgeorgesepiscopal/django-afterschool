@@ -6,18 +6,18 @@
 
 {% block content %}
     <h1>Today</h1>
-    <table class="table"><thead><tr><th>Student</th><th>In</th><th>Out</th><th>Parent</th><th>Action</th></tr></thead>
+    <table class="table"><thead><tr><th>Student</th><th>In</th><th>Out</th><th>&#x23F0;</th><th>Parent</th><th>Action</th></tr></thead>
 
     {% for session in session_list %}
     {% if not session.end %}
-        <tr class="table-light"><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        <tr class="table-light"><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td>{{ session.duration }}</td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
     {% endif %}
     {% empty %}
         <li>No sessions yet.</li>
     {% endfor %}
     {% for session in session_list %}
     {% if session.end %}
-        <tr class="table-success"><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        <tr class="table-success"><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{{ session.duration }}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
     {% endif %}
     
     {% endfor %}
