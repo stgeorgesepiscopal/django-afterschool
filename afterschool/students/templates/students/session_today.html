@@ -1,0 +1,17 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+    sessions
+{% endblock %}
+
+{% block content %}
+    <h1>Today</h1>
+    <table class="table"><thead><tr><th>Student</th><th>In</th><th>Out</th><th>Parent</th><th>Action</th></tr></thead>
+    {% for session in session_list %}
+        <tr class="{% if session.end %}table-success{% else %}table-light{% endif %}"><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+    {% empty %}
+        <li>No sessions yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
