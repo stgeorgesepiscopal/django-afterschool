@@ -1,0 +1,14 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+    {{ session }}
+{% endblock %}
+
+{% block content %}
+    <h1><a href={% url "students:session_list" %}>Session</a></h1>
+    <h2>{{ session }} | <a href={% url "students:session_update" session.pk %}>Update</a> | 
+    <form style="display:inline;" action={% url "students:session_delete" session.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ session }}?')">{% csrf_token %}
+    <input type="submit" value="Delete" />
+    </form>
+    </h2>
+{% endblock %}

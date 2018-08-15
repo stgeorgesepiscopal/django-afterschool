@@ -1,0 +1,16 @@
+{% extends "students/dayof_week_base.html" %}
+
+{% block title %}
+    Create DayofWeek
+{% endblock %}
+
+{% block content %}
+<h1><a href={% url "students:dayof_week_list" %}>DayofWeek</a></h1>
+<h2>Create DayofWeek</h2>
+
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create" />
+</form>
+<a href={% url "students:dayof_week_list" %}>Cancel</a>
+{% endblock %}

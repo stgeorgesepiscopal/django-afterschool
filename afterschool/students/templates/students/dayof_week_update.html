@@ -1,0 +1,19 @@
+{% extends "students/dayof_week_base.html" %}
+
+{% block title %}
+    Update {{ dayof_week }}
+{% endblock %}
+
+{% block content %}
+<h1><a href={% url "students:dayof_week_list" %}>DayofWeek</a></h1>
+<h2>Update {{ dayof_week }}</h2>
+
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+</form>
+<a href={% url "students:dayof_week_detail" dayof_week.pk %}>Cancel</a>
+<form style="display:inline;" action={% url "students:dayof_week_delete" dayof_week.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ dayof_week }}?')">{% csrf_token %}
+    <input type="submit" value="Delete" />
+</form>
+{% endblock %}

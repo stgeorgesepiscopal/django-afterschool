@@ -1,0 +1,91 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+    Create Session
+{% endblock %}
+
+{% block nav %}
+{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+	<h1>Check-Out <input class="btn btn-primary btn-lg float-right" type="submit" value="Check Out" /></h1>
+<h2>{{ current_time }}</h2>
+    {{ form.as_p }}
+    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Check Out" />
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+
+function doChange(){
+	$('.btn-group-vertical').empty();
+	//$('#present').append('<h1>Present</h1>');
+	//$('#search').val('');
+	$('select#id_sessions option:selected').each(function(){
+		
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#present').append($div);
+		//console.log(this.value);
+	});
+	$('select#id_sessions option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#absent').append($div);
+		$('#absent .btn:not(:contains("'+$('#search').value+'"))').hide();
+		//$($div).hide()
+		//console.log(this.value);
+	});
+};
+
+$(function() {
+	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+	});
+
+	$('select#id_sessions').hide();
+	$('#id_parent').addClass('form-control');
+	//$('#id_time').addClass('form-control');
+	$('#id_parent').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text">Name of person picking up</span></div>');
+	$('label[for=id_parent]').hide();
+	$('label[for=id_sessions]').hide();
+	$('select#id_sessions').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
+
+	$('#search').keyup(function(){
+		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
+		$('.btn:contains("'+this.value+'")').show();
+		if(this.value==''){
+			$('#present .btn').show();
+			$('#absent .btn').hide();
+		}
+	});
+
+	doChange();
+	
+	$('select#id_sessions').change(doChange);
+
+	setTimeout(function(){
+		$('.alert').hide()
+	}, 5000);
+    
+});
+
+</script>
+{% endblock %}

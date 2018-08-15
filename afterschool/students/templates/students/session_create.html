@@ -1,0 +1,16 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+    Create Session
+{% endblock %}
+
+{% block content %}
+<h1><a href={% url "students:session_list" %}>Session</a></h1>
+<h2>Create Session</h2>
+
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create" />
+</form>
+<a href={% url "students:session_list" %}>Cancel</a>
+{% endblock %}

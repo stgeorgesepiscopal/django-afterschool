@@ -1,0 +1,20 @@
+{% extends "students/family_base.html" %}
+
+{% block title %}
+    families
+{% endblock %}
+
+{% block content %}
+    <h1>families</h1>
+    <h2><a href={% url "students:family_create" %}>Create new Family</a></h2>
+    <ul>
+    {% for family in family_list %}
+        <li><a href={% url "students:family_detail" family.pk %}>{{ family }}</a> | <a href={% url "students:family_update" family.pk %}>Update</a> | <form style="display:inline;" action={% url "students:family_delete" family.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ family }}?')">{% csrf_token %}
+    <input type="submit" value="Delete" />
+    </form></li>
+    {% empty %}
+        <li>No families yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
