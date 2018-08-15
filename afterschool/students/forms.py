@@ -1,6 +1,6 @@
 from django import forms
 from .models import DayofWeek, Student, Family, Session
-from searchableselect.widgets import SearchableSelect
+
 from datetime import datetime, timedelta
 
 import logging
