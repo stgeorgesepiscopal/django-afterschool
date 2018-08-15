@@ -1,5 +1,12 @@
 from django.db import models
 
+from django.utils import timezone
+from datetime import datetime, timedelta
+
+def ceil_dt(dt, delta):
+    return dt + (datetime.min - timezone.make_naive(dt)) % delta
+
+
 class DayofWeek(models.Model):
 	MONDAY = '0'
 	TUESDAY = '1'
@@ -109,7 +116,7 @@ class Session(models.Model):
 	def duration(self):
 		"Returns the duration of the session in minutes"
 		if self.end is None:
-			return 0
+			return (ceil_dt(timezone.now(),timedelta(minutes=15)) - self.start).total_seconds() / 60  
 		else:
 			return (self.end - self.start).total_seconds() / 60
 
