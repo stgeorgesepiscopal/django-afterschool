@@ -215,3 +215,27 @@ class MultiSessionEndForm(forms.Form):
             s.save()
         return self
         #return super(SessionForm, self).save(commit)
+
+class StudentExportForm(forms.Form):
+    #time = forms.TimeField()
+    sessions = forms.ModelMultipleChoiceField(queryset=Session.objects.all())
+    parent = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(StudentExportForm, self).__init__(*args, **kwargs)
+        self.fields["sessions"].queryset=Session.objects.filter(start__gt=datetime.today().replace(hour=0,minute=1),end__isnull=True)
+        #self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
+
+    def save(self, commit=True):
+        #print(self.cleaned_data)
+        rightnow = ceil_dt(datetime.today(),timedelta(minutes=15))
+        #formtime = self['time']
+        #print(formtime)
+        #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
+        #print(rightnow)
+        for s in self.cleaned_data['sessions']:
+            s.end = rightnow
+            s.parent = self.cleaned_data['parent']
+            #s.save()
+        return self
+        #return super(SessionForm, self).save(commit)

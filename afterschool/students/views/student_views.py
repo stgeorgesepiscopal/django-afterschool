@@ -1,11 +1,13 @@
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from ..models import Student
-from ..forms import StudentForm
+from ..forms import StudentForm, StudentExportForm
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.http import Http404
+
+import csv
 
 
 class StudentListView(ListView):
@@ -264,3 +266,59 @@ class StudentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse("students:student_list")
+
+class StudentExportView(FormView):
+    #model = Session
+    form_class = StudentExportForm
+    # fields = ['start', 'end', 'student', 'parent']
+    template_name = "students/student_export.html"
+    #success_url = reverse_lazy("session_list")
+
+    def __init__(self, **kwargs):
+        return super(StudentExportView, self).__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(StudentExportView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(StudentExportView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return super(StudentExportView, self).post(request, *args, **kwargs)
+
+    def get_form_class(self):
+        return super(StudentExportView, self).get_form_class()
+
+    def get_form(self, form_class=None):
+        return super(StudentExportView, self).get_form(form_class)
+
+    def get_form_kwargs(self, **kwargs):
+        return super(StudentExportView, self).get_form_kwargs(**kwargs)
+
+    def get_initial(self):
+        return super(StudentExportView, self).get_initial()
+
+    def form_invalid(self, form):
+        return super(StudentExportView, self).form_invalid(form)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.save()
+        return super(StudentExportView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentExportView, self).get_context_data(**kwargs)
+        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        context.update(more_context)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(StudentExportView, self).render_to_response(context, **response_kwargs)
+
+    def get_template_names(self):
+        return super(StudentExportView, self).get_template_names()
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Session ended')
+        return reverse("students:session_end_multiple")
+        #return reverse("students:session_detail", args=(self.object.pk,))
