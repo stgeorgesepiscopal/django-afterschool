@@ -73,5 +73,13 @@ class Session(models.Model):
 		verbose_name_plural = 'sessions'
 		#app_label = 'afterschool.students'
 
+	@property
+	def duration(self):
+		"Returns the duration of the session in minutes"
+		if self.end is None:
+			return 0
+		else:
+			return (self.end - self.start).total_seconds() / 60
+
 	def __str__(self):
 		return str(self.student) + ' ' + self.start.strftime('%x')

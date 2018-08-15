@@ -6,9 +6,14 @@
 
 {% block content %}
     <h1><a href={% url "students:student_list" %}>Student</a></h1>
-    <h2>{{ student }} | <a href={% url "students:student_update" student.pk %}>Update</a> | 
-    <form style="display:inline;" action={% url "students:student_delete" student.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ student }}?')">{% csrf_token %}
-    <input type="submit" value="Delete" />
-    </form>
-    </h2>
+    <h2>{{ student }} | <a href={% url "students:student_update" student.pk %}>Update</a></h2>
+<table class="table">
+	<thead><tr><th scope="col">Start</th><th scope="col">End</th><th scope="col">Parent</th><th scope="col">Duration (minutes)</th></tr></thead>
+	<tbody>
+    	{% for session in student.sessions.all %}
+    	<tr><td>	{{ session.start }}</td><td>{{session.end}}</td><td>{{session.parent}}</td><td>{{ session.duration }}</td></tr>
+    	{% endfor %}
+    </tbody>
+    </table>
+
 {% endblock %}
