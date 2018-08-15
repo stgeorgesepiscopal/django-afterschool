@@ -46,8 +46,40 @@ class Student(models.Model):
 		verbose_name_plural = 'students'
 		#app_label = 'afterschool.students'
 
+	@property
+	def gradestr(self):
+		if self.grade is -4:
+			return 'Ones'
+		elif self.grade is -3:
+			return 'Twos'
+		elif self.grade is -2:
+			return 'PreK-3'
+		elif self.grade is -1:
+			return 'PreK'
+		elif self.grade is 0:
+			return 'Kinder'
+		elif self.grade is 1:
+			return '1st'
+		elif self.grade is 2:
+			return '2nd'
+		elif self.grade is 3:
+			return '3rd'
+		elif self.grade is 4:
+			return '4th'
+		elif self.grade is 5:
+			return '5th'
+		elif self.grade is 6:
+			return '6th'
+		elif self.grade is 7:
+			return '7th'
+		elif self.grade is 8:
+			return '8th'
+		else:
+			return str(self.grade)
+
+
 	def __str__(self):
-		return self.name + ' ('+str(self.grade)+')'
+		return self.name + ' ('+str(self.gradestr)+')'
 
 
 class Family(models.Model):
