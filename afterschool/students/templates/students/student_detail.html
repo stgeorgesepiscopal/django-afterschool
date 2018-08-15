@@ -1,0 +1,14 @@
+{% extends "students/student_base.html" %}
+
+{% block title %}
+    {{ student }}
+{% endblock %}
+
+{% block content %}
+    <h1><a href={% url "students:student_list" %}>Student</a></h1>
+    <h2>{{ student }} | <a href={% url "students:student_update" student.pk %}>Update</a> | 
+    <form style="display:inline;" action={% url "students:student_delete" student.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ student }}?')">{% csrf_token %}
+    <input type="submit" value="Delete" />
+    </form>
+    </h2>
+{% endblock %}

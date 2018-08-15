@@ -1,0 +1,17 @@
+{% extends "students/family_base.html" %}
+
+{% block title %}
+    Delete {{ family }}
+{% endblock %}
+
+{% block content %}
+<h1>Delete {{ family }}</h1>
+
+<form action="" method="post">{% csrf_token %}
+    <p>Are you sure you want to delete {{ family }}?</p>
+    <input type="submit" value="Confirm" />
+</form>
+
+<a href={% url "students:family_detail" family.pk %}>Cancel</a>
+
+{% endblock %}

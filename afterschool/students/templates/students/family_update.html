@@ -1,0 +1,19 @@
+{% extends "students/family_base.html" %}
+
+{% block title %}
+    Update {{ family }}
+{% endblock %}
+
+{% block content %}
+<h1><a href={% url "students:family_list" %}>Family</a></h1>
+<h2>Update {{ family }}</h2>
+
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+</form>
+<a href={% url "students:family_detail" family.pk %}>Cancel</a>
+<form style="display:inline;" action={% url "students:family_delete" family.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ family }}?')">{% csrf_token %}
+    <input type="submit" value="Delete" />
+</form>
+{% endblock %}

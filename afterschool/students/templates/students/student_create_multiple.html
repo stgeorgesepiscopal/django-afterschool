@@ -1,0 +1,18 @@
+{% extends "students/student_base.html" %}
+
+{% block title %}
+    Create Student
+{% endblock %}
+
+{% block content %}
+<h1><a href={% url "students:student_list" %}>Student</a></h1>
+<h2>Create Student</h2>
+<div id="test_section"></div>
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create" />
+</form>
+<a href={% url "students:student_list" %}>Cancel</a>
+{% endblock %}
+
+
