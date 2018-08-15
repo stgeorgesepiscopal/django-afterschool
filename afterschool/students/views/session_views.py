@@ -387,3 +387,51 @@ class SessionMultiEndView(FormView):
         messages.add_message(self.request, messages.SUCCESS, 'Session ended')
         return reverse("students:session_end_multiple")
         #return reverse("students:session_detail", args=(self.object.pk,))
+
+
+class SessionTodayView(ListView):
+    model = Session
+    template_name = "students/session_today.html"
+    paginate_by = 2000
+    context_object_name = "session_list"
+    allow_empty = True
+    page_kwarg = 'page'
+    paginate_orphans = 0
+
+    def __init__(self, **kwargs):
+        return super(SessionTodayView, self).__init__(**kwargs)
+
+    def dispatch(self, *args, **kwargs):
+        return super(SessionTodayView, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(SessionTodayView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        #s = super(SessionListView, self).get_queryset()
+        return Session.objects.filter(start__gt=datetime.today().replace(hour=0,minute=1))
+
+    def get_allow_empty(self):
+        return super(SessionTodayView, self).get_allow_empty()
+
+    def get_context_data(self, *args, **kwargs):
+        ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
+        return ret
+
+    def get_paginate_by(self, queryset):
+        return super(SessionTodayView, self).get_paginate_by(queryset)
+
+    def get_context_object_name(self, object_list):
+        return super(SessionTodayView, self).get_context_object_name(object_list)
+
+    def paginate_queryset(self, queryset, page_size):
+        return super(SessionTodayView, self).paginate_queryset(queryset, page_size)
+
+    def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
+        return super(SessionTodayView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(SessionTodayView, self).render_to_response(context, **response_kwargs)
+
+    def get_template_names(self):
+        return super(SessionTodayView, self).get_template_names()
