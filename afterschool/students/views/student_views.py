@@ -11,7 +11,7 @@ from django.http import Http404
 class StudentListView(ListView):
     model = Student
     template_name = "students/student_list.html"
-    paginate_by = 20
+    paginate_by = 500
     context_object_name = "student_list"
     allow_empty = True
     page_kwarg = 'page'
