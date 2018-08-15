@@ -57,6 +57,9 @@
                 <a class="nav-link" href="{% url 'students:student_list'  %}">{% trans "Students" %}</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'today'  %}">{% trans "Today" %}</a>
+              </li>
+              <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
                 <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
               </li>
@@ -83,8 +86,9 @@
       {% endif %}
 
       {% block content %}
-        <a class="btn btn-lg btn-info" href="{% url 'kiosk' %}">Checkout Kiosk</a>
-        <a class="btn btn-lg btn-success" href="{% url 'start' %}">Start Sessions</a>
+        <a class="btn btn-lg btn-info w-100" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+        <a class="btn btn-lg btn-success w-100" href="{% url 'start' %}">Start Sessions</a>
+        <a class="btn btn-lg btn-warning w-100" href="{% url 'today' %}">Today</a>
       {% endblock content %}
 
     </div> <!-- /container -->
