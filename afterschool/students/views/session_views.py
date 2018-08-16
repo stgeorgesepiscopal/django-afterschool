@@ -413,7 +413,7 @@ class SessionTodayView(ListView):
 
     def get_queryset(self):
         #s = super(SessionListView, self).get_queryset()
-        return Session.objects.filter(start__gt=datetime.today().replace(hour=0,minute=1))
+        return Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1))
 
     def get_allow_empty(self):
         return super(SessionTodayView, self).get_allow_empty()
