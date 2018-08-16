@@ -7,9 +7,11 @@ from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
 
-
 def ceil_dt(dt, delta):
-    return dt + (datetime.min - timezone.make_naive(dt)) % delta
+    if timezone.is_naive(dt):
+        return dt + (datetime.min - dt) % delta
+    else:
+        return dt + (datetime.min - timezone.make_naive(dt)) % delta
 
 def floor_dt(dt, delta):
     return ceil_dt(dt, delta) - delta
