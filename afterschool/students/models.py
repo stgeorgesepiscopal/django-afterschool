@@ -46,7 +46,8 @@ class DayofWeek(models.Model):
 class Student(models.Model):
 	name = models.CharField(max_length=60)
 	grade = models.SmallIntegerField()
-	schedule = models.ManyToManyField(DayofWeek, related_name='students')
+	schedule = models.ManyToManyField(DayofWeek, related_name='students', blank=True)
+	pcr_id = models.SmallIntegerField(null=True, blank=True)
 	
 	class Meta:
 		verbose_name = 'student'
@@ -122,3 +123,15 @@ class Session(models.Model):
 
 	def __str__(self):
 		return str(self.student) + ' ' + self.start.strftime('%x')
+
+class ScheduledClass(models.Model):
+	start = models.TimeField()
+	end = models.TimeField()
+	weekday = models.SmallIntegerField()
+	student = models.ForeignKey(Student, related_name='scheduled_classes', on_delete=models.SET_NULL, null=True)
+	course = models.CharField(max_length=60,null=True)
+	room = models.CharField(max_length=60,null=True)
+	teacher = models.CharField(max_length=60,null=True)
+	
+	def __str__(self):
+		return str(self.student) + ': [' + str(self.room) + '] ' + str(self.course) + ' (' + str(self.teacher) + ')'
