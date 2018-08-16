@@ -178,17 +178,17 @@ class MultiSessionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(MultiSessionForm, self).__init__(*args, **kwargs)
         self.fields["students"].initial=(
-            Student.objects.filter(schedule__day__in=[str(datetime.today().weekday())]).values_list('id', flat=True)
+            Student.objects.filter(schedule__day__in=[str(timezone.now().weekday())]).values_list('id', flat=True)
             )
-        self.fields["students"].queryset=Student.objects.exclude(sessions__start__gt=datetime.today().replace(hour=0,minute=1))
+        self.fields["students"].queryset=Student.objects.exclude(sessions__start__gt=timezone.now().replace(hour=0,minute=1))
         self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
 
     def save(self, commit=True):
         #print(self.cleaned_data)
-        rightnow = timezone.now()
+        rightnow = datetime.today()
         #formtime = self['time']
         #print(formtime)
-        rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
+        rightnow = timezone.make_aware(rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0))
         #print(rightnow)
         for s in self.cleaned_data['students']:
             ses = Session.objects.create(start=rightnow,student=s)
@@ -203,7 +203,7 @@ class MultiSessionEndForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(MultiSessionEndForm, self).__init__(*args, **kwargs)
-        self.fields["sessions"].queryset=Session.objects.filter(start__gt=datetime.today().replace(hour=0,minute=1),end__isnull=True)
+        self.fields["sessions"].queryset=Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1),end__isnull=True)
         #self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
 
     def save(self, commit=True):
