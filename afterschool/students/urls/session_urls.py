@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from ..views import (SessionListView, SessionCreateView, SessionDetailView,
                      SessionUpdateView, SessionDeleteView, SessionMultiCreateView, 
-                     SessionMultiEndView, SessionTodayView)
+                     SessionMultiEndView, SessionTodayView, WhereIsView)
 from django.contrib.auth.decorators import login_required
 
 

@@ -2,7 +2,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from ..models import Session
-from ..forms import SessionForm, MultiSessionForm, MultiSessionEndForm
+from ..forms import SessionForm, MultiSessionForm, MultiSessionEndForm, WhereIsForm
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.http import Http404
@@ -439,3 +439,59 @@ class SessionTodayView(ListView):
 
     def get_template_names(self):
         return super(SessionTodayView, self).get_template_names()
+
+class WhereIsView(FormView):
+    #model = Session
+    form_class = WhereIsForm
+    # fields = ['start', 'end', 'student', 'parent']
+    template_name = "students/where_is.html"
+    #success_url = reverse_lazy("session_list")
+
+    def __init__(self, **kwargs):
+        return super(WhereIsView, self).__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(WhereIsView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(WhereIsView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return super(WhereIsView, self).post(request, *args, **kwargs)
+
+    def get_form_class(self):
+        return super(WhereIsView, self).get_form_class()
+
+    def get_form(self, form_class=None):
+        return super(WhereIsView, self).get_form(form_class)
+
+    def get_form_kwargs(self, **kwargs):
+        return super(WhereIsView, self).get_form_kwargs(**kwargs)
+
+    def get_initial(self):
+        return super(WhereIsView, self).get_initial()
+
+    def form_invalid(self, form):
+        return super(WhereIsView, self).form_invalid(form)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        #obj.save()
+        messages.add_message(self.request, messages.SUCCESS, obj)
+        return super(WhereIsView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(WhereIsView, self).get_context_data(**kwargs)
+        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        context.update(more_context)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(WhereIsView, self).render_to_response(context, **response_kwargs)
+
+    def get_template_names(self):
+        return super(WhereIsView, self).get_template_names()
+
+    def get_success_url(self):
+        return reverse("where_is")
+        #return reverse("students:session_detail", args=(self.object.pk,))

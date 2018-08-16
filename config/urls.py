@@ -7,7 +7,7 @@ from django.views import defaults as default_views
 from django.contrib.auth.decorators import login_required
 
 from afterschool.students.views.session_views import (SessionMultiEndView, 
-    SessionMultiCreateView, SessionTodayView)
+    SessionMultiCreateView, SessionTodayView, WhereIsView)
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -34,6 +34,9 @@ urlpatterns = [
     path("today",  # NOQA
         login_required(SessionTodayView.as_view()),
         name="today"),
+    path("whereis",  # NOQA
+       WhereIsView.as_view(),
+        name="where_is"),
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

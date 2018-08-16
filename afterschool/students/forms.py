@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import DayofWeek, Student, Family, Session
+from .models import DayofWeek, Student, Family, Session, ScheduledClass
 
 from datetime import datetime, timedelta
 
@@ -218,6 +218,31 @@ class MultiSessionEndForm(forms.Form):
             s.parent = self.cleaned_data['parent']
             s.save()
         return self
+        #return super(SessionForm, self).save(commit)
+
+class WhereIsForm(forms.Form):
+    #time = forms.TimeField()
+    students = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(WhereIsForm, self).__init__(*args, **kwargs)
+        self.fields["students"].queryset=Student.objects.filter(grade__gt=4).order_by('name')
+        #self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
+
+    def save(self, commit=True):
+        #print(self.cleaned_data)
+        #rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
+        #formtime = self['time']
+        #print(formtime)
+        #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
+        #print(rightnow)
+        now = datetime.now()
+        for s in self.cleaned_data['students']:
+            try:
+                scheduled_class = ScheduledClass.objects.get(student=s,start__lte=timezone.localtime().time(),end__gte=timezone.localtime().time(),weekday=timezone.now().weekday())
+            except:
+                scheduled_class = 'Unknown'                
+        return scheduled_class
         #return super(SessionForm, self).save(commit)
 
 class StudentExportForm(forms.Form):
