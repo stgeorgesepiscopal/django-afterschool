@@ -185,7 +185,11 @@ class SessionUpdateView(UpdateView):
         return super(SessionUpdateView, self).post(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        return super(SessionUpdateView, self).get_object(queryset)
+        obj = super(SessionUpdateView, self).get_object(queryset)
+        if obj.end is None:
+            if obj.start is not None:
+                obj.end = timezone.localtime(obj.start).replace(minute=0,hour=18)
+        return obj
 
     def get_queryset(self):
         return super(SessionUpdateView, self).get_queryset()

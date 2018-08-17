@@ -79,3 +79,8 @@ $(function() {
 
 </script>
 {% endblock %}
+
+
+{% block extrahead %}       {# Extra Resources Start #}
+{{ form.media }}            {# Form required JS and CSS #}
+{% endblock %}              {# Extra Resources End #}

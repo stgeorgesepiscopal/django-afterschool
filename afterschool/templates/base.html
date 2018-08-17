@@ -29,6 +29,7 @@
     
     
     {% endblock %}
+    
 
   </head>
 
@@ -86,15 +87,19 @@
       {% endif %}
 
       {% block content %}
-        <a class="btn btn-lg btn-info w-100" href="{% url 'kiosk' %}">Checkout Kiosk</a>
-        <a class="btn btn-lg btn-success w-100" href="{% url 'start' %}">Start Sessions</a>
-        <a class="btn btn-lg btn-warning w-100" href="{% url 'today' %}">Today</a>
+        <a class="btn btn-lg btn-info w-100 p-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+        <a class="btn btn-lg btn-success w-100 p-2" href="{% url 'start' %}">Start Sessions</a>
+        <a class="btn btn-lg btn-warning w-100 p-2" href="{% url 'today' %}">Today</a>
       {% endblock content %}
 
     </div> <!-- /container -->
 
     {% block modal %}{% endblock modal %}
-
+<footer class="footer">
+  <div class="container text-center">
+    <span class="text-white small">Created for SGES by Ryan Meyers [ ryanmeyersweb@gmail.com ]</span>
+  </div>
+</footer>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -112,8 +117,11 @@
       
       <script src="{% static 'js/project.js' %}"></script>
       
+      {% block extrahead %}
+      {% endblock %}
 
     {% endblock javascript %}
+
   </body>
 </html>
  
