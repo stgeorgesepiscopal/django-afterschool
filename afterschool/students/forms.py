@@ -1,3 +1,5 @@
+from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput
+
 from django import forms
 from django.utils import timezone
 from .models import DayofWeek, Student, Family, Session, ScheduledClass
@@ -131,7 +133,10 @@ class SessionForm(forms.ModelForm):
         model = Session
         fields = ['start', 'end', 'student', 'parent']
         exclude = []
-        widgets = None
+        widgets = {
+            'start': DateTimePickerInput(options={'sideBySide':True}).start_of('session'),
+            'end': DateTimePickerInput(options={'sideBySide':True}).end_of('session'),
+        }
         localized_fields = None
         labels = {}
         help_texts = {}
@@ -172,8 +177,14 @@ class SessionForm(forms.ModelForm):
         return super(SessionForm, self).save(commit)
 
 class MultiSessionForm(forms.Form):
-    time = forms.TimeField()
+    time = forms.TimeField(
+            widget=TimePickerInput(options={
+                #'inline': True,
+                'format': 'LT',
+                })
+        )
     students = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+
 
     def __init__(self, *args, **kwargs):
         super(MultiSessionForm, self).__init__(*args, **kwargs)
