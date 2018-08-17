@@ -253,7 +253,7 @@ class WhereIsForm(forms.Form):
                 scheduled_class = ScheduledClass.objects.get(student=s,start__lte=timezone.localtime().time(),end__gte=timezone.localtime().time(),weekday=timezone.now().weekday())
             except:
                 try:
-                    scheduled_class = ScheduledClass.objects.get(student=s,start__lte=(timezone.localtime()+timedelta(minutes=5)).time(),end__gte=(timezone.localtime()+timedelta(minutes=5)).time(),weekday=timezone.now().weekday())
+                    scheduled_class = ScheduledClass.objects.filter(student=s,start__lte=(timezone.localtime()+timedelta(minutes=5)).time(),weekday=timezone.now().weekday()).last()
                 except: 
                     scheduled_class = 'Unknown'                
         return scheduled_class
