@@ -12,7 +12,7 @@
 
 
 <form action="" method="post">{% csrf_token %}
-	<h1>Where is... <input class="btn btn-primary btn-lg float-right" type="submit" value="Find" /></h1>
+	<h1>Where is... <input class="btn btn-primary btn-lg float-right" type="submit" value="Find"  /></h1>
     {{ form.as_p }}
    
 </form>
@@ -54,7 +54,7 @@ $(function() {
 
 	$('select#id_students').hide();
 	$('label[for=id_students]').hide();
-	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control"></input></div><div id="test_div" class="row align-items-start"><div class=" col" id="absent"></div></div>');
+	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class=" col" id="absent"></div></div>');
 
 	$('#search').keyup(function(){
 		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
