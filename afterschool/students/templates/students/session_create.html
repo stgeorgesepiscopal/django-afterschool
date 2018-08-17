@@ -14,3 +14,7 @@
 </form>
 <a href={% url "students:session_list" %}>Cancel</a>
 {% endblock %}
+
+{% block extrahead %}       {# Extra Resources Start #}
+{{ form.media }}            {# Form required JS and CSS #}
+{% endblock %}              {# Extra Resources End #}
