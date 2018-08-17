@@ -1,0 +1,76 @@
+{% extends "students/session_base.html" %}
+{% load static i18n %}
+{% block title %}
+    Create Session
+{% endblock %}
+
+{% block nav %}
+<div class="row"><div class="w-100" style="background-color: #1a2857"><img src="{% static 'images/logo.png' %}" class="mx-auto my-1 py-2 d-block"/></div></div>
+{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+	<h1>Where is... <input class="btn btn-primary btn-lg float-right" type="submit" value="Find" /></h1>
+    {{ form.as_p }}
+   
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+
+function doChange(){
+	$('.btn-group-vertical').empty();
+	//$('#present').append('<h1>Present</h1>');
+	//$('#search').val('');
+
+	$('select#id_students option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-info p-2', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$(this).remove();
+			$('form').submit()
+		});
+		$div.html(this.text);
+		$('#absent').append($div);
+
+		
+		$($div).hide()
+		//console.log(this.value);
+	});
+};
+
+$(function() {
+	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+	});
+
+	$('select#id_students').hide();
+	$('label[for=id_students]').hide();
+	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control"></input></div><div id="test_div" class="row align-items-start"><div class=" col" id="absent"></div></div>');
+
+	$('#search').keyup(function(){
+		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
+		$('.btn:contains("'+this.value+'")').show();
+		if(this.value==''){
+			$('#absent .btn').hide();
+		}
+	});
+
+	doChange();
+	
+	$('select#id_students').change(doChange);
+
+
+    
+});
+
+</script>
+{% endblock %}
