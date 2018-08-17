@@ -67,7 +67,7 @@ $(function() {
 	$('#id_parent').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text">Name of person picking up</span></div>');
 	$('label[for=id_parent]').hide();
 	$('label[for=id_sessions]').hide();
-	$('select#id_sessions').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
+	$('select#id_sessions').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">&#x1f50e;</span></div><input id="search" class="form-control" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
 
 	$('#search').keyup(function(){
 		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
