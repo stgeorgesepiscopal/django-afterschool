@@ -24,7 +24,7 @@ def floor_dt(dt, delta):
 class SessionListView(ListView):
     model = Session
     template_name = "students/session_list.html"
-    paginate_by = 20
+    paginate_by = 2000
     context_object_name = "session_list"
     allow_empty = True
     page_kwarg = 'page'
@@ -478,10 +478,26 @@ class WhereIsView(FormView):
     def form_invalid(self, form):
         return super(WhereIsView, self).form_invalid(form)
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
         obj = form.save(commit=False)
-        #obj.save()
-        messages.add_message(self.request, messages.SUCCESS, obj)
+        iterobj = iter(obj)
+        
+#        if iterobj:
+#            o = next(iterobj)
+#            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
+#            messages.success(self.request, m, extra_tags='safe')
+#        else:
+#            messages.error(self.request,'Unknown')
+
+        for o in iterobj:
+            #m = f"{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}: {o.course} ({o.teacher}) in Room {o.room}"
+            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
+            if o.current:
+                messages.success(self.request, m, extra_tags='safe')
+            else:
+                messages.warning(self.request, m, extra_tags='safe')
+            
+
         return super(WhereIsView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
