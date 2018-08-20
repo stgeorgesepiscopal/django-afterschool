@@ -4,6 +4,8 @@ from django import forms
 from django.utils import timezone
 from .models import DayofWeek, Student, Family, Session, ScheduledClass
 
+from django.db.models import Case, Value, When, BooleanField
+
 from datetime import datetime, timedelta
 
 import logging
@@ -250,13 +252,28 @@ class WhereIsForm(forms.Form):
         now = datetime.now()
         for s in self.cleaned_data['students']:
             try:
-                scheduled_class = ScheduledClass.objects.get(student=s,start__lte=timezone.localtime().time(),end__gte=timezone.localtime().time(),weekday=timezone.now().weekday())
+                scheduled_classes = ScheduledClass.objects.filter(
+                    #student=s,start__lte=timezone.localtime().time(),
+                    student=s,
+                    end__gte=(timezone.localtime()+timedelta(minutes=-15)).time(),
+                    weekday=timezone.now().weekday()
+                    ).annotate(current=Case(
+                        When(start__lte=timezone.localtime().time(),
+                            end__gte=timezone.localtime().time(),
+                            then=Value(True)),
+                        default=Value(False),
+                        output_field=BooleanField(),
+                        )).order_by('start')[:3]
             except:
                 try:
-                    scheduled_class = ScheduledClass.objects.filter(student=s,start__lte=(timezone.localtime()+timedelta(minutes=5)).time(),weekday=timezone.now().weekday()).last()
+                    scheduled_classes = ScheduledClass.objects.filter(
+                        student=s,
+                        start__lte=(timezone.localtime()+timedelta(minutes=5)).time(),
+                        weekday=timezone.now().weekday()
+                        ).order_by('start')
                 except: 
-                    scheduled_class = 'Unknown'                
-        return scheduled_class
+                    scheduled_classes = []               
+        return scheduled_classes
         #return super(SessionForm, self).save(commit)
 
 class StudentExportForm(forms.Form):
