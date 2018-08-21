@@ -490,7 +490,7 @@ class WhereIsView(FormView):
     def form_valid(self, form, **kwargs):
         obj = form.save(commit=False)
         iterobj = iter(obj)
-        
+        messages.info(self.request, '<h3>'+obj[0].student.name+'</h3>', extra_tags='safe')
 #        if iterobj:
 #            o = next(iterobj)
 #            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
