@@ -45,6 +45,9 @@ class DayofWeek(models.Model):
 
 class Student(models.Model):
 	name = models.CharField(max_length=60)
+	first_name = models.CharField(max_length=60, null=True, blank=True)
+	last_name = models.CharField(max_length=60, null=True, blank=True)
+	nickname = models.CharField(max_length=60, null=True, blank=True)
 	grade = models.SmallIntegerField()
 	schedule = models.ManyToManyField(DayofWeek, related_name='students', blank=True)
 	pcr_id = models.SmallIntegerField(null=True, blank=True)
