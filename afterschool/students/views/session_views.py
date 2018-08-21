@@ -602,8 +602,8 @@ class ImportStudentsView(ImportSchedulesView):
         reader = csv.DictReader(f)
         for row in reader:
             if row['Student First Name'] != 'Fahad':
-                name = row['Student First Name'] + ' ' + row['Student Last Name']
-                s, created = Student.objects.get_or_create(name=name,grade=row['Grade Level Num'])
+                #name = row['Student First Name'] + ' ' + row['Student Last Name']
+                s, created = Student.objects.get_or_create(pcr_id=row['Student Id'])
                 s.first_name = row['Student First Name']
                 s.last_name = row['Student Last Name']
                 s.nickname = row['Student Nickname']
