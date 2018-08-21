@@ -2,7 +2,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from ..models import Session
-from ..forms import SessionForm, MultiSessionForm, MultiSessionEndForm, WhereIsForm
+from ..forms import SessionForm, MultiSessionForm, MultiSessionGradesForm, MultiSessionEndForm, WhereIsForm
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.http import Http404
@@ -339,6 +339,15 @@ class SessionMultiCreateView(FormView):
         return reverse("students:session_create_multiple")
         #return reverse("students:session_detail", args=(self.object.pk,))
 
+class SessionMultiCreateGradesView(SessionMultiCreateView):
+    #model = Session
+    form_class = MultiSessionGradesForm
+
+
+    def get_form_kwargs(self, **kwargs):
+        kw = super(SessionMultiCreateView, self).get_form_kwargs(**kwargs)
+        kw.update({'grades':self.kwargs['grades']})
+        return kw
 
 class SessionMultiEndView(FormView):
     #model = Session

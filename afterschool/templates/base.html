@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}St. George Afterschool{% endblock title %}</title>
+    <title>{% block title %}SGES{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -40,7 +40,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">St. George Afterschool</a>
+        <a class="navbar-brand" href="{% url 'home' %}">SGES</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -53,6 +53,15 @@
             {% if request.user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'start'  %}">{% trans "Start Sessions" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='-1,0'  %}">{% trans "Start PreK-K" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='1,2,3,4'  %}">{% trans "Start 1-4" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='5,6,7,8'  %}">{% trans "Start 5-8" %}</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'students:student_list'  %}">{% trans "Students" %}</a>
@@ -88,9 +97,34 @@
       {% endif %}
 
       {% block content %}
-        <a class="btn btn-lg btn-info w-100 p-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
-        <a class="btn btn-lg btn-success w-100 p-2" href="{% url 'start' %}">Start Sessions</a>
-        <a class="btn btn-lg btn-warning w-100 p-2" href="{% url 'today' %}">Today</a>
+        <div class="row"><div class="col">
+          <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+        </div></div>
+        <div class="container border border-success rounded">
+          <div class="row">
+            <h3 class="text-center w-100 text-success">Start Sessions</h3>
+          </div>
+        
+        <div class="row">
+          <div class="col">
+            <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'start' %}">All Grades</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'students:session_create_multiple_grades' grades='-1,0'  %}">PreK &amp; Kindergarten</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'students:session_create_multiple_grades' grades='1,2,3,4'  %}">Grades 1-4</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'students:session_create_multiple_grades' grades='5,6,7,8'  %}">Grades 5-8</a>
+          </div>
+        </div>
+      </div>
+        <div class="row">
+          <div class="col">
+            <a class="btn btn-lg btn-warning w-100 p-2 m-2" href="{% url 'today' %}">Today</a>
+          </div>
+        </div>
       {% endblock content %}
 
     </div> <!-- /container -->

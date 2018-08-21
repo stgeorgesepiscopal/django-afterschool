@@ -1,7 +1,8 @@
 from django.conf.urls import url
+from django.urls import path
 from ..views import (SessionListView, SessionCreateView, SessionDetailView,
                      SessionUpdateView, SessionDeleteView, SessionMultiCreateView, 
-                     SessionMultiEndView, SessionTodayView, WhereIsView)
+                     SessionMultiEndView, SessionTodayView, WhereIsView, SessionMultiCreateGradesView)
 from django.contrib.auth.decorators import login_required
 
 
@@ -13,6 +14,10 @@ urlpatterns = [
     url(r'^createmulti/$',  # NOQA
         login_required(SessionMultiCreateView.as_view()),
         name="session_create_multiple"),
+
+    path('createmulti/<grades>',  # NOQA
+        login_required(SessionMultiCreateGradesView.as_view()),
+        name="session_create_multiple_grades"),
 
     url(r'^endmulti/$',  # NOQA
         SessionMultiEndView.as_view(),
