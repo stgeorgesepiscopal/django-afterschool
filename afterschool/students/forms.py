@@ -193,7 +193,7 @@ class MultiSessionForm(forms.Form):
         self.fields["students"].initial=(
             Student.objects.filter(schedule__day__in=[str(timezone.now().weekday())]).values_list('id', flat=True)
             )
-        self.fields["students"].queryset=Student.objects.exclude(sessions__start__gt=timezone.now().replace(hour=0,minute=1)).order_by('grade','name')
+        self.fields["students"].queryset=Student.objects.exclude(sessions__start__gt=timezone.now().replace(hour=0,minute=1)).exclude(grade__lt=-1).order_by('grade','name')
         self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
 
     def save(self, commit=True):

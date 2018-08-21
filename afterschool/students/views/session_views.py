@@ -594,3 +594,27 @@ class ImportSchedulesView(FormView):
     def get_success_url(self):
         return reverse("students:import_schedules")
         #return reverse("students:session_detail", args=(self.object.pk,))
+
+class ImportStudentsView(ImportSchedulesView):
+    def form_valid(self, form, **kwargs):
+        
+        f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['Student First Name'] != 'Fahad':
+                name = row['Student First Name'] + ' ' + row['Student Last Name']
+                s, created = Student.objects.get_or_create(name=name,grade=row['Grade Level Num'])
+                s.first_name = row['Student First Name']
+                s.last_name = row['Student Last Name']
+                s.nickname = row['Student Nickname']
+                s.pcr_id = row['Student Id']
+                s.grade = row['Grade Level Num']
+                if row['Student Nickname'] == row['Student First Name'] or '':
+                    s.name = row['Student First Name'] + ' ' + row['Student Last Name']
+                else:
+                    s.name = row['Student First Name'] + ' (' + row['Student Nickname'] + ') ' + row['Student Last Name']
+         
+            s.save()
+            #print(row)
+
+        return super(ImportStudentsView, self).form_valid(form)
