@@ -1,8 +1,13 @@
+import csv
+from io import TextIOWrapper
+
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
-from ..models import Session
-from ..forms import SessionForm, MultiSessionForm, MultiSessionGradesForm, MultiSessionEndForm, WhereIsForm
+from ..models import Session, Student, ScheduledClass
+from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm, 
+    MultiSessionEndForm, WhereIsForm, ImportSchedulesForm,
+    )
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.http import Http404
@@ -523,4 +528,69 @@ class WhereIsView(FormView):
 
     def get_success_url(self):
         return reverse("where_is")
+        #return reverse("students:session_detail", args=(self.object.pk,))
+
+
+class ImportSchedulesView(FormView):
+    #model = Session
+    form_class = ImportSchedulesForm
+    # fields = ['start', 'end', 'student', 'parent']
+    template_name = "students/import_file.html"
+    #success_url = reverse_lazy("session_list")
+
+    def __init__(self, **kwargs):
+        return super(ImportSchedulesView, self).__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ImportSchedulesView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ImportSchedulesView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return super(ImportSchedulesView, self).post(request, *args, **kwargs)
+
+    def get_form_class(self):
+        return super(ImportSchedulesView, self).get_form_class()
+
+    def get_form(self, form_class=None):
+        return super(ImportSchedulesView, self).get_form(form_class)
+
+    def get_form_kwargs(self, **kwargs):
+        return super(ImportSchedulesView, self).get_form_kwargs(**kwargs)
+
+    def get_initial(self):
+        return super(ImportSchedulesView, self).get_initial()
+
+    def form_invalid(self, form):
+        return super(ImportSchedulesView, self).form_invalid(form)
+
+    def form_valid(self, form, **kwargs):
+        ScheduledClass.objects.all().delete()
+        f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
+        reader = csv.DictReader(f)
+        for row in reader:
+            name = row['Student First Name'] + ' ' + row['Student Last Name']
+            s, created = Student.objects.get_or_create(name=name,grade=row['Grade Level Num'])
+            sched = ScheduledClass.objects.create(student=s, weekday=int(row['Day Of Cycle'])-1, 
+                course=row['Course Name'],teacher=row['Teacher Last Name'],room=row['Room'],
+                start=datetime.strptime(row['Begin Time'],"%I:%M %p"), end=datetime.strptime(row['End Time'],"%I:%M %p"), )
+            #print(row)
+
+        return super(ImportSchedulesView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ImportSchedulesView, self).get_context_data(**kwargs)
+        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        context.update(more_context)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return super(ImportSchedulesView, self).render_to_response(context, **response_kwargs)
+
+    def get_template_names(self):
+        return super(ImportSchedulesView, self).get_template_names()
+
+    def get_success_url(self):
+        return reverse("students:import_schedules")
         #return reverse("students:session_detail", args=(self.object.pk,))

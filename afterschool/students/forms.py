@@ -314,3 +314,6 @@ class StudentExportForm(forms.Form):
             #s.save()
         return self
         #return super(SessionForm, self).save(commit)
+
+class ImportSchedulesForm(forms.Form):
+    csv_file = forms.FileField()
