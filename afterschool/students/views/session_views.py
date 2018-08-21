@@ -570,8 +570,8 @@ class ImportSchedulesView(FormView):
         f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
         reader = csv.DictReader(f)
         for row in reader:
-            name = row['Student First Name'] + ' ' + row['Student Last Name']
-            s, created = Student.objects.get_or_create(name=name,grade=row['Grade Level Num'])
+            #name = row['Student First Name'] + ' ' + row['Student Last Name']
+            s, created = Student.objects.get_or_create(pcr_id=row['Student Id'])
             sched = ScheduledClass.objects.create(student=s, weekday=int(row['Day Of Cycle'])-1, 
                 course=row['Course Name'],teacher=row['Teacher Last Name'],room=row['Room'],
                 start=datetime.strptime(row['Begin Time'],"%I:%M %p"), end=datetime.strptime(row['End Time'],"%I:%M %p"), )
@@ -595,7 +595,12 @@ class ImportSchedulesView(FormView):
         return reverse("students:import_schedules")
         #return reverse("students:session_detail", args=(self.object.pk,))
 
-class ImportStudentsView(ImportSchedulesView):
+class ImportStudentsView(FormView):
+    #model = Session
+    form_class = ImportSchedulesForm
+    # fields = ['start', 'end', 'student', 'parent']
+    template_name = "students/import_file.html"
+    #success_url = reverse_lazy("session_list")
     def form_valid(self, form, **kwargs):
         
         f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
@@ -618,3 +623,7 @@ class ImportStudentsView(ImportSchedulesView):
             #print(row)
 
         return super(ImportStudentsView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("students:import_students")
+        #return reverse("students:session_detail", args=(self.object.pk,))
