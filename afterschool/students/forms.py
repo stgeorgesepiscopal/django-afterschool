@@ -241,11 +241,13 @@ class MultiSessionEndForm(forms.Form):
         #print(formtime)
         #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
         #print(rightnow)
+        student_names = []
         for s in self.cleaned_data['sessions']:
             s.end = rightnow
             s.parent = self.cleaned_data['parent']
             s.save()
-        return self
+            student_names += [s.student.name]
+        return student_names
         #return super(SessionForm, self).save(commit)
 
 class WhereIsForm(forms.Form):
