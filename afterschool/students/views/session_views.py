@@ -390,7 +390,9 @@ class SessionMultiEndView(FormView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.save()
+        #obj.save()
+        for s in obj:
+            messages.success(self.request,'<h3>Checked out: '+str(s)+'</h3>',extra_tags='safe')
         return super(SessionMultiEndView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -431,7 +433,7 @@ class SessionTodayView(ListView):
 
     def get_queryset(self):
         #s = super(SessionListView, self).get_queryset()
-        return Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1)).order_by('student__grade','student__name')
+        return Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1)).order_by('student__grade','student__last_name')
 
     def get_allow_empty(self):
         return super(SessionTodayView, self).get_allow_empty()
@@ -495,7 +497,10 @@ class WhereIsView(FormView):
     def form_valid(self, form, **kwargs):
         obj = form.save(commit=False)
         iterobj = iter(obj)
-        messages.info(self.request, '<h3>'+obj[0].student.name+'</h3>', extra_tags='safe')
+        try:
+            messages.info(self.request, '<h3>'+obj[0].student.name+'</h3>', extra_tags='safe')
+        except:
+            messages.error(self.request, 'No scheduled classes')
 #        if iterobj:
 #            o = next(iterobj)
 #            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
