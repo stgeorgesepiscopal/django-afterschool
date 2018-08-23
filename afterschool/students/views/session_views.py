@@ -302,6 +302,11 @@ class SessionMultiCreateView(FormView):
         return super(SessionMultiCreateView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        open_sessions = Session.objects.filter(start__lt=timezone.now().replace(hour=0,minute=1), end__isnull=True)
+        for s in open_sessions:
+            m = '<b>WARNING:</b> Open session for '+s.student.name+' on '+s.start.strftime('%c')
+            m += ' <a href="'+reverse("students:session_update",args=[s.pk])+'" class="btn btn-danger btn-sm float-right">Update</a>'
+            messages.error(request,m,extra_tags='safe')
         return super(SessionMultiCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

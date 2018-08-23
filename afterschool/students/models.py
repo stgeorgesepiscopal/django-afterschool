@@ -118,11 +118,11 @@ class Session(models.Model):
 
 	@property
 	def duration(self):
-		"Returns the duration of the session in minutes"
+		"Returns the duration of the session in hours"
 		if self.end is None:
-			return (ceil_dt(timezone.now(),timedelta(minutes=15)) - self.start).total_seconds() / 60  
+			return (ceil_dt(timezone.now(),timedelta(minutes=15)) - self.start).total_seconds() / 3600  
 		else:
-			return (self.end - self.start).total_seconds() / 60
+			return (self.end - self.start).total_seconds() / 3600
 
 	def __str__(self):
 		return str(self.student) + ' ' + self.start.strftime('%x')
