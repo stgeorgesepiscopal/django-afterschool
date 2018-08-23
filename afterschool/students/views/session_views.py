@@ -15,6 +15,8 @@ from django.http import Http404
 from django.contrib import messages
 
 from django.utils import timezone
+from django.db import transaction
+
 from datetime import datetime, timedelta
 
 def ceil_dt(dt, delta):
@@ -503,7 +505,7 @@ class WhereIsView(FormView):
         obj = form.save(commit=False)
         iterobj = iter(obj)
         try:
-            messages.info(self.request, '<h3>'+obj[0].student.name+'</h3>', extra_tags='safe')
+            messages.info(self.request, '<h4><small>Where is </small>'+obj[0].student.name+'<small> at '+datetime.today().strftime('%-I:%M %p')+'?</small></h4>', extra_tags='safe')
         except:
             messages.error(self.request, 'No scheduled classes')
 #        if iterobj:
@@ -515,9 +517,9 @@ class WhereIsView(FormView):
 
         for o in iterobj:
             #m = f"{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}: {o.course} ({o.teacher}) in Room {o.room}"
-            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
+            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%-I:%M %p')}-{o.end.strftime('%-I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
             if o.current:
-                messages.success(self.request, m, extra_tags='safe')
+                messages.success(self.request, f'<h3>{m}</h3>', extra_tags='safe')
             else:
                 messages.warning(self.request, m, extra_tags='safe')
             
@@ -526,7 +528,7 @@ class WhereIsView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(WhereIsView, self).get_context_data(**kwargs)
-        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        more_context = {'current_time': timezone.now().strftime('%c')}
         context.update(more_context)
         return context
 
@@ -539,7 +541,6 @@ class WhereIsView(FormView):
     def get_success_url(self):
         return reverse("where_is")
         #return reverse("students:session_detail", args=(self.object.pk,))
-
 
 class ImportSchedulesView(FormView):
     #model = Session
@@ -577,11 +578,11 @@ class ImportSchedulesView(FormView):
 
     def form_valid(self, form, **kwargs):
         ScheduledClass.objects.all().delete()
-        print("delete")
+        #print("delete")
         f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
-        print("TextIOWrapper")
+        #print("TextIOWrapper")
         reader = csv.DictReader(f)
-        print("reader")
+        #print("reader")
         student_id = 0
         for row in reader:
             if student_id != row['Student Id']:
@@ -597,6 +598,7 @@ class ImportSchedulesView(FormView):
             else:
                 sched.teacher = sched.teacher+'/'+row['Teacher Last Name']
             sched.save()
+            #print(sched)
 
         return super(ImportSchedulesView, self).form_valid(form)
 
