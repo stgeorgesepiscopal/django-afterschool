@@ -55,6 +55,10 @@ class Student(models.Model):
 	class Meta:
 		verbose_name = 'student'
 		verbose_name_plural = 'students'
+		indexes=[
+			models.Index(fields=['pcr_id']),
+			models.Index(fields=['grade','last_name']),
+			]
 		#app_label = 'afterschool.students'
 
 	@property
@@ -114,6 +118,7 @@ class Session(models.Model):
 	class Meta:
 		verbose_name = 'session'
 		verbose_name_plural = 'sessions'
+
 		#app_label = 'afterschool.students'
 
 	@property
@@ -135,6 +140,11 @@ class ScheduledClass(models.Model):
 	course = models.CharField(max_length=60,null=True)
 	room = models.CharField(max_length=60,null=True)
 	teacher = models.CharField(max_length=60,null=True)
+
+	class Meta:
+		indexes = [
+			models.Index(fields=['student','weekday','course','room','start','end']),
+		]
 	
 	def __str__(self):
 		return str(self.student) + ': [' + str(self.room) + '] ' + str(self.course) + ' (' + str(self.teacher) + ')'
