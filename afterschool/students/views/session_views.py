@@ -577,15 +577,26 @@ class ImportSchedulesView(FormView):
 
     def form_valid(self, form, **kwargs):
         ScheduledClass.objects.all().delete()
+        print("delete")
         f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
+        print("TextIOWrapper")
         reader = csv.DictReader(f)
+        print("reader")
+        student_id = 0
         for row in reader:
-            #name = row['Student First Name'] + ' ' + row['Student Last Name']
-            s, created = Student.objects.get_or_create(pcr_id=row['Student Id'])
-            sched = ScheduledClass.objects.create(student=s, weekday=int(row['Day Of Cycle'])-1, 
-                course=row['Course Name'],teacher=row['Teacher Last Name'],room=row['Room'],
-                start=datetime.strptime(row['Begin Time'],"%I:%M %p"), end=datetime.strptime(row['End Time'],"%I:%M %p"), )
-            #print(row)
+            if student_id != row['Student Id']:
+                student_id = row['Student Id']
+                s, _ = Student.objects.get_or_create(pcr_id=row['Student Id'])
+            
+            sched, created = ScheduledClass.objects.get_or_create(student=s, weekday=int(row['Day Of Cycle'])-1, 
+                course=row['Course Name'],room=row['Room'],
+                start=datetime.strptime(row['Begin Time'],"%I:%M %p"), 
+                end=datetime.strptime(row['End Time'],"%I:%M %p"), )
+            if created:
+                sched.teacher=row['Teacher Last Name']
+            else:
+                sched.teacher = sched.teacher+'/'+row['Teacher Last Name']
+            sched.save()
 
         return super(ImportSchedulesView, self).form_valid(form)
 
