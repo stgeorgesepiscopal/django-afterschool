@@ -74,6 +74,10 @@ $(function() {
 	doChange();
 	
 	$('select#id_students').change(doChange);
+
+	setTimeout(function(){
+		$('.alert').hide()
+	}, 8000);
     
 });
 
