@@ -1,9 +1,11 @@
-import csv
+import csv, calendar, re
 from io import TextIOWrapper
+
 
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
 from ..models import Session, Student, ScheduledClass
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm, 
     MultiSessionEndForm, WhereIsForm, ImportSchedulesForm,
@@ -14,10 +16,14 @@ from django.http import Http404
 
 from django.contrib import messages
 
-from django.utils import timezone
+from django.utils import timezone, dateparse
 from django.db import transaction
 
+from django.db.models import Min, Max
+
 from datetime import datetime, timedelta
+
+from dateutil.relativedelta import relativedelta
 
 def ceil_dt(dt, delta):
     if timezone.is_naive(dt):
@@ -432,40 +438,31 @@ class SessionTodayView(ListView):
     def __init__(self, **kwargs):
         return super(SessionTodayView, self).__init__(**kwargs)
 
-    def dispatch(self, *args, **kwargs):
-        return super(SessionTodayView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionTodayView, self).get(request, *args, **kwargs)
-
     def get_queryset(self):
         #s = super(SessionListView, self).get_queryset()
         return Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1)).order_by('student__grade','student__last_name')
-
-    def get_allow_empty(self):
-        return super(SessionTodayView, self).get_allow_empty()
 
     def get_context_data(self, *args, **kwargs):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
         return ret
 
-    def get_paginate_by(self, queryset):
-        return super(SessionTodayView, self).get_paginate_by(queryset)
-
-    def get_context_object_name(self, object_list):
-        return super(SessionTodayView, self).get_context_object_name(object_list)
-
-    def paginate_queryset(self, queryset, page_size):
-        return super(SessionTodayView, self).paginate_queryset(queryset, page_size)
-
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
         return super(SessionTodayView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)
 
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionTodayView, self).render_to_response(context, **response_kwargs)
+class SessionDayView(SessionTodayView):
 
-    def get_template_names(self):
-        return super(SessionTodayView, self).get_template_names()
+    def get_queryset(self):
+        try:
+            start = dateparse.parse_date(self.request.GET['start'])
+        except:
+            start = dateparse.parse_date(self.kwargs['start'])
+        #print(start)
+        return Session.objects.filter(start__date=start).order_by('student__grade','student__last_name')
+
+    def get_context_data(self, *args, **kwargs):
+        ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
+        print(ret)
+        return ret
 
 class WhereIsView(FormView):
     #model = Session
@@ -650,3 +647,26 @@ class ImportStudentsView(FormView):
     def get_success_url(self):
         return reverse("students:import_students")
         #return reverse("students:session_detail", args=(self.object.pk,))
+
+def month_year_generator(start,end):
+    date_yielded = start.replace(day=1)
+    end = end.replace(day=28)
+    while date_yielded < end:
+        yield (date_yielded.month, date_yielded.year)
+        date_yielded = date_yielded + relativedelta(months=+1)
+
+class SessionCalendarView(TemplateView):
+    template_name = "students/calendar.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        minmax = Session.objects.aggregate(min=Min('start'),max=Max('start'))
+        calendars=[]
+        for month, year in month_year_generator(minmax['min'],minmax['max']):
+            cal = calendar.HTMLCalendar()
+            html_cal = cal.formatmonth(year,month)
+            calendars.append(re.sub(r'>(\d+)<',f'><a href="day/{year}-{month}-\\1">\\1</a><',html_cal))
+
+        context.update({'calendars':calendars})
+
+        return context

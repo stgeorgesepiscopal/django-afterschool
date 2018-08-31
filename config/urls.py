@@ -7,7 +7,9 @@ from django.views import defaults as default_views
 from django.contrib.auth.decorators import login_required
 
 from afterschool.students.views.session_views import (SessionMultiEndView, 
-    SessionMultiCreateView, SessionTodayView, WhereIsView)
+    SessionMultiCreateView, SessionTodayView, SessionDayView, WhereIsView,
+     SessionCalendarView,
+     )
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -34,9 +36,18 @@ urlpatterns = [
     path("today",  # NOQA
         login_required(SessionTodayView.as_view()),
         name="today"),
+    path("day",
+        login_required(SessionDayView.as_view()),
+        name="day"),
+    path("day/<start>",  # NOQA
+        login_required(SessionDayView.as_view()),
+        name="day_hardlink"),
     path("whereis",  # NOQA
        WhereIsView.as_view(),
         name="where_is"),
+    path("cal",
+        login_required(SessionCalendarView.as_view()),
+        name="calendar")
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

@@ -1,4 +1,4 @@
-from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput
+from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput, DatePickerInput
 
 from django import forms
 from django.utils import timezone
@@ -7,6 +7,8 @@ from .models import DayofWeek, Student, Family, Session, ScheduledClass
 from django.db.models import Case, Value, When, BooleanField
 
 from datetime import datetime, timedelta
+
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -234,15 +236,9 @@ class MultiSessionEndForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(MultiSessionEndForm, self).__init__(*args, **kwargs)
         self.fields["sessions"].queryset=Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1),end__isnull=True)
-        #self.fields["time"].initial=floor_dt(datetime.today(),timedelta(minutes=15)).strftime('%X')
 
     def save(self, commit=True):
-        #print(self.cleaned_data)
         rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
-        #formtime = self['time']
-        #print(formtime)
-        #rightnow = rightnow.replace(minute=self.cleaned_data['time'].minute,hour=self.cleaned_data['time'].hour,second=0,microsecond=0)
-        #print(rightnow)
         student_names = []
         for s in self.cleaned_data['sessions']:
             s.end = rightnow
@@ -250,7 +246,6 @@ class MultiSessionEndForm(forms.Form):
             s.save()
             student_names += [s.student.name]
         return student_names
-        #return super(SessionForm, self).save(commit)
 
 class WhereIsForm(forms.Form):
     #time = forms.TimeField()
@@ -274,7 +269,7 @@ class WhereIsForm(forms.Form):
                 scheduled_classes = ScheduledClass.objects.filter(
                     #student=s,start__lte=timezone.localtime().time(),
                     student=s,
-                    end__gte=(timezone.localtime()+timedelta(minutes=-15)).time(),
+                    end__gte=(timezone.localtime()+timedelta(minutes=-5)).time(),
                     weekday=timezone.now().weekday()
                     ).annotate(current=Case(
                         When(start__lte=timezone.localtime().time(),
