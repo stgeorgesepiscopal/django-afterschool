@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+{% for c in calendars %}
+{{ c | safe}}
+{% endfor %}
+{% endblock %}
