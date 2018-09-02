@@ -672,8 +672,8 @@ class SessionCalendarView(TemplateView):
             print(ds)
             if match.group(1):
                 if (year,month,int(match.group(1))) in ds:
-                    return f'"><a href="day/{year}-{month}-{match.group(1)}" class="btn btn-sm btn-info w-100">{match.group(1)}</a><'
-            return f' text-black-50"><div class="w-100 text-center mx-auto"><small>{match.group(1)}</small></div><'
+                    return f' p-1"><a href="day/{year}-{month}-{match.group(1)}" class="btn btn-sm btn-info w-100">{match.group(1)}</a><'
+            return f' p-1 text-black-50"><div class="w-100 text-center mx-auto"><small>{match.group(1)}</small></div><'
 
         for month, year in month_year_generator(minmax['min'],minmax['max']):
 
