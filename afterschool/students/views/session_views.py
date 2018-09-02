@@ -19,7 +19,7 @@ from django.contrib import messages
 from django.utils import timezone, dateparse
 from django.db import transaction
 
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Count
 
 from datetime import datetime, timedelta
 
@@ -662,10 +662,27 @@ class SessionCalendarView(TemplateView):
         context = super().get_context_data(**kwargs)
         minmax = Session.objects.aggregate(min=Min('start'),max=Max('start'))
         calendars=[]
+        ds = []
+        for d in Session.objects.values('start__date__year','start__date__month','start__date__day','start__date').annotate(Count('start__date')):
+            ds.append((d['start__date__year'],d['start__date__month'],d['start__date__day']))
+
+
+        def re_sessions(year,month,match):
+            print(year, month, match.group(1))
+            print(ds)
+            if match.group(1):
+                if (year,month,int(match.group(1))) in ds:
+                    return f'"><a href="day/{year}-{month}-{match.group(1)}" class="btn btn-sm btn-info w-100">{match.group(1)}</a><'
+            return f' text-black-50"><div class="w-100 text-center mx-auto"><small>{match.group(1)}</small></div><'
+
         for month, year in month_year_generator(minmax['min'],minmax['max']):
+
             cal = calendar.HTMLCalendar()
             html_cal = cal.formatmonth(year,month)
-            calendars.append(re.sub(r'>(\d+)<',f'><a href="day/{year}-{month}-\\1">\\1</a><',html_cal))
+            mapping = [('Mon', 'M'), ('Tue', 'T'), ('Wed', 'W'), ('Thu', 'T'), ('Fri', 'F'), ('Sat', 'S'), ('Sun', 'S')]
+            for k, v in mapping:
+                html_cal = html_cal.replace(k, v)
+            calendars.append(re.sub(r'">(\d+)<', lambda match: re_sessions(year, month, match), html_cal))
 
         context.update({'calendars':calendars})
 

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+  <div class="row">
 {% for c in calendars %}
+  <div class="col-lg-2 col-md-3 col-sm-4 ">
 {{ c | safe}}
+  </div>
 {% endfor %}
+  </div>
 {% endblock %}
