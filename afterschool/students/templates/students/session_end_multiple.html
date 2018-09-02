@@ -49,9 +49,11 @@ function doChange(){
 		$div.html(this.text);
 		$('#absent').append($div);
 		$('#absent .btn:not(:contains("'+$('#search').value+'"))').hide();
+		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
 	});
+$('#search').keyup();
 };
 
 $(function() {
