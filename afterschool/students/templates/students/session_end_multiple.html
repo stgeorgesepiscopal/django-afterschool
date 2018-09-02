@@ -64,9 +64,9 @@ $(function() {
 	});
 
 	$('select#id_sessions').hide();
-	$('#id_parent').addClass('form-control');
+	$('#id_parent').addClass('form-control border border-primary');
 	//$('#id_time').addClass('form-control');
-	$('#id_parent').parent().addClass('input-group input-group-lg border border-primary').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Pick-up person</span></div>');
+	$('#id_parent').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Pick-up person</span></div>');
 	$('label[for=id_parent]').hide();
 	$('label[for=id_sessions]').hide();
 	$('select#id_sessions').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Child\'s Name &#x1f50e;</span></div><input id="search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
