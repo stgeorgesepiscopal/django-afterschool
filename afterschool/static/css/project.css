@@ -25,3 +25,8 @@
     background-color: #1a2857;
 }
 
+.month {
+  text-align: center;
+}
+
+.mon, .tue, .wed, .thur, .fri, .sat, .sun { text-align:center; }
