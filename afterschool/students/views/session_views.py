@@ -421,7 +421,7 @@ class SessionMultiEndView(FormView):
         return super(SessionMultiEndView, self).get_template_names()
 
     def get_success_url(self):
-        messages.add_message(self.request, messages.SUCCESS, 'Session ended')
+        #messages.add_message(self.request, messages.SUCCESS, 'Session ended')
         return reverse("students:session_end_multiple")
         #return reverse("students:session_detail", args=(self.object.pk,))
 
@@ -440,7 +440,7 @@ class SessionTodayView(ListView):
 
     def get_queryset(self):
         #s = super(SessionListView, self).get_queryset()
-        return Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1)).order_by('student__grade','student__last_name')
+        return Session.objects.filter(start__gt=timezone.make_aware(datetime.today().replace(hour=0,minute=1))).order_by('student__grade','student__last_name')
 
     def get_context_data(self, *args, **kwargs):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
@@ -628,7 +628,7 @@ class ImportStudentsView(FormView):
         for row in reader:
             if row['Student First Name'] != 'Fahad':
                 #name = row['Student First Name'] + ' ' + row['Student Last Name']
-                s, created = Student.objects.get_or_create(pcr_id=row['Student Id'])
+                s, created = Student.objects.get_or_create(pcr_id=row['Student Id'],grade=row['Grade Level Num'])
                 s.first_name = row['Student First Name']
                 s.last_name = row['Student Last Name']
                 s.nickname = row['Student Nickname']

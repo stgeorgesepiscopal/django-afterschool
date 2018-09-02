@@ -235,7 +235,7 @@ class MultiSessionEndForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(MultiSessionEndForm, self).__init__(*args, **kwargs)
-        self.fields["sessions"].queryset=Session.objects.filter(start__gt=timezone.now().replace(hour=0,minute=1),end__isnull=True)
+        self.fields["sessions"].queryset=Session.objects.filter(start__gt=timezone.make_aware(datetime.today().replace(hour=0,minute=1)),end__isnull=True)
 
     def save(self, commit=True):
         rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
