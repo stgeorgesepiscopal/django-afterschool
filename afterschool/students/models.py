@@ -114,15 +114,27 @@ class Session(models.Model):
 	end = models.DateTimeField(null=True)
 	student = models.ForeignKey(Student, related_name='sessions', on_delete=models.SET_NULL, null=True)
 	parent = models.CharField(max_length=60,null=True)
+	duration = models.DecimalField(null=True,max_digits=6,decimal_places=2)
+	overtime = models.SmallIntegerField(default=0)
 
 	class Meta:
 		verbose_name = 'session'
 		verbose_name_plural = 'sessions'
 
-		#app_label = 'afterschool.students'
+	def save(self, *args, **kwargs):
+		print(self.end)
+		if self.end:
+			if timezone.localtime(self.end).hour >= 18:
+				self.overtime = (timezone.localtime(self.end) - timezone.localtime(self.end).replace(minute=0,hour=18)).total_seconds() / 60
+				self.duration = (timezone.localtime(self.end).replace(minute=0,hour=18) - timezone.localtime(self.start)).total_seconds() / 3600
+			else:
+				self.duration = (self.end - self.start).total_seconds() / 3600
+
+		super().save(*args,**kwargs)
+		
 
 	@property
-	def duration(self):
+	def duration_property(self):
 		"Returns the duration of the session in hours"
 		if self.end is None:
 			return (ceil_dt(timezone.now(),timedelta(minutes=15)) - self.start).total_seconds() / 3600  

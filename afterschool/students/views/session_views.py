@@ -19,7 +19,7 @@ from django.contrib import messages
 from django.utils import timezone, dateparse
 from django.db import transaction
 
-from django.db.models import Min, Max, Count
+from django.db.models import Min, Max, Count, Sum
 
 from datetime import datetime, timedelta
 
@@ -668,8 +668,8 @@ class SessionCalendarView(TemplateView):
 
 
         def re_sessions(year,month,match):
-            print(year, month, match.group(1))
-            print(ds)
+            #print(year, month, match.group(1))
+            #print(ds)
             if match.group(1):
                 if (year,month,int(match.group(1))) in ds:
                     return f' p-1"><a href="day/{year}-{month}-{match.group(1)}" class="btn btn-sm btn-info w-100">{match.group(1)}</a><'
