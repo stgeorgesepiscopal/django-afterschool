@@ -10,14 +10,14 @@
 
     {% for session in session_list %}
     {% if not session.end %}
-        <tr class="table-light"><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td>{{ session.duration }}</td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        <tr class="table-light"><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} ({{ session.overtime }} minutes overtime){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
     {% endif %}
     {% empty %}
         <li>No sessions yet.</li>
     {% endfor %}
     {% for session in session_list %}
     {% if session.end %}
-        <tr class="table-success"><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{{ session.duration }}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        <tr class="table-success"><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
     {% endif %}
     
     {% endfor %}
