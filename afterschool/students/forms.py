@@ -238,7 +238,10 @@ class MultiSessionEndForm(forms.Form):
         self.fields["sessions"].queryset=Session.objects.filter(start__gt=timezone.make_aware(datetime.today().replace(hour=0,minute=1)),end__isnull=True)
 
     def save(self, commit=True):
-        rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
+        if timezone.localtime().hour >= 18:
+            rightnow = ceil_dt(timezone.now(),timedelta(minutes=1))
+        else:
+            rightnow = ceil_dt(timezone.now(),timedelta(minutes=15))
         student_names = []
         for s in self.cleaned_data['sessions']:
             s.end = rightnow
