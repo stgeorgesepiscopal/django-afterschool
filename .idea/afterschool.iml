@@ -32,6 +32,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/afterschool/templates" />
+        <option value="$MODULE_DIR$/afterschool/students/templates" />
       </list>
     </option>
   </component>
