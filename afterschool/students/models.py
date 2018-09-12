@@ -128,7 +128,7 @@ class Session(models.Model):
         verbose_name_plural = 'sessions'
 
     def save(self, *args, **kwargs):
-        print(self.end)
+
         if self.end:
             if timezone.localtime(self.end).hour >= 18:
                 self.overtime = (
@@ -142,6 +142,7 @@ class Session(models.Model):
                 )
             else:
                 duration = (self.end - self.start).total_seconds() / 3600
+
                 if duration > 0.25:
                     self.duration = ceil(duration)
                 else:
@@ -155,7 +156,12 @@ class Session(models.Model):
         if self.end is None:
             return ceil((ceil_dt(timezone.now(), timedelta(minutes=15)) - self.start).total_seconds() / 3600)
         else:
-            return ceil((self.end - self.start).total_seconds() / 3600)
+            duration = (self.end - self.start).total_seconds() / 3600
+
+            if duration > 0.25:
+                return ceil(duration)
+            else:
+                return 0
 
     def __str__(self):
         return str(self.student) + ' ' + self.start.strftime('%x')
