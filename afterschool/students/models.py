@@ -141,7 +141,11 @@ class Session(models.Model):
                     ).total_seconds() / 3600
                 )
             else:
-                self.duration = ceil((self.end - self.start).total_seconds() / 3600)
+                duration = (self.end - self.start).total_seconds() / 3600
+                if duration > 15:
+                    self.duration = ceil(duration)
+                else:
+                    self.duration = 0
 
         super().save(*args, **kwargs)
 
