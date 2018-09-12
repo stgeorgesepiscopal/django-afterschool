@@ -9,7 +9,8 @@
       {{ s.start|date:"l d M Y"}}
       {% endwith %}
   {%  regroup session_list by complete as sessions %}
-      <small class="float-right">[ {{ sessions|first|length }}  <small class="text-muted"> / {{ session_list|length }} </small> ]</small></h1>
+
+      <small class="float-right">[ {{ sessions|first|last|length }}  <small class="text-muted"> / {{ session_list|length }} </small> ]</small></h1>
   <table class="table"><thead><tr><th><small>#</small></th></th><th>Student</th><th>In</th><th>Out</th><th>&#x23F0;</th><th>Parent</th><th>Action</th></tr></thead>
 
       {% for session in session_list %}
