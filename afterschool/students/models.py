@@ -142,7 +142,7 @@ class Session(models.Model):
                 )
             else:
                 duration = (self.end - self.start).total_seconds() / 3600
-                if duration > 15:
+                if duration > 0.25:
                     self.duration = ceil(duration)
                 else:
                     self.duration = 0
