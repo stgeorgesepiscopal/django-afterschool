@@ -267,12 +267,14 @@ class StudentDeleteView(DeleteView):
     def get_success_url(self):
         return reverse("students:student_list")
 
+
 class StudentExportView(FormView):
-    #model = Session
+    # model = Session
     form_class = StudentExportForm
     # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/student_export.html"
-    #success_url = reverse_lazy("session_list")
+
+    # success_url = reverse_lazy("session_list")
 
     def __init__(self, **kwargs):
         return super(StudentExportView, self).__init__(**kwargs)
@@ -321,4 +323,4 @@ class StudentExportView(FormView):
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Session ended')
         return reverse("students:session_end_multiple")
-        #return reverse("students:session_detail", args=(self.object.pk,))
+        # return reverse("students:session_detail", args=(self.object.pk,))

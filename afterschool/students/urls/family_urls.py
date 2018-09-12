@@ -3,7 +3,6 @@ from ..views import (FamilyListView, FamilyCreateView, FamilyDetailView,
                      FamilyUpdateView, FamilyDeleteView)
 from django.contrib.auth.decorators import login_required
 
-
 urlpatterns = [
     url(r'^create/$',  # NOQA
         login_required(FamilyCreateView.as_view()),

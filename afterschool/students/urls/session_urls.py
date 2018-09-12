@@ -1,12 +1,11 @@
 from django.conf.urls import url
 from django.urls import path
 from ..views import (SessionListView, SessionCreateView, SessionDetailView,
-                     SessionUpdateView, SessionDeleteView, SessionMultiCreateView, 
-                     SessionMultiEndView, SessionTodayView, WhereIsView, 
+                     SessionUpdateView, SessionDeleteView, SessionMultiCreateView,
+                     SessionMultiEndView, SessionTodayView, WhereIsView,
                      SessionMultiCreateGradesView, ImportSchedulesView, ImportStudentsView,
                      )
 from django.contrib.auth.decorators import login_required
-
 
 urlpatterns = [
     url(r'^create/$',  # NOQA
@@ -26,8 +25,8 @@ urlpatterns = [
         name="import_students"),
 
     path('createmulti/<grades>',  # NOQA
-        login_required(SessionMultiCreateGradesView.as_view()),
-        name="session_create_multiple_grades"),
+         login_required(SessionMultiCreateGradesView.as_view()),
+         name="session_create_multiple_grades"),
 
     url(r'^endmulti/$',  # NOQA
         SessionMultiEndView.as_view(),

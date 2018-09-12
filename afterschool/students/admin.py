@@ -48,7 +48,7 @@ class FamilyAdmin(ExtendedModelAdminMixin, admin.ModelAdmin):
     readonly_fields = []
 
 
-#class SessionAdmin(ExtendedModelAdminMixin, admin.ModelAdmin):
+# class SessionAdmin(ExtendedModelAdminMixin, admin.ModelAdmin):
 #    extra_list_display = []
 #    extra_list_filter = []
 #    extra_search_fields = []
@@ -63,6 +63,7 @@ class FamilyAdmin(ExtendedModelAdminMixin, admin.ModelAdmin):
 #    readonly_fields = []
 class SessionAdmin(admin.ModelAdmin):
     readonly_fields = []
+
 
 admin.site.register(DayofWeek, DayofWeekAdmin)
 admin.site.register(Student, StudentAdmin)

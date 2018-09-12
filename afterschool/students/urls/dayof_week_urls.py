@@ -3,7 +3,6 @@ from ..views import (DayofWeekListView, DayofWeekCreateView, DayofWeekDetailView
                      DayofWeekUpdateView, DayofWeekDeleteView)
 from django.contrib.auth.decorators import login_required
 
-
 urlpatterns = [
     url(r'^create/$',  # NOQA
         login_required(DayofWeekCreateView.as_view()),
