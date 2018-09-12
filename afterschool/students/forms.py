@@ -2,7 +2,7 @@ from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput, Date
 
 from django import forms
 from django.utils import timezone
-from .models import DayofWeek, Student, Family, Session, ScheduledClass
+from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass
 
 from django.db.models import Case, Value, When, BooleanField
 
@@ -132,7 +132,7 @@ class FamilyForm(forms.ModelForm):
 
 class SessionForm(forms.ModelForm):
     class Meta:
-        model = Session
+        model = StudentSession
         fields = ['start', 'end', 'student', 'parent']
         exclude = []
         widgets = {
@@ -193,7 +193,7 @@ class MultiSessionForm(forms.Form):
         self.fields["students"].initial = (
             Student.objects.filter(schedule__day__in=[str(timezone.now().weekday())]).values_list('id', flat=True)
         )
-        open_sessions = Session.objects.filter(start__gt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
+        open_sessions = StudentSession.objects.filter(start__gt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
         self.fields["students"].queryset = Student.objects.exclude(sessions__in=open_sessions).exclude(
             grade__lt=-1).order_by('grade', 'last_name')
         self.fields["time"].initial = floor_dt(datetime.today(), timedelta(minutes=15)).strftime('%X')
@@ -208,7 +208,7 @@ class MultiSessionForm(forms.Form):
                              microsecond=0))
         # print(rightnow)
         for s in self.cleaned_data['students']:
-            ses = Session.objects.create(start=rightnow, student=s)
+            ses = StudentSession.objects.create(start=rightnow, student=s)
             s.save()
         return self
         # return super(SessionForm, self).save(commit)
@@ -222,7 +222,7 @@ class MultiSessionGradesForm(MultiSessionForm):
         except:
             grades = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
         super(MultiSessionGradesForm, self).__init__(*args, **kwargs)
-        open_sessions = Session.objects.filter(start__gt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
+        open_sessions = StudentSession.objects.filter(start__gt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
         self.fields["students"].initial = (
             Student.objects.filter(grade__in=grades, schedule__day__in=[str(timezone.now().weekday())]).values_list(
                 'id', flat=True)
@@ -233,12 +233,12 @@ class MultiSessionGradesForm(MultiSessionForm):
 
 class MultiSessionEndForm(forms.Form):
     # time = forms.TimeField()
-    sessions = forms.ModelMultipleChoiceField(queryset=Session.objects.all())
+    sessions = forms.ModelMultipleChoiceField(queryset=StudentSession.objects.all())
     parent = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         super(MultiSessionEndForm, self).__init__(*args, **kwargs)
-        self.fields["sessions"].queryset = Session.objects.filter(
+        self.fields["sessions"].queryset = StudentSession.objects.filter(
             start__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)), end__isnull=True)
 
     def save(self, commit=True):
@@ -301,7 +301,7 @@ class WhereIsForm(forms.Form):
 
 class StudentExportForm(forms.Form):
     # time = forms.TimeField()
-    sessions = forms.ModelMultipleChoiceField(queryset=Session.objects.all())
+    sessions = forms.ModelMultipleChoiceField(queryset=StudentSession.objects.all())
     parent = forms.CharField()
 
     def __init__(self, *args, **kwargs):

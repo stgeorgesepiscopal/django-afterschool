@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
-from ..models import Session, Student, ScheduledClass
+from ..models import StudentSession, Student, ScheduledClass
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, WhereIsForm, ImportSchedulesForm,
                      )
@@ -37,7 +37,7 @@ def floor_dt(dt, delta):
 
 
 class SessionListView(ListView):
-    model = Session
+    model = StudentSession
     template_name = "students/session_list.html"
     paginate_by = 2000
     context_object_name = "session_list"
@@ -84,7 +84,7 @@ class SessionListView(ListView):
 
 
 class SessionDetailView(DetailView):
-    model = Session
+    model = StudentSession
     template_name = "students/session_detail.html"
     context_object_name = "session"
     slug_field = 'slug'
@@ -124,7 +124,7 @@ class SessionDetailView(DetailView):
 
 
 class SessionCreateView(CreateView):
-    model = Session
+    model = StudentSession
     form_class = SessionForm
     # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/session_create.html"
@@ -177,7 +177,7 @@ class SessionCreateView(CreateView):
 
 
 class SessionUpdateView(UpdateView):
-    model = Session
+    model = StudentSession
     form_class = SessionForm
     # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/session_update.html"
@@ -250,7 +250,7 @@ class SessionUpdateView(UpdateView):
 
 
 class SessionDeleteView(DeleteView):
-    model = Session
+    model = StudentSession
     template_name = "students/session_delete.html"
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
@@ -313,7 +313,7 @@ class SessionMultiCreateView(FormView):
         return super(SessionMultiCreateView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        open_sessions = Session.objects.filter(start__lt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
+        open_sessions = StudentSession.objects.filter(start__lt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
         for s in open_sessions:
             m = '<b>WARNING:</b> Open session for ' + s.student.name + ' on ' + s.start.strftime('%c')
             m += ' <a href="' + reverse("students:session_update",
@@ -433,7 +433,7 @@ class SessionMultiEndView(FormView):
 
 
 class SessionTodayView(ListView):
-    model = Session
+    model = StudentSession
     template_name = "students/session_today.html"
     paginate_by = 2000
     context_object_name = "session_list"
@@ -446,7 +446,7 @@ class SessionTodayView(ListView):
 
     def get_queryset(self):
         # s = super(SessionListView, self).get_queryset()
-        return Session.objects.filter(
+        return StudentSession.objects.filter(
             start__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by('student__grade',
                                                                                                 'student__last_name')
 
@@ -466,7 +466,7 @@ class SessionDayView(SessionTodayView):
         except:
             start = dateparse.parse_date(self.kwargs['start'])
         # print(start)
-        return Session.objects.filter(start__date=start).order_by('student__grade', 'student__last_name')
+        return StudentSession.objects.filter(start__date=start).order_by('student__grade', 'student__last_name')
 
     def get_context_data(self, *args, **kwargs):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
@@ -680,10 +680,10 @@ class SessionCalendarView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        minmax = Session.objects.aggregate(min=Min('start'), max=Max('start'))
+        minmax = StudentSession.objects.aggregate(min=Min('start'), max=Max('start'))
         calendars = []
         ds = []
-        for d in Session.objects.values('start__date__year', 'start__date__month', 'start__date__day',
+        for d in StudentSession.objects.values('start__date__year', 'start__date__month', 'start__date__day',
                                         'start__date').annotate(Count('start__date')):
             ds.append((d['start__date__year'], d['start__date__month'], d['start__date__day']))
 

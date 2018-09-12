@@ -115,7 +115,7 @@ class Family(models.Model):
         return self.name + ' (' + ','.join([str(child) for child in self.children.all()]) + ')'
 
 
-class Session(models.Model):
+class StudentSession(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(null=True)
     student = models.ForeignKey(Student, related_name='sessions', on_delete=models.SET_NULL, null=True)

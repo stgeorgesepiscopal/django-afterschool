@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DayofWeek, Student, Family, Session
+from .models import DayofWeek, Student, Family, StudentSession
 from django_baker.admin import ExtendedModelAdminMixin
 
 
@@ -68,4 +68,4 @@ class SessionAdmin(admin.ModelAdmin):
 admin.site.register(DayofWeek, DayofWeekAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Family, FamilyAdmin)
-admin.site.register(Session, SessionAdmin)
+admin.site.register(StudentSession, SessionAdmin)
