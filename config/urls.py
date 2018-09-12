@@ -6,50 +6,51 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from django.contrib.auth.decorators import login_required
 
-from afterschool.students.views.session_views import (SessionMultiEndView, 
-    SessionMultiCreateView, SessionTodayView, SessionDayView, WhereIsView,
-     SessionCalendarView,
-     )
+from afterschool.students.views.session_views import (SessionMultiEndView,
+                                                      SessionMultiCreateView, SessionTodayView, SessionDayView,
+                                                      WhereIsView,
+                                                      SessionCalendarView,
+                                                      )
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path(
-        "users/",
-        include("afterschool.users.urls", namespace="users"),
-    ),
-    path("accounts/", include("allauth.urls")),
-    path("students/", include("afterschool.students.urls",namespace="students")),
-    path("kiosk",  # NOQA
-        SessionMultiEndView.as_view(),
-        name="kiosk"),
-    path("start",  # NOQA
-        login_required(SessionMultiCreateView.as_view()),
-        name="start"),
-    path("today",  # NOQA
-        login_required(SessionTodayView.as_view()),
-        name="today"),
-    path("day",
-        login_required(SessionDayView.as_view()),
-        name="day"),
-    path("day/<start>",  # NOQA
-        login_required(SessionDayView.as_view()),
-        name="day_hardlink"),
-    path("whereis",  # NOQA
-       WhereIsView.as_view(),
-        name="where_is"),
-    path("cal",
-        login_required(SessionCalendarView.as_view()),
-        name="calendar")
-    # Your stuff: custom urls includes go here
-] + static(
+                  path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+                  path(
+                      "about/",
+                      TemplateView.as_view(template_name="pages/about.html"),
+                      name="about",
+                  ),
+                  # Django Admin, use {% url 'admin:index' %}
+                  path(settings.ADMIN_URL, admin.site.urls),
+                  # User management
+                  path(
+                      "users/",
+                      include("afterschool.users.urls", namespace="users"),
+                  ),
+                  path("accounts/", include("allauth.urls")),
+                  path("students/", include("afterschool.students.urls", namespace="students")),
+                  path("kiosk",  # NOQA
+                       SessionMultiEndView.as_view(),
+                       name="kiosk"),
+                  path("start",  # NOQA
+                       login_required(SessionMultiCreateView.as_view()),
+                       name="start"),
+                  path("today",  # NOQA
+                       login_required(SessionTodayView.as_view()),
+                       name="today"),
+                  path("day",
+                       login_required(SessionDayView.as_view()),
+                       name="day"),
+                  path("day/<start>",  # NOQA
+                       login_required(SessionDayView.as_view()),
+                       name="day_hardlink"),
+                  path("whereis",  # NOQA
+                       WhereIsView.as_view(),
+                       name="where_is"),
+                  path("cal",
+                       login_required(SessionCalendarView.as_view()),
+                       name="calendar")
+                  # Your stuff: custom urls includes go here
+              ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
 

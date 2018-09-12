@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 
-app_name="afterschool.students"
+app_name = "afterschool.students"
 
 urlpatterns = [
 

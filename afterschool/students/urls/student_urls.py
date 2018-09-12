@@ -3,7 +3,6 @@ from ..views import (StudentListView, StudentCreateView, StudentDetailView,
                      StudentUpdateView, StudentDeleteView)
 from django.contrib.auth.decorators import login_required
 
-
 urlpatterns = [
     url(r'^create/$',  # NOQA
         login_required(StudentCreateView.as_view()),

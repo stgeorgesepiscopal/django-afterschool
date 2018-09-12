@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,7 +15,9 @@ class Migration(migrations.Migration):
             name='DayofWeek',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('day', models.CharField(choices=[('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday')], max_length=2)),
+                ('day', models.CharField(
+                    choices=[('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday')],
+                    max_length=2)),
             ],
             options={
                 'verbose_name': 'day_of_week',
@@ -63,7 +64,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='session',
             name='student',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='sessions', to='students.Student'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='sessions',
+                                    to='students.Student'),
         ),
         migrations.AddField(
             model_name='family',
