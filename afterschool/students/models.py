@@ -122,6 +122,7 @@ class StudentSession(models.Model):
     parent = models.CharField(max_length=60, null=True)
     duration = models.DecimalField(null=True, max_digits=6, decimal_places=2)
     overtime = models.SmallIntegerField(default=0)
+    complete = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'session'
@@ -147,6 +148,7 @@ class StudentSession(models.Model):
                     self.duration = ceil(duration)
                 else:
                     self.duration = 0
+            self.complete = True
 
         super().save(*args, **kwargs)
 

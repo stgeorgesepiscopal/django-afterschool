@@ -447,8 +447,8 @@ class SessionTodayView(ListView):
     def get_queryset(self):
         # s = super(SessionListView, self).get_queryset()
         return StudentSession.objects.filter(
-            start__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by('student__grade',
-                                                                                                'student__last_name')
+            start__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
+            'complete', 'student__grade', 'student__last_name')
 
     def get_context_data(self, *args, **kwargs):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
