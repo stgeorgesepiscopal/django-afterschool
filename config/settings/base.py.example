@@ -243,3 +243,6 @@ SOCIALACCOUNT_ADAPTER = 'afterschool.users.adapters.SocialAccountAdapter'
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+INSTALLED_APPS += ['bootstrap_datepicker_plus']
+TIME_INPUT_FORMATS = ['%I:%M %p', ]
