@@ -229,6 +229,10 @@ class MultiSessionGradesForm(MultiSessionForm):
         )
         self.fields["students"].queryset = Student.objects.filter(grade__in=grades).exclude(
             sessions__in=open_sessions).order_by('grade', 'last_name')
+        if -1 in grades:
+            self.fields["time"].initial = timezone.localtime().strftime('%X')
+        else:
+            pass
 
 
 class MultiSessionEndForm(forms.Form):
