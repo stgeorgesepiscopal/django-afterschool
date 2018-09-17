@@ -68,6 +68,7 @@ target/
 .venv
 venv/
 ENV/
+.env
 
 # Rope project settings
 .ropeproject
@@ -336,3 +337,4 @@ pip-selfcheck.json
 afterschool/media/
 
 .pytest_cache/
+afterschool.db
