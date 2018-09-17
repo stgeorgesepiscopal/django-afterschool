@@ -4,7 +4,7 @@ Base settings to build other settings files upon.
 
 import environ
 
-ROOT_DIR = environ.Path(__file__) - 3  # (afterschool/config/settings/base.py - 3 = afterschool/)
+ROOT_DIR = environ.Path(__file__) - 3  # (django-afterschool/config/settings/base.py - 3 = django-afterschool/)
 APPS_DIR = ROOT_DIR.path('afterschool')
 
 env = environ.Env()
