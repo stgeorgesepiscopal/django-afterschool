@@ -20,6 +20,14 @@ Description
 -----------
 St. George's Episcopal School in New Orleans, LA needed a simple way to manage afterschool in-and-out as well as a "Student Finder" that was more intuitive than their current SIS (called PCR).  The CSV imports that are currently built into this package are specific to the PCR Exports.  Anyone interested in making them more generalized is welcome to make a PR!
 
+Session start
+^^^^^^^^^^^^^
+.. image:: https://raw.githubusercontent.com/sreyemnayr/django-afterschool/master/docs/start_session.png
+
+Session checkout
+^^^^^^^^^^^^^^^^
+.. image:: https://raw.githubusercontent.com/sreyemnayr/django-afterschool/master/docs/checkout.png
+
 
 
 Installing
