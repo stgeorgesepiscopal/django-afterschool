@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
 
-from djqscsv import render_to_csv_response
+#from djqscsv import render_to_csv_response
 
 
 def ceil_dt(dt, delta):
