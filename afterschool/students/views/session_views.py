@@ -11,7 +11,7 @@ from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      )
 from django.urls import reverse_lazy
 from django.urls import reverse
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 from django.contrib import messages
 
@@ -23,6 +23,8 @@ from django.db.models import Min, Max, Count, Sum
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
+
+from djqscsv import render_to_csv_response
 
 
 def ceil_dt(dt, delta):
@@ -699,6 +701,7 @@ class SessionCalendarView(TemplateView):
 
             cal = calendar.HTMLCalendar()
             html_cal = cal.formatmonth(year, month)
+            html_cal = re.sub(f'{year}',f'{year} <a href="export/{month}/{year}" class="btn btn-sm btn-outline-success p-0 m-0">&dArr;</a>',html_cal)
             mapping = [('Mon', 'M'), ('Tue', 'T'), ('Wed', 'W'), ('Thu', 'T'), ('Fri', 'F'), ('Sat', 'S'), ('Sun', 'S')]
             for k, v in mapping:
                 html_cal = html_cal.replace(k, v)
@@ -707,3 +710,32 @@ class SessionCalendarView(TemplateView):
         context.update({'calendars': calendars})
 
         return context
+
+
+def csv_export(request,month,year):
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="afterschool-{month}-{year}.csv"'
+
+    #sessions = StudentSession.objects.filter(start__month=int(month),start__year=int(year)).annotate(Count('student')).annotate(total_duration=Sum('duration'))
+
+    students = Student.objects.filter(sessions__start__month=int(month), sessions__start__year=int(year)).annotate(duration_sum=Sum('sessions__duration'), overtime_sum=Sum('sessions__overtime'))
+
+    writer = csv.writer(response)
+    writer.writerow(['Transaction Date', 'Customer ID', 'Student ID', 'Full Name', 'Account ID', 'Account Name', 'Adjustment Code', 'Adjustment Reason', 'Amount', 'Description'])
+    for s in students:
+        tdate = datetime.now().strftime('%-m/%d/%Y')
+        cid = ''
+        sid = s.pcr_id
+        fullname = s.last_name+', '+s.first_name
+        accountID = 'Aftercare'
+        accountName = 'Aftercare'
+        adjustmentCode = '2'
+        adjReason = 'Aftercare'
+        amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
+        desc = f'Aftercare for {s.first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
+        if s.overtime_sum > 0:
+            desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
+        writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
+
+    return response
