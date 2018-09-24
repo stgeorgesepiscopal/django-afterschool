@@ -132,9 +132,14 @@ class StudentSession(models.Model):
 
         if self.end:
             if timezone.localtime(self.end).hour >= 18:
-                self.overtime = (
+                overtime = (
                     timezone.localtime(self.end) - timezone.localtime(self.end).replace(minute=0, hour=18)
                                 ).total_seconds() / 60
+                if overtime > 5:
+                    """
+                    5-minute exclusive grace period.  Should probably become env variable
+                    """
+                    self.overtime = overtime-5
                 self.duration = ceil(
                     (
                         timezone.localtime(self.end).replace(minute=0, hour=18) -
@@ -145,6 +150,9 @@ class StudentSession(models.Model):
                 duration = (self.end - self.start).total_seconds() / 3600
 
                 if duration > 0.25:
+                    """
+                    15-minute grace period with inclusive charge. Should probably become env var
+                    """
                     self.duration = ceil(duration)
                 else:
                     self.duration = 0
