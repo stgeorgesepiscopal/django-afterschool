@@ -24,19 +24,6 @@ from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
 
-#from djqscsv import render_to_csv_response
-
-
-def ceil_dt(dt, delta):
-    if timezone.is_naive(dt):
-        return dt + (datetime.min - dt) % delta
-    else:
-        return dt + (datetime.min - timezone.make_naive(dt)) % delta
-
-
-def floor_dt(dt, delta):
-    return ceil_dt(dt, delta) - delta
-
 
 class SessionListView(ListView):
     model = StudentSession
@@ -50,39 +37,6 @@ class SessionListView(ListView):
     def __init__(self, **kwargs):
         return super(SessionListView, self).__init__(**kwargs)
 
-    def dispatch(self, *args, **kwargs):
-        return super(SessionListView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionListView, self).get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return super(SessionListView, self).get_queryset()
-
-    def get_allow_empty(self):
-        return super(SessionListView, self).get_allow_empty()
-
-    def get_context_data(self, *args, **kwargs):
-        ret = super(SessionListView, self).get_context_data(*args, **kwargs)
-        return ret
-
-    def get_paginate_by(self, queryset):
-        return super(SessionListView, self).get_paginate_by(queryset)
-
-    def get_context_object_name(self, object_list):
-        return super(SessionListView, self).get_context_object_name(object_list)
-
-    def paginate_queryset(self, queryset, page_size):
-        return super(SessionListView, self).paginate_queryset(queryset, page_size)
-
-    def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
-        return super(SessionListView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionListView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionListView, self).get_template_names()
 
 
 class SessionDetailView(DetailView):
@@ -96,33 +50,6 @@ class SessionDetailView(DetailView):
     def __init__(self, **kwargs):
         return super(SessionDetailView, self).__init__(**kwargs)
 
-    def dispatch(self, *args, **kwargs):
-        return super(SessionDetailView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionDetailView, self).get(request, *args, **kwargs)
-
-    def get_object(self, queryset=None):
-        return super(SessionDetailView, self).get_object(queryset)
-
-    def get_queryset(self):
-        return super(SessionDetailView, self).get_queryset()
-
-    def get_slug_field(self):
-        return super(SessionDetailView, self).get_slug_field()
-
-    def get_context_data(self, **kwargs):
-        ret = super(SessionDetailView, self).get_context_data(**kwargs)
-        return ret
-
-    def get_context_object_name(self, obj):
-        return super(SessionDetailView, self).get_context_object_name(obj)
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionDetailView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionDetailView, self).get_template_names()
 
 
 class SessionCreateView(CreateView):
@@ -135,44 +62,10 @@ class SessionCreateView(CreateView):
     def __init__(self, **kwargs):
         return super(SessionCreateView, self).__init__(**kwargs)
 
-    def dispatch(self, request, *args, **kwargs):
-        return super(SessionCreateView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionCreateView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(SessionCreateView, self).post(request, *args, **kwargs)
-
-    def get_form_class(self):
-        return super(SessionCreateView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(SessionCreateView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(SessionCreateView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(SessionCreateView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(SessionCreateView, self).form_invalid(form)
-
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.save()
         return super(SessionCreateView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        ret = super(SessionCreateView, self).get_context_data(**kwargs)
-        return ret
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionCreateView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionCreateView, self).get_template_names()
 
     def get_success_url(self):
         return reverse("students:session_detail", args=(self.object.pk,))
@@ -192,15 +85,6 @@ class SessionUpdateView(UpdateView):
     def __init__(self, **kwargs):
         return super(SessionUpdateView, self).__init__(**kwargs)
 
-    def dispatch(self, *args, **kwargs):
-        return super(SessionUpdateView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionUpdateView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(SessionUpdateView, self).post(request, *args, **kwargs)
-
     def get_object(self, queryset=None):
         obj = super(SessionUpdateView, self).get_object(queryset)
         if obj.end is None:
@@ -208,44 +92,10 @@ class SessionUpdateView(UpdateView):
                 obj.end = timezone.localtime(obj.start).replace(minute=0, hour=18)
         return obj
 
-    def get_queryset(self):
-        return super(SessionUpdateView, self).get_queryset()
-
-    def get_slug_field(self):
-        return super(SessionUpdateView, self).get_slug_field()
-
-    def get_form_class(self):
-        return super(SessionUpdateView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(SessionUpdateView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(SessionUpdateView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(SessionUpdateView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(SessionUpdateView, self).form_invalid(form)
-
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.save()
         return super(SessionUpdateView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        ret = super(SessionUpdateView, self).get_context_data(**kwargs)
-        return ret
-
-    def get_context_object_name(self, obj):
-        return super(SessionUpdateView, self).get_context_object_name(obj)
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionUpdateView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionUpdateView, self).get_template_names()
 
     def get_success_url(self):
         return reverse("students:session_detail", args=(self.object.pk,))
@@ -262,57 +112,16 @@ class SessionDeleteView(DeleteView):
     def __init__(self, **kwargs):
         return super(SessionDeleteView, self).__init__(**kwargs)
 
-    def dispatch(self, *args, **kwargs):
-        return super(SessionDeleteView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        raise Http404
-
-    def post(self, request, *args, **kwargs):
-        return super(SessionDeleteView, self).post(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return super(SessionDeleteView, self).delete(request, *args, **kwargs)
-
-    def get_object(self, queryset=None):
-        return super(SessionDeleteView, self).get_object(queryset)
-
-    def get_queryset(self):
-        return super(SessionDeleteView, self).get_queryset()
-
-    def get_slug_field(self):
-        return super(SessionDeleteView, self).get_slug_field()
-
-    def get_context_data(self, **kwargs):
-        ret = super(SessionDeleteView, self).get_context_data(**kwargs)
-        return ret
-
-    def get_context_object_name(self, obj):
-        return super(SessionDeleteView, self).get_context_object_name(obj)
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionDeleteView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionDeleteView, self).get_template_names()
-
     def get_success_url(self):
         return reverse("students:session_list")
 
 
 class SessionMultiCreateView(FormView):
-    # model = Session
     form_class = MultiSessionForm
-    # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/session_create_multiple.html"
-
-    # success_url = reverse_lazy("session_list")
 
     def __init__(self, **kwargs):
         return super(SessionMultiCreateView, self).__init__(**kwargs)
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(SessionMultiCreateView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         open_sessions = StudentSession.objects.filter(start__lt=timezone.now().replace(hour=0, minute=1), end__isnull=True)
@@ -322,24 +131,6 @@ class SessionMultiCreateView(FormView):
                                         args=[s.pk]) + '" class="btn btn-danger btn-sm float-right">Update</a>'
             messages.error(request, m, extra_tags='safe')
         return super(SessionMultiCreateView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(SessionMultiCreateView, self).post(request, *args, **kwargs)
-
-    def get_form_class(self):
-        return super(SessionMultiCreateView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(SessionMultiCreateView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(SessionMultiCreateView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(SessionMultiCreateView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(SessionMultiCreateView, self).form_invalid(form)
 
     def form_valid(self, form):
         obj = form.save(commit=False)
@@ -352,12 +143,6 @@ class SessionMultiCreateView(FormView):
         context.update(more_context)
         return context
 
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionMultiCreateView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionMultiCreateView, self).get_template_names()
-
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Sessions started')
         return reverse("students:session_create_multiple")
@@ -365,7 +150,6 @@ class SessionMultiCreateView(FormView):
 
 
 class SessionMultiCreateGradesView(SessionMultiCreateView):
-    # model = Session
     form_class = MultiSessionGradesForm
 
     def get_form_kwargs(self, **kwargs):
@@ -375,43 +159,14 @@ class SessionMultiCreateGradesView(SessionMultiCreateView):
 
 
 class SessionMultiEndView(FormView):
-    # model = Session
     form_class = MultiSessionEndForm
-    # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/session_end_multiple.html"
-
-    # success_url = reverse_lazy("session_list")
 
     def __init__(self, **kwargs):
         return super(SessionMultiEndView, self).__init__(**kwargs)
 
-    def dispatch(self, request, *args, **kwargs):
-        return super(SessionMultiEndView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(SessionMultiEndView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(SessionMultiEndView, self).post(request, *args, **kwargs)
-
-    def get_form_class(self):
-        return super(SessionMultiEndView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(SessionMultiEndView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(SessionMultiEndView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(SessionMultiEndView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(SessionMultiEndView, self).form_invalid(form)
-
     def form_valid(self, form):
         obj = form.save(commit=False)
-        # obj.save()
         for s in obj:
             messages.success(self.request, '<h3>Checked out: ' + str(s) + '</h3>', extra_tags='safe')
         return super(SessionMultiEndView, self).form_valid(form)
@@ -422,16 +177,8 @@ class SessionMultiEndView(FormView):
         context.update(more_context)
         return context
 
-    def render_to_response(self, context, **response_kwargs):
-        return super(SessionMultiEndView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(SessionMultiEndView, self).get_template_names()
-
     def get_success_url(self):
-        # messages.add_message(self.request, messages.SUCCESS, 'Session ended')
         return reverse("students:session_end_multiple")
-        # return reverse("students:session_detail", args=(self.object.pk,))
 
 
 class SessionTodayView(ListView):
@@ -487,30 +234,6 @@ class WhereIsView(FormView):
     def __init__(self, **kwargs):
         return super(WhereIsView, self).__init__(**kwargs)
 
-    def dispatch(self, request, *args, **kwargs):
-        return super(WhereIsView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(WhereIsView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(WhereIsView, self).post(request, *args, **kwargs)
-
-    def get_form_class(self):
-        return super(WhereIsView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(WhereIsView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(WhereIsView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(WhereIsView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(WhereIsView, self).form_invalid(form)
-
     def form_valid(self, form, **kwargs):
         obj = form.save(commit=False)
         iterobj = iter(obj)
@@ -520,16 +243,11 @@ class WhereIsView(FormView):
                           extra_tags='safe')
         except:
             messages.error(self.request, 'No scheduled classes')
-        #        if iterobj:
-        #            o = next(iterobj)
-        #            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
-        #            messages.success(self.request, m, extra_tags='safe')
-        #        else:
-        #            messages.error(self.request,'Unknown')
 
         for o in iterobj:
-            # m = f"{o.start.strftime('%I:%M %p')}-{o.end.strftime('%I:%M %p')}: {o.course} ({o.teacher}) in Room {o.room}"
-            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%-I:%M %p')}-{o.end.strftime('%-I:%M %p')}</span>: {o.course} ({o.teacher}) in <span class=\"font-weight-bold\">{o.room}</span>"
+            m = f"<span class=\"font-weight-italic\">{o.start.strftime('%-I:%M %p')}-"\
+                f"{o.end.strftime('%-I:%M %p')}</span>: {o.course} ({o.teacher}) "\
+                f"in <span class=\"font-weight-bold\">{o.room}</span>"
             if o.current:
                 messages.success(self.request, f'<h3>{m}</h3>', extra_tags='safe')
             else:
@@ -542,12 +260,6 @@ class WhereIsView(FormView):
         more_context = {'current_time': timezone.now().strftime('%c')}
         context.update(more_context)
         return context
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(WhereIsView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(WhereIsView, self).get_template_names()
 
     def get_success_url(self):
         return reverse("where_is")
@@ -565,30 +277,6 @@ class ImportSchedulesView(FormView):
     def __init__(self, **kwargs):
         return super(ImportSchedulesView, self).__init__(**kwargs)
 
-    def dispatch(self, request, *args, **kwargs):
-        return super(ImportSchedulesView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(ImportSchedulesView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return super(ImportSchedulesView, self).post(request, *args, **kwargs)
-
-    def get_form_class(self):
-        return super(ImportSchedulesView, self).get_form_class()
-
-    def get_form(self, form_class=None):
-        return super(ImportSchedulesView, self).get_form(form_class)
-
-    def get_form_kwargs(self, **kwargs):
-        return super(ImportSchedulesView, self).get_form_kwargs(**kwargs)
-
-    def get_initial(self):
-        return super(ImportSchedulesView, self).get_initial()
-
-    def form_invalid(self, form):
-        return super(ImportSchedulesView, self).form_invalid(form)
-
     def form_valid(self, form, **kwargs):
         ScheduledClass.objects.all().delete()
         # print("delete")
@@ -602,7 +290,8 @@ class ImportSchedulesView(FormView):
                 student_id = row['Student Id']
                 s, _ = Student.objects.get_or_create(pcr_id=row['Student Id'])
 
-            sched, created = ScheduledClass.objects.get_or_create(student=s, weekday=int(row['Day Of Cycle']) - 1,
+            sched, created = ScheduledClass.objects.get_or_create(student=s,
+                                                                  weekday=int(row['Day Of Cycle']) - 1,
                                                                   course=row['Course Name'], room=row['Room'],
                                                                   start=datetime.strptime(row['Begin Time'],
                                                                                           "%I:%M %p"),
@@ -621,12 +310,6 @@ class ImportSchedulesView(FormView):
         more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
         context.update(more_context)
         return context
-
-    def render_to_response(self, context, **response_kwargs):
-        return super(ImportSchedulesView, self).render_to_response(context, **response_kwargs)
-
-    def get_template_names(self):
-        return super(ImportSchedulesView, self).get_template_names()
 
     def get_success_url(self):
         return reverse("students:import_schedules")
@@ -712,14 +395,18 @@ class SessionCalendarView(TemplateView):
         return context
 
 
-def csv_export(request,month,year):
+def csv_export(request, month, year):
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="afterschool-{month}-{year}.csv"'
 
     #sessions = StudentSession.objects.filter(start__month=int(month),start__year=int(year)).annotate(Count('student')).annotate(total_duration=Sum('duration'))
 
-    students = Student.objects.filter(sessions__start__month=int(month), sessions__start__year=int(year)).annotate(duration_sum=Sum('sessions__duration'), overtime_sum=Sum('sessions__overtime'))
+    students = Student.objects.filter(split_billing=False, sessions__start__month=int(month), sessions__start__year=int(year)).annotate(duration_sum=Sum('sessions__duration'), overtime_sum=Sum('sessions__overtime'))
+
+    students_split = StudentSession.objects.filter(student__split_billing=True).values('student', 'parent').annotate(
+        duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).values_list(
+        'student__first_name', 'student__last_name', 'student__pcr_id', 'parent', 'duration_sum', 'overtime_sum', named=True)
 
     writer = csv.writer(response)
     writer.writerow(['Transaction Date', 'Customer ID', 'Student ID', 'Full Name', 'Account ID', 'Account Name', 'Adjustment Code', 'Adjustment Reason', 'Amount', 'Description'])
@@ -734,6 +421,21 @@ def csv_export(request,month,year):
         adjReason = 'Aftercare'
         amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
         desc = f'Aftercare for {s.first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
+        if s.overtime_sum > 0:
+            desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
+        writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
+
+    for s in students_split:
+        tdate = datetime.now().strftime('%-m/%d/%Y')
+        cid = ''
+        sid = s.student__pcr_id
+        fullname = f'{s.student__last_name}, {s.student__first_name} ({s.parent})'
+        accountID = 'Aftercare'
+        accountName = 'Aftercare'
+        adjustmentCode = '2'
+        adjReason = 'Aftercare'
+        amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
+        desc = f'Aftercare for {s.student__first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
         if s.overtime_sum > 0:
             desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
         writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])

@@ -3,6 +3,7 @@ from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput, Date
 from django import forms
 from django.utils import timezone
 from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass
+from .utils import ceil_dt, floor_dt
 
 from django.db.models import Case, Value, When, BooleanField
 
@@ -12,16 +13,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-def ceil_dt(dt, delta):
-    if timezone.is_naive(dt):
-        return dt + (datetime.min - dt) % delta
-    else:
-        return dt + (datetime.min - timezone.make_naive(dt)) % delta
-
-
-def floor_dt(dt, delta):
-    return ceil_dt(dt, delta) - delta
 
 
 class DayofWeekForm(forms.ModelForm):
@@ -61,7 +52,7 @@ class DayofWeekForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['name', 'grade', 'schedule']
+        fields = ['name', 'grade', 'schedule', 'split_billing']
         exclude = []
         widgets = None
         localized_fields = None

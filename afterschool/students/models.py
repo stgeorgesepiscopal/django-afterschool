@@ -55,6 +55,7 @@ class Student(models.Model):
     grade = models.SmallIntegerField(default=-6)
     schedule = models.ManyToManyField(DayofWeek, related_name='students', blank=True)
     pcr_id = models.SmallIntegerField(null=True, blank=True)
+    split_billing = models.BooleanField(null=False, default=False, )
 
     class Meta:
         verbose_name = 'student'
