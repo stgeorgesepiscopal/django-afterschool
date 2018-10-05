@@ -128,6 +128,7 @@ class StudentSession(models.Model):
     duration = models.DecimalField(null=False, max_digits=6, decimal_places=2, default=0.00)
     overtime = models.SmallIntegerField(default=0)
     complete = models.BooleanField(default=False)
+    waive_fees = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'session'

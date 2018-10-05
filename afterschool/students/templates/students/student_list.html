@@ -5,13 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <h1>students</h1>
-    <h2><a href={% url "students:student_create" %}>Create new Student</a></h2>
-    <ul>
+    <h1>Students <small><small><small><a class="badge badge-success badge-pill float-right" href={% url "students:student_create" %}>+add new</a></small></small></small></h1>
+    <ul class="list-group">
     {% for student in student_list %}
-        <li><a href={% url "students:student_detail" student.pk %}>{{ student }}</a> <a href="{% url "students:student_update" student.pk %}" class="btn btn-sm btn-outline-primary">&#9998; Edit </a> <form style="display:inline;" action={% url "students:student_delete" student.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ student }}?')">{% csrf_token %}
-    <input type="submit" value="&#215;" class="btn btn-sm btn-danger" />
-    </form></li>
+        <li class="list-group-item d-flex justify-content-between align-items-center"><a href={% url "students:student_detail" student.pk %}>{{ student }}</a> <span><a href="{% url "students:student_update" student.pk %}" class="badge btn btn-sm btn-outline-primary"><i class="fal fa-user-edit"></i></a> <form style="display:inline;" action={% url "students:student_delete" student.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ student }}?')">{% csrf_token %}
+          <button type="submit" value="&#215;" class="badge btn btn-sm btn-outline-danger" ><i class="fal fa-trash-alt"></i></button>
+        </form></span></li>
     {% empty %}
         <li>No students yet.</li>
     {% endfor %}

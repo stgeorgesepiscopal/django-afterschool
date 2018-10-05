@@ -6,12 +6,12 @@
 
 {% block content %}
 
-    <h2>{{ student }} <a href="{% url "students:student_update" student.pk %}" class="btn btn-outline-success ">&#9998;</a></h2>
+    <h2>{{ student }} <a href="{% url "students:student_update" student.pk %}" class="float-right btn btn-outline-success "><i class="fal fa-user-edit"></i> &nbsp;Edit Student</a></h2>
 <table class="table">
-	<thead><tr><th scope="col">Date</th><th scope="col">Check-Out</th><th scope="col">Parent</th><th scope="col">Duration (hours)</th><th>Update</th></tr></thead>
+	<thead><tr><th scope="col">Date</th><th scope="col">Check-Out</th><th scope="col">Parent</th><th scope="col"><i class="fal fa-alarm-clock"></i></th><th>Update</th></tr></thead>
 	<tbody>
     	{% for session in student.session_groups.all %}
-        <tr><td>	{{ session.date }}</td><td>{{session.sessions.first.end | time:"P" }}</td><td>{{session.parent}}</td><td>{{ session.duration }}{% if session.overtime > 0 %} ({{ session.overtime }} OT) {% endif %}</td><td>{% for s in session.sessions.all %}<a href="{% url "students:session_update" s.pk %}" class="btn btn-small btn-primary" >&#9998; <small>{{ s.start | time:"P" }}-{{ s.end | time:"P" }}</small></a> {% endfor %}</td></tr>
+        <tr><td>	{{ session.date }}</td><td>{{session.sessions.first.end | time:"P" }}</td><td>{{session.parent}}</td><td>{{ session.duration }}h {% if session.overtime > 0 %} ({{ session.overtime }}m OT) {% endif %}</td><td>{% for s in session.sessions.all %}<a href="{% url "students:session_update" s.pk %}" class="btn btn-small btn-primary" ><i class="fal fa-calendar-edit"></i> <small>{{ s.start | time:"P" }}-{{ s.end | time:"P" }}</small></a> {% endfor %}</td></tr>
     	{% endfor %}
     </tbody>
     </table>

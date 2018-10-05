@@ -26,7 +26,7 @@
     <!-- This file stores project-specific CSS -->
     
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-9ralMzdK1QYsk4yBY680hmsb4/hJ98xK3w0TIaJ3ll4POWpWUYaA2bRjGGujGT8w" crossorigin="anonymous">
     
     {% endblock %}
     
@@ -47,22 +47,25 @@
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'kiosk' %}">Checkout Kiosk</a>
-            </li>
+
             {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Start Sessions
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'start'  %}">{% trans "All Students" %}</a>
+                        <div class="dropdown-divider"></div>
+                         <a class="dropdown-item" href="{% url 'students:session_create_multiple_grades' grades='-1,0'  %}">{% trans "PreK-K" %}</a>
+                        <a class="dropdown-item" href="{% url 'students:session_create_multiple_grades' grades='1,2,3,4'  %}">{% trans "Grades 1-4" %}</a>
+                        <a class="dropdown-item" href="{% url 'students:session_create_multiple_grades' grades='5,6,7,8'  %}">{% trans "Grades 5-8" %}</a>
+                      </div>
+                    </li>
+
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'start'  %}">{% trans "Start Sessions" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='-1,0'  %}">{% trans "Start PreK-K" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='1,2,3,4'  %}">{% trans "Start 1-4" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'students:session_create_multiple_grades' grades='5,6,7,8'  %}">{% trans "Start 5-8" %}</a>
-              </li>
+              <a class="nav-link" href="{% url 'students:session_end_multiple_staff' %}">Stop Sessions</a>
+            </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'students:student_list'  %}">{% trans "Students" %}</a>
               </li>
@@ -77,6 +80,9 @@
                 <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
               </li>
             {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+              </li>
               
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
@@ -100,12 +106,11 @@
       {% endif %}
 
       {% block content %}
-        <div class="row"><div class="col">
-          <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
-        </div></div>
-        <div class="container border border-success rounded">
+        <div class="row">
+
+        <div class="container border border-success rounded m-2 col">
           <div class="row">
-            <h3 class="text-center w-100 text-success">Start Sessions</h3>
+            <h3 class="text-center w-100 text-success">Start</h3>
           </div>
         
         <div class="row">
@@ -122,12 +127,37 @@
             <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'students:session_create_multiple_grades' grades='5,6,7,8'  %}">Grades 5-8</a>
           </div>
         </div>
-      </div>
+        </div>
+        <div class="container border border-danger rounded m-2 col">
+        <div class="row">
+            <h3 class="text-center w-100 text-danger">Stop</h3>
+          </div>
         <div class="row">
           <div class="col">
-            <a class="btn btn-lg btn-warning w-100 p-2 m-2" href="{% url 'today' %}">Today</a>
+            <a class="btn btn-lg btn-danger w-100 p-2 m-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-danger w-100 p-2 m-2" href="{% url 'students:session_end_multiple_staff' %}">Checkout for Activities (Staff)</a>
           </div>
         </div>
+      </div>
+        <div class="container border border-info rounded m-2 col">
+          <div class="row">
+            <h3 class="text-center w-100 text-info">Manage</h3>
+          </div>
+        <div class="row">
+          <div class="col">
+            <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'today' %}">Today</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'calendar' %}">History</a>
+          </div>
+          <div class="col">
+            <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'students:student_list' %}">Students</a>
+          </div>
+        </div>
+        </div>
+      </div>
       {% endblock content %}
 
     </div> <!-- /container -->

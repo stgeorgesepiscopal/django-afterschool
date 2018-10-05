@@ -124,7 +124,7 @@ class FamilyForm(forms.ModelForm):
 class SessionForm(forms.ModelForm):
     class Meta:
         model = StudentSession
-        fields = ['start', 'end', 'student', 'parent']
+        fields = ['start', 'end', 'student', 'parent', 'waive_fees']
         exclude = []
         widgets = {
             'start': DateTimePickerInput(options={'sideBySide': True}).start_of('session'),
@@ -229,7 +229,7 @@ class MultiSessionGradesForm(MultiSessionForm):
 class MultiSessionEndForm(forms.Form):
     # time = forms.TimeField()
     sessions = forms.ModelMultipleChoiceField(queryset=StudentSession.objects.all())
-    parent = forms.CharField()
+    parent = forms.CharField(label='Pick-up person')
 
     def __init__(self, *args, **kwargs):
         super(MultiSessionEndForm, self).__init__(*args, **kwargs)
@@ -244,6 +244,35 @@ class MultiSessionEndForm(forms.Form):
         student_names = []
         for s in self.cleaned_data['sessions']:
             s.end = rightnow
+            s.parent = self.cleaned_data['parent']
+            s.save()
+            student_names += [s.student.name]
+        return student_names
+
+
+class MultiSessionEndStaffForm(MultiSessionEndForm):
+    time = forms.TimeField(
+        widget=TimePickerInput(options={
+            # 'inline': True,
+            'format': 'LT',
+        })
+    )
+    no_charge = forms.BooleanField(help_text='No charge if session was waiting for official SGES activities', initial=True)
+
+    def __init__(self, *args, **kwargs):
+        super(MultiSessionEndStaffForm, self).__init__(*args, **kwargs)
+        self.fields["time"].initial = floor_dt(datetime.today(), timedelta(minutes=15)).strftime('%X')
+        self.fields["parent"].label = 'Activity/Pick-up person'
+
+    def save(self, commit=True):
+        rightnow = datetime.today()
+        rightnow = timezone.make_aware(
+            rightnow.replace(minute=self.cleaned_data['time'].minute, hour=self.cleaned_data['time'].hour, second=0,
+                             microsecond=0))
+        student_names = []
+        for s in self.cleaned_data['sessions']:
+            s.end = rightnow
+            s.waive_fees = self.cleaned_data['no_charge']
             s.parent = self.cleaned_data['parent']
             s.save()
             student_names += [s.student.name]

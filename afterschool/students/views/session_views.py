@@ -7,7 +7,8 @@ from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGroup
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
-                     MultiSessionEndForm, WhereIsForm, ImportSchedulesForm,
+                     MultiSessionEndForm, MultiSessionEndStaffForm,
+                     WhereIsForm, ImportSchedulesForm,
                      )
 from django.urls import reverse_lazy
 from django.urls import reverse
@@ -179,6 +180,17 @@ class SessionMultiEndView(FormView):
 
     def get_success_url(self):
         return reverse("students:session_end_multiple")
+
+
+class SessionMultiEndStaffView(SessionMultiEndView):
+    form_class = MultiSessionEndStaffForm
+    template_name = "students/session_end_multiple.html"
+
+    def __init__(self, **kwargs):
+        return super(SessionMultiEndStaffView, self).__init__(**kwargs)
+
+    def get_success_url(self):
+        return reverse("students:session_end_multiple_staff")
 
 
 class SessionTodayView(ListView):
@@ -384,7 +396,7 @@ class SessionCalendarView(TemplateView):
 
             cal = calendar.HTMLCalendar()
             html_cal = cal.formatmonth(year, month)
-            html_cal = re.sub(f'{year}',f'{year} <a href="export/{month}/{year}" class="btn btn-sm btn-outline-success p-0 m-0">&dArr;</a>',html_cal)
+            html_cal = re.sub(f'{year}',f'{year} <a href="export/{month}/{year}" class="text-success"><i class="fal fa-file-spreadsheet"></i></a>',html_cal)
             mapping = [('Mon', 'M'), ('Tue', 'T'), ('Wed', 'W'), ('Thu', 'T'), ('Fri', 'F'), ('Sat', 'S'), ('Sun', 'S')]
             for k, v in mapping:
                 html_cal = html_cal.replace(k, v)
