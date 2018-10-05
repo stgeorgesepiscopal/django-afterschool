@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    <h1><a href={% url "students:student_list" %}>Student</a></h1>
-    <h2>{{ student }} | <a href={% url "students:student_update" student.pk %}>Update</a></h2>
+
+    <h2>{{ student }} <a href="{% url "students:student_update" student.pk %}" class="btn btn-outline-success ">&#9998;</a></h2>
 <table class="table">
-	<thead><tr><th scope="col">Date</th><th scope="col">End</th><th scope="col">Parent</th><th scope="col">Duration (hours)</th><th>Action</th></tr></thead>
+	<thead><tr><th scope="col">Date</th><th scope="col">Check-Out</th><th scope="col">Parent</th><th scope="col">Duration (hours)</th><th>Update</th></tr></thead>
 	<tbody>
     	{% for session in student.session_groups.all %}
-    	<tr><td>	{{ session.date }}</td><td>{{session.sessions.last.end}}</td><td>{{session.parent}}</td><td>{{ session.duration }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td></tr>
+        <tr><td>	{{ session.date }}</td><td>{{session.sessions.first.end | time:"P" }}</td><td>{{session.parent}}</td><td>{{ session.duration }}{% if session.overtime > 0 %} ({{ session.overtime }} OT) {% endif %}</td><td>{% for s in session.sessions.all %}<a href="{% url "students:session_update" s.pk %}" class="btn btn-small btn-primary" >&#9998; <small>{{ s.start | time:"P" }}-{{ s.end | time:"P" }}</small></a> {% endfor %}</td></tr>
     	{% endfor %}
     </tbody>
     </table>
