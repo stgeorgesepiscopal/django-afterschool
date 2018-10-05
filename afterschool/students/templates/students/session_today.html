@@ -19,7 +19,10 @@
             {% else %}
           <tr class="table-success">
             {% endif %}
-          <td><small>{{ forloop.counter }}</small></td><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{% if session.end %}{{ session.end }}{% endif %}</td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td>{% if session.parent %}{{ session.parent }}{% endif  %}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+          <td><small>{{ forloop.counter }}</small></td><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{% if session.end %}{{ session.end }}{% endif %}</td><td>{% if session.waive_fees %}  <div class="fa-layers fa-1x fa-fw">
+    <i class="far fa-usd-circle "></i>
+    <i class="fal fa-ban "></i>
+  </div>{% else %}{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}{% endif %}</td><td>{% if session.parent %}{{ session.parent }}{% endif  %}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
 
 
     {% empty %}

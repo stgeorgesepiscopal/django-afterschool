@@ -137,9 +137,11 @@ class StudentSession(models.Model):
 
     def save(self, *args, **kwargs):
 
-        #super().save(*args, **kwargs)
+        if self.waive_fees:
+            self.duration = 0
+            self.overtime = 0
 
-        if self.end:
+        elif self.end:
             if timezone.localtime(self.end).hour >= 18:
                 overtime = (
                     timezone.localtime(self.end) - timezone.localtime(self.end).replace(minute=0, hour=18)
@@ -167,8 +169,6 @@ class StudentSession(models.Model):
                 else:
                     self.duration = 0
             self.complete = True
-
-        #self.save()
 
         super().save(*args, **kwargs)
         self.session_group.clear()
