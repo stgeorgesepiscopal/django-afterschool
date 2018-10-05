@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
-from ..models import StudentSession, Student, ScheduledClass
+from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGroup
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, WhereIsForm, ImportSchedulesForm,
                      )
@@ -402,42 +402,85 @@ def csv_export(request, month, year):
 
     #sessions = StudentSession.objects.filter(start__month=int(month),start__year=int(year)).annotate(Count('student')).annotate(total_duration=Sum('duration'))
 
-    students = Student.objects.filter(split_billing=False, sessions__start__month=int(month), sessions__start__year=int(year)).annotate(duration_sum=Sum('sessions__duration'), overtime_sum=Sum('sessions__overtime'))
+    #students = Student.objects.filter(split_billing=False, sessions__start__month=int(month), sessions__start__year=int(year)).annotate(duration_sum=Sum('sessions__duration'), overtime_sum=Sum('sessions__overtime'))
 
-    students_split = StudentSession.objects.filter(student__split_billing=True).values('student', 'parent').annotate(
-        duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).values_list(
-        'student__first_name', 'student__last_name', 'student__pcr_id', 'parent', 'duration_sum', 'overtime_sum', named=True)
+    students = StudentSessionsGroup.objects.\
+        filter(date__month=int(month), date__year=int(year), student__split_billing=False).\
+        values('student').\
+        annotate(duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).\
+        values_list('student__first_name', 'student__last_name', 'student__pcr_id',
+                    'duration_sum', 'overtime_sum', named=True)
+
+    students_split_ratio = StudentSessionsGroup.objects. \
+        filter(date__month=int(month), date__year=int(year), student__split_billing=True, student__parent1_pays__gt=0). \
+        values('student', 'parent'). \
+        annotate(duration_sum=Sum('duration'), overtime_sum=Sum('overtime')). \
+        values_list('student__first_name', 'student__last_name', 'student__pcr_id',
+                    'student__parent1_pays', 'duration_sum', 'overtime_sum', named=True)
+
+    students_split = StudentSessionsGroup.objects.\
+        filter(date__month=int(month), date__year=int(year), student__split_billing=True, student__parent1_pays__lt=0).\
+        values('student', 'parent').\
+        annotate(duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).\
+        values_list('student__first_name', 'student__last_name', 'student__pcr_id',
+                    'parent', 'duration_sum', 'overtime_sum', named=True)
 
     writer = csv.writer(response)
     writer.writerow(['Transaction Date', 'Customer ID', 'Student ID', 'Full Name', 'Account ID', 'Account Name', 'Adjustment Code', 'Adjustment Reason', 'Amount', 'Description'])
-    for s in students:
-        tdate = datetime.now().strftime('%-m/%d/%Y')
-        cid = ''
-        sid = s.pcr_id
-        fullname = s.last_name+', '+s.first_name
-        accountID = 'Aftercare'
-        accountName = 'Aftercare'
-        adjustmentCode = '2'
-        adjReason = 'Aftercare'
-        amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
-        desc = f'Aftercare for {s.first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
-        if s.overtime_sum > 0:
-            desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
-        writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
+    # for s in students:
+    #     tdate = datetime.now().strftime('%-m/%d/%Y')
+    #     cid = ''
+    #     sid = s.pcr_id
+    #     fullname = s.last_name+', '+s.first_name
+    #     accountID = 'Aftercare'
+    #     accountName = 'Aftercare'
+    #     adjustmentCode = '2'
+    #     adjReason = 'Aftercare'
+    #     amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
+    #     desc = f'Aftercare for {s.first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
+    #     if s.overtime_sum > 0:
+    #         desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
+    #     writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
 
-    for s in students_split:
-        tdate = datetime.now().strftime('%-m/%d/%Y')
-        cid = ''
-        sid = s.student__pcr_id
-        fullname = f'{s.student__last_name}, {s.student__first_name} ({s.parent})'
-        accountID = 'Aftercare'
-        accountName = 'Aftercare'
-        adjustmentCode = '2'
-        adjReason = 'Aftercare'
-        amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
-        desc = f'Aftercare for {s.student__first_name}, month of {calendar.month_name[int(month)]}, {year}. {s.duration_sum} hours @ $8/hour.'
-        if s.overtime_sum > 0:
-            desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
-        writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
+    for ss in (students, students_split):
+        for s in ss:
+            tdate = datetime.now().strftime('%-m/%d/%Y')
+            cid = ''
+            sid = s.student__pcr_id
+            fullname = f'{s.student__last_name}, {s.student__first_name}'
+            if 'parent' in s._fields:
+                fullname += f' ({s.parent})'
+            accountID = 'Aftercare'
+            accountName = 'Aftercare'
+            adjustmentCode = '2'
+            adjReason = 'Aftercare'
+            amt = (int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)
+            desc = f'Aftercare for {s.student__first_name}, month of {calendar.month_name[int(month)]}, {year}. '\
+                   f'{s.duration_sum} hours @ $8/hour.'
+            if s.overtime_sum > 0:
+                desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
+            writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
+
+    for s in students_split_ratio:
+
+        for rate in (s.student__parent1_pays, 100 - s.student__parent1_pays):
+            tdate = datetime.now().strftime('%-m/%d/%Y')
+            cid = ''
+            sid = s.student__pcr_id
+            fullname = f'{s.student__last_name}, {s.student__first_name}'
+            if 'parent' in s._fields:
+                fullname += f' ({s.parent})'
+            accountID = 'Aftercare'
+            accountName = 'Aftercare'
+            adjustmentCode = '2'
+            adjReason = 'Aftercare'
+            amt = round(((int(s.duration_sum) * 8) + (int(s.overtime_sum) * 3)) * (rate / 100), 2)
+
+            desc = f'{rate}% of aftercare for {s.student__first_name},'\
+                f' month of {calendar.month_name[int(month)]}, {year}. '\
+                f'{s.duration_sum} hours @ $8/hour.'
+            if s.overtime_sum > 0:
+                desc += f'  {s.overtime_sum} minutes of overtime (past 6:05pm) @ $3/minute.'
+            writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
 
     return response

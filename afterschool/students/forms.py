@@ -52,7 +52,7 @@ class DayofWeekForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['name', 'grade', 'schedule', 'split_billing']
+        fields = ['name', 'grade', 'schedule', 'split_billing', 'parent1_pays']
         exclude = []
         widgets = None
         localized_fields = None
