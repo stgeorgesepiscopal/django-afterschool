@@ -462,14 +462,13 @@ def csv_export(request, month, year):
             writer.writerow([tdate, cid, sid, fullname, accountID, accountName, adjustmentCode, adjReason, amt, desc])
 
     for s in students_split_ratio:
-
+        parent = 0
         for rate in (s.student__parent1_pays, 100 - s.student__parent1_pays):
+            parent += 1
             tdate = datetime.now().strftime('%-m/%d/%Y')
             cid = ''
-            sid = s.student__pcr_id
+            sid = f'{s.student__pcr_id}_{parent}'
             fullname = f'{s.student__last_name}, {s.student__first_name}'
-            if 'parent' in s._fields:
-                fullname += f' ({s.parent})'
             accountID = 'Aftercare'
             accountName = 'Aftercare'
             adjustmentCode = '2'
