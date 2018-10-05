@@ -67,6 +67,7 @@ class Student(models.Model):
             models.Index(fields=['pcr_id']),
             models.Index(fields=['grade', 'last_name']),
         ]
+        ordering = ['grade','last_name']
 
     # app_label = 'afterschool.students'
 
@@ -131,6 +132,7 @@ class StudentSession(models.Model):
     class Meta:
         verbose_name = 'session'
         verbose_name_plural = 'sessions'
+        ordering = ['-end']
 
     def save(self, *args, **kwargs):
 
@@ -201,6 +203,9 @@ class StudentSessionsGroup(models.Model):
     sessions = models.ManyToManyField(StudentSession, related_name='session_group', blank=True)
     duration = models.SmallIntegerField(default=0)
     overtime = models.SmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['-date']
 
     def save(self, *args, **kwargs):
         if self.id:
