@@ -430,6 +430,7 @@ def csv_export(request, month, year):
 
     students = StudentSessionsGroup.objects.\
         filter(date__month=int(month), date__year=int(year), student__split_billing=False).\
+        order_by('student__pk').\
         values('student').\
         annotate(duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).\
         values_list('student__first_name', 'student__last_name', 'student__pcr_id',
