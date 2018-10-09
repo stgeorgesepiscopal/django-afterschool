@@ -143,14 +143,10 @@ class StudentSession(models.Model):
 
         elif self.end:
             if timezone.localtime(self.end).hour >= 18:
-                overtime = (
+                self.overtime = (
                     timezone.localtime(self.end) - timezone.localtime(self.end).replace(minute=0, hour=18)
                                 ).total_seconds() / 60
-                if overtime > 5:
-                    """
-                    5-minute exclusive grace period.  Should probably become env variable
-                    """
-                    self.overtime = overtime-5
+
                 self.duration = (
                         timezone.localtime(self.end).replace(minute=0, hour=18) -
                         timezone.localtime(self.start)
@@ -173,8 +169,8 @@ class StudentSession(models.Model):
         super().save(*args, **kwargs)
         self.session_group.clear()
 
-        session_group, _ = StudentSessionsGroup.objects.get_or_create(date=self.start.date(), student=self.student)
-        if _:
+        session_group, new_session = StudentSessionsGroup.objects.get_or_create(date=self.start.date(), student=self.student)
+        if new_session:
             session_group.save()
 
         self.session_group.add(session_group)
@@ -228,8 +224,6 @@ class StudentSessionsGroup(models.Model):
                 self.parent = self.sessions.order_by('-start').first().parent
 
         super().save(*args, **kwargs)
-
-
 
 
 class ScheduledClass(models.Model):
