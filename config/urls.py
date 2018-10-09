@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from afterschool.students.views.session_views import (SessionMultiEndView,
                                                       SessionMultiCreateView, SessionTodayView, SessionDayView,
-                                                      WhereIsView,
+                                                      WhereIsView, SessionDayGroupView,
                                                       SessionCalendarView, csv_export
                                                       )
 
@@ -38,11 +38,14 @@ urlpatterns = [
                        login_required(SessionTodayView.as_view()),
                        name="today"),
                   path("day",
-                       login_required(SessionDayView.as_view()),
+                       login_required(SessionDayGroupView.as_view()),
                        name="day"),
                   path("day/<start>",  # NOQA
-                       login_required(SessionDayView.as_view()),
+                       login_required(SessionDayGroupView.as_view()),
                        name="day_hardlink"),
+                  path("allsessions/<start>",  # NOQA
+                       login_required(SessionDayView.as_view()),
+                       name="daysessions_hardlink"),
                   path("export/<month>/<year>",  # NOQA
                        login_required(csv_export),
                        name="export"),

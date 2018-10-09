@@ -133,7 +133,7 @@ class StudentSession(models.Model):
     class Meta:
         verbose_name = 'session'
         verbose_name_plural = 'sessions'
-        ordering = ['-end']
+        ordering = ['start']
 
     def save(self, *args, **kwargs):
 
@@ -202,7 +202,7 @@ class StudentSessionsGroup(models.Model):
     overtime = models.SmallIntegerField(default=0)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['-date', 'student__grade', 'student__last_name']
 
     def save(self, *args, **kwargs):
         if self.id:

@@ -231,8 +231,20 @@ class SessionDayView(SessionTodayView):
 
     def get_context_data(self, *args, **kwargs):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
-        print(ret)
+        #print(ret)
         return ret
+
+
+class SessionDayGroupView(SessionDayView):
+    template_name = "students/sessiongroups_today.html"
+
+    def get_queryset(self):
+        try:
+            start = dateparse.parse_date(self.request.GET['start'])
+        except:
+            start = dateparse.parse_date(self.kwargs['start'])
+        # print(start)
+        return StudentSessionsGroup.objects.filter(date=start).order_by('student__grade', 'student__last_name')
 
 
 class WhereIsView(FormView):

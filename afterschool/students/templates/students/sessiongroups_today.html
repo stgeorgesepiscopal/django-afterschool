@@ -1,0 +1,60 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+    sessions
+{% endblock %}
+
+{% block content %}
+    <h1>{% with s=session_list.first %}
+      {{ s.date|date:"l d M Y"}}
+      {% endwith %}
+
+      <small class="float-right">[ {{ session_list|length }} ]</small></h1>
+  <table class="table"><thead><tr><th><small>#</small></th></th><th>Student</th><th>In</th><th>Out</th><th><i class="fal fa-alarm-clock"></i></th><th>Parent</th><th>Action</th></tr></thead>
+    	{% for session in session_list %}
+        <tr><td><small>{{ forloop.counter }}</small></td>
+          <td>{{ session.student }} <small><a href="{% url "students:student_detail" session.student.pk %}" class="badge btn-sm btn-outline-info"><i class="far fa-eye"></i></a></small></td>
+          <td>{{ session.sessions.first.start | time:"P" }}</td>
+          <td>{{session.sessions.last.end | time:"P" }}</td>
+          <td>{% if session.duration is 0 %}  <div class="fa-layers fa-1x fa-fw">
+    <i class="far fa-usd-circle "></i>
+    <i class="fal fa-ban "></i>
+  </div>{% else %}{{ session.duration }}h {% if session.overtime > 0 %} ({{ session.overtime }}m OT) {% endif %}{% endif %}</td>
+          <td>{% if session.parent %}{{ session.parent }}{% endif  %}</td>
+          <td>{% for s in session.sessions.all %}<a href="{% url "students:session_update" s.pk %}" class="btn btn-small btn-primary" ><i class="fal fa-calendar-edit"></i> <small>{{ s.start | time:"P" }}-{{ s.end | time:"P" }}</small></a> {% endfor %}</td></tr>
+    	{% endfor %}
+  {% comment %}
+      {% for session in session_list %}
+        {% if session.complete is False %}
+          <tr class="table-light">
+            {% else %}
+          <tr class="table-success">
+            {% endif %}
+          <td><small>{{ forloop.counter }}</small></td><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{% if session.end %}{{ session.end }}{% endif %}</td><td>{% if session.waive_fees %}  <div class="fa-layers fa-1x fa-fw">
+    <i class="far fa-usd-circle "></i>
+    <i class="fal fa-ban "></i>
+  </div>{% else %}{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}{% endif %}</td><td>{% if session.parent %}{{ session.parent }}{% endif  %}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+
+
+    {% empty %}
+        <li>No sessions yet.</li>
+    {% endfor %}
+{% endcomment%}
+  </table>
+{% endblock %}
+
+{% comment %}
+
+  {%  regroup session_list by complete as sessions %}
+    {% for sessiongroup in sessions %}
+      {% for session in sessiongroup.list %}
+        {% if sessiongroup.grouper is False %}
+          <tr class="table-light"><td>{{ forloop.counter }}</td><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} ({{ session.overtime }} minutes overtime){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        {% else %}
+          <tr class="table-success"><td>{{ forloop.counter }}</td><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        {% endif %}
+      {% endfor %}
+    {% empty %}
+        <li>No sessions yet.</li>
+    {% endfor %}
+{% endcomment %}
