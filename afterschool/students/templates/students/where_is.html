@@ -24,8 +24,9 @@
       </div>
       <div class="modal-body">
         <table class="table table-sm table-striped">
+          <tr><th>Time</th><th>Course</th><th>Teacher</th><th>Room</th></tr>
         {% endif %}
-        <tr {% if c.current %}class="bg-primary text-white"{% endif %}><td>{{ c.start }}</td><td>{{ c.course }}</td><td>{{ c.teacher }}</td><td>{{ c.room }}</td></tr>
+        <tr {% if c.current %}class="bg-primary text-white"{% endif %}><td>{{ c.start }}-{{ c.end }}</td><td>{{ c.course }}</td><td>{{ c.teacher }}</td><td>{{ c.room }}</td></tr>
           {% if forloop.last %}
             </table></div>
       <div class="modal-footer">
