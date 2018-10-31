@@ -252,6 +252,7 @@ class WhereIsView(FormView):
     form_class = WhereIsForm
     # fields = ['start', 'end', 'student', 'parent']
     template_name = "students/where_is.html"
+    plus_context = dict()
 
     # success_url = reverse_lazy("session_list")
 
@@ -263,7 +264,7 @@ class WhereIsView(FormView):
         iterobj = iter(obj)
         try:
             messages.info(self.request, '<h4><small>Where is </small>' + obj[
-                0].student.name + '<small> at ' + datetime.today().strftime('%-I:%M %p') + '?</small></h4>',
+                0].student.name + '<small> at ' + datetime.today().strftime('%-I:%M %p') + '?</small><button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#scheduleModal">Full schedule</button></h4>',
                           extra_tags='safe')
         except:
             messages.error(self.request, 'No scheduled classes')
@@ -277,12 +278,18 @@ class WhereIsView(FormView):
             else:
                 messages.warning(self.request, m, extra_tags='safe')
 
+        self.plus_context['full_schedule'] = obj[0].student.classes_today
+
         return super(WhereIsView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(WhereIsView, self).get_context_data(**kwargs)
         more_context = {'current_time': timezone.now().strftime('%c')}
         context.update(more_context)
+        context.update(self.plus_context)
+        self.plus_context["full_schedule"] = None
+        print(context)
+
         return context
 
     def get_success_url(self):

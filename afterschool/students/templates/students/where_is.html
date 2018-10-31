@@ -9,7 +9,34 @@
 {% endblock %}
 
 {% block content %}
+<!-- Modal -->
 
+        {% for c in full_schedule %}
+        {% if forloop.first %}
+          <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="max-width:86%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scheduleModalLabel">Full Schedule for {{ c.student }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-sm table-striped">
+        {% endif %}
+        <tr {% if c.current %}class="bg-primary text-white"{% endif %}><td>{{ c.start }}</td><td>{{ c.course }}</td><td>{{ c.teacher }}</td><td>{{ c.room }}</td></tr>
+          {% if forloop.last %}
+            </table></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        {% endif %}
+      {% endfor %}
 
 
 

@@ -2,6 +2,8 @@ from math import ceil
 
 from django.db import models
 
+from django.db.models import Case, Value, When, BooleanField
+
 from django.utils import timezone
 from datetime import datetime, timedelta
 
@@ -104,6 +106,22 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name + ' (' + str(self.gradestr) + ')'
+
+    @property
+    def classes_today(self):
+        try:
+            scheduled_classes = self.scheduled_classes.filter(
+                weekday=timezone.now().weekday()
+            ).annotate(current=Case(
+                When(start__lte=timezone.localtime().time(),
+                     end__gte=timezone.localtime().time(),
+                     then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            )).order_by('start')
+        except:
+            scheduled_classes = []
+        return scheduled_classes
 
 
 class Family(models.Model):
