@@ -153,6 +153,15 @@ class StudentSession(models.Model):
         verbose_name_plural = 'sessions'
         ordering = ['start']
 
+    def delete(self, using=None, keep_parents=False):
+        sg = self.session_group.first()
+        self.session_group.clear()
+        if sg.sessions.count() > 0:
+            sg.save()
+        else:
+            sg.delete()
+        super().delete(using=using, keep_parents=keep_parents)
+
     def save(self, *args, **kwargs):
 
         if self.waive_fees:
@@ -252,11 +261,14 @@ class ScheduledClass(models.Model):
     course = models.CharField(max_length=60, null=True)
     room = models.CharField(max_length=60, null=True)
     teacher = models.CharField(max_length=60, null=True)
+    source = models.CharField(max_length=60, default="manual")
 
     class Meta:
         indexes = [
             models.Index(fields=['student', 'weekday', 'course', 'room', 'start', 'end']),
-        ]
+            models.Index(fields=['student', 'weekday']),
+            models.Index(fields=['student', 'weekday', 'start']),
+                  ]
 
     def __str__(self):
         return str(self.student) + ': [' + str(self.room) + '] ' + str(self.course) + ' (' + str(self.teacher) + ')'

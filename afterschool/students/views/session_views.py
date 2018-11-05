@@ -309,7 +309,7 @@ class ImportSchedulesView(FormView):
         return super(ImportSchedulesView, self).__init__(**kwargs)
 
     def form_valid(self, form, **kwargs):
-        ScheduledClass.objects.all().delete()
+        ScheduledClass.objects.filter(source="import").delete()
         # print("delete")
         f = TextIOWrapper(self.request.FILES['csv_file'].file, encoding='utf-8-sig')
         # print("TextIOWrapper")
@@ -326,7 +326,9 @@ class ImportSchedulesView(FormView):
                                                                   course=row['Course Name'], room=row['Room'],
                                                                   start=datetime.strptime(row['Begin Time'],
                                                                                           "%I:%M %p"),
-                                                                  end=datetime.strptime(row['End Time'], "%I:%M %p"), )
+                                                                  end=datetime.strptime(row['End Time'], "%I:%M %p"),
+                                                                  source="import",
+                                                                  )
             if created:
                 sched.teacher = row['Teacher Last Name']
             else:
