@@ -20,6 +20,7 @@ from django.utils import timezone, dateparse
 from django.db import transaction
 
 from django.db.models import Min, Max, Count, Sum
+from django.db.models.functions import Upper
 
 from datetime import datetime, timedelta
 
@@ -455,11 +456,12 @@ def csv_export(request, month, year):
 
     students_split = StudentSessionsGroup.objects.\
         filter(date__month=int(month), date__year=int(year), student__split_billing=True, student__parent1_pays__lt=0). \
-        order_by('student__pk', 'parent'). \
-        values('student', 'parent').\
+        annotate(parent_upper=Upper('parent')). \
+        order_by('student__pk', 'parent_upper'). \
+        values('student', 'parent_upper').\
         annotate(duration_sum=Sum('duration'), overtime_sum=Sum('overtime')).\
         values_list('student__first_name', 'student__last_name', 'student__pcr_id',
-                    'parent', 'duration_sum', 'overtime_sum', named=True)
+                    'parent_upper', 'duration_sum', 'overtime_sum', named=True)
 
     writer = csv.writer(response)
     writer.writerow(['Transaction Date', 'Customer ID', 'Student ID', 'Full Name', 'Account ID', 'Account Name', 'Adjustment Code', 'Adjustment Reason', 'Amount', 'Description'])
@@ -485,8 +487,8 @@ def csv_export(request, month, year):
                 cid = ''
                 sid = s.student__pcr_id
                 fullname = f'{s.student__last_name}, {s.student__first_name}'
-                if 'parent' in s._fields:
-                    fullname += f' ({s.parent})'
+                if 'parent_upper' in s._fields:
+                    fullname += f' ({s.parent_upper.title()})'
                 accountID = 'Aftercare'
                 accountName = 'Aftercare'
                 adjustmentCode = '2'
