@@ -485,10 +485,12 @@ def csv_export(request, month, year):
             if s.duration_sum > 0:
                 tdate = datetime.now().strftime('%-m/%d/%Y')
                 cid = ''
-                sid = s.student__pcr_id
+                sid = str(s.student__pcr_id)
+
                 fullname = f'{s.student__last_name}, {s.student__first_name}'
                 if 'parent_upper' in s._fields:
                     fullname += f' ({s.parent_upper.title()})'
+                    sid += "_" + s.parent_upper.replace(" ", "")
                 accountID = 'Aftercare'
                 accountName = 'Aftercare'
                 adjustmentCode = '2'
