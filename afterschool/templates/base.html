@@ -108,8 +108,8 @@
       {% endif %}
 
       {% block content %}
-        <div class="row">
-
+        <div class="row justify-content-center">
+        {% if request.user.is_authenticated %}
         <div class="container border border-success rounded m-2 col">
           <div class="row">
             <h3 class="text-center w-100 text-success">Start</h3>
@@ -159,6 +159,15 @@
           </div>
         </div>
         </div>
+        {% else %}
+          <div class="container border border-danger rounded m-2 col-md-6">
+            <a class="btn btn-lg btn-danger w-100 p-2 m-2" href="{% url 'kiosk' %}">Checkout Kiosk</a>
+          </div>
+          <div class="container border border-info rounded m-2 col-md-3">
+             <a class="btn btn-lg btn-info w-100 p-2 m-2" href="{% url 'account_login' %}">Sign In</a>
+          </div>
+        {% endif %}
+
       </div>
       {% endblock content %}
 
