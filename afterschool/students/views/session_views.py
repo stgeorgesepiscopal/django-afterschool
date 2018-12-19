@@ -100,7 +100,7 @@ class SessionUpdateView(UpdateView):
         return super(SessionUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("students:session_detail", args=(self.object.pk,))
+        return reverse("day_hardlink", kwargs=({'start': self.object.start.strftime('%Y-%m-%d')}))
 
 
 class SessionDeleteView(DeleteView):
@@ -115,7 +115,7 @@ class SessionDeleteView(DeleteView):
         return super(SessionDeleteView, self).__init__(**kwargs)
 
     def get_success_url(self):
-        return reverse("students:session_list")
+        return reverse("day_hardlink", kwargs=({'start': self.object.start.strftime('%Y-%m-%d')}))
 
 
 class SessionMultiCreateView(FormView):
