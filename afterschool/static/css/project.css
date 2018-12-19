@@ -27,8 +27,12 @@
 
 .month {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.mon, .tue, .wed, .thur, .fri, .sat, .sun { text-align:center; }
+th.mon, th.tue, th.wed, th.thu, th.fri, th.sat, th.sun { text-align:center; font-size:smaller; }
+
+.mon, .tue, .wed, .thu, .fri, .sat, .sun { text-align:center; }
 
 .sat, .sun { display:none; }
