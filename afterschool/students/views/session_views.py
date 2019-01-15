@@ -163,6 +163,11 @@ class SessionMultiCreateGradesView(SessionMultiCreateView):
 class SessionMultiCreateHistoricalView(SessionMultiCreateView):
     form_class = MultiSessionHistoricalForm
 
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Sessions added')
+        return reverse("students:session_create_historical")
+        # return reverse("students:session_detail", args=(self.object.pk,))
+
 
 class SessionMultiEndView(FormView):
     form_class = MultiSessionEndForm
