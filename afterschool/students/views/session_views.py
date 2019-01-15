@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGroup
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, MultiSessionEndStaffForm,
-                     WhereIsForm, ImportSchedulesForm,
+                     WhereIsForm, ImportSchedulesForm, MultiSessionHistoricalForm,
                      )
 from django.urls import reverse_lazy
 from django.urls import reverse
@@ -158,6 +158,10 @@ class SessionMultiCreateGradesView(SessionMultiCreateView):
         kw = super(SessionMultiCreateView, self).get_form_kwargs(**kwargs)
         kw.update({'grades': self.kwargs['grades']})
         return kw
+
+
+class SessionMultiCreateHistoricalView(SessionMultiCreateView):
+    form_class = MultiSessionHistoricalForm
 
 
 class SessionMultiEndView(FormView):

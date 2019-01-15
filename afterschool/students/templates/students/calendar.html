@@ -5,6 +5,10 @@
   <div class="  border border-success rounded p-3 m-2">
 {{ c | safe}}
   </div>
+
 {% endfor %}
+  </div>
+  <div class="row">
+  <a class="btn btn-lg btn-success w-100 p-2 m-2" href="{% url 'students:session_create_historical' %}">Create Historical Sessions</a>
   </div>
 {% endblock %}

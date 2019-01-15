@@ -226,6 +226,52 @@ class MultiSessionGradesForm(MultiSessionForm):
             pass
 
 
+class MultiSessionHistoricalForm(forms.Form):
+    date = forms.DateField(
+        widget=DatePickerInput()
+    )
+    start_time = forms.TimeField(
+        widget=TimePickerInput(options={
+            # 'inline': True,
+            'format': 'LT',
+        })
+    )
+
+    end_time = forms.TimeField(
+        widget=TimePickerInput(options={
+            # 'inline': True,
+            'format': 'LT',
+        })
+    )
+
+    students = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["students"].queryset = Student.objects.all()
+        self.fields["start_time"].initial = "15:00:00"
+        self.fields["end_time"].initial = "18:00:00"
+
+    def save(self, commit=True):
+        # print(self.cleaned_data)
+        rightnow = datetime.today()
+        # formtime = self['time']
+        # print(formtime)
+        start = timezone.make_aware(datetime.combine(self.cleaned_data['date'], self.cleaned_data['start_time']))
+        end = timezone.make_aware(datetime.combine(self.cleaned_data['date'], self.cleaned_data['end_time']))
+        # end = self.cleaned_data['date']
+        #timezone.make_aware(
+        #    start.replace(minute=self.cleaned_data['start_time'].minute, hour=self.cleaned_data['start_time'].hour, second=0, microsecond=0))
+        # timezone.make_aware(end.replace(minute=self.cleaned_data['end_time'].minute, hour=self.cleaned_data['end_time'].hour, second=0, microsecond=0))
+        # print(rightnow)
+        for s in self.cleaned_data['students']:
+            ses = StudentSession.objects.create(start=start, end=end, student=s)
+            s.save()
+        return self
+        # return super(SessionForm, self).save(commit)
+
+
 class MultiSessionEndForm(forms.Form):
     # time = forms.TimeField()
     sessions = forms.ModelMultipleChoiceField(queryset=StudentSession.objects.all())
