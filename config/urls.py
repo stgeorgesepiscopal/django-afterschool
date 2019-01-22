@@ -12,6 +12,8 @@ from afterschool.students.views.session_views import (SessionMultiEndView,
                                                       SessionCalendarView, csv_export
                                                       )
 
+from config.routers import router
+
 urlpatterns = [
                   path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
                   path(
@@ -54,8 +56,10 @@ urlpatterns = [
                        name="where_is"),
                   path("cal",
                        login_required(SessionCalendarView.as_view()),
-                       name="calendar")
+                       name="calendar"),
                   # Your stuff: custom urls includes go here
+                  path("api-auth/", include('rest_framework.urls')),
+                  path("api/", include(router.urls)),
               ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )

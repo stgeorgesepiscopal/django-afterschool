@@ -29,7 +29,28 @@
 {{ block.super }}
 <script>
 
+var updateInterval;
+
+function updateSessions(){
+	  $.ajax("/api/opensessions/", {
+	    success: function(data){
+
+	      $('select#id_sessions').empty();
+	      for (let d of data){
+
+	        var option = $('<option></option>').attr("value", d['pk']).text(d['student']['name']);
+	        $('select#id_sessions').append(option);
+	        doChange();
+
+        }
+
+      }
+    });
+
+  }
+
 function doChange(){
+
 	$('.btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
@@ -93,6 +114,8 @@ $('label[for=id_time]').hide();
 
 
 	$('#search').keyup(function(){
+    clearInterval(updateInterval);
+    updateInterval = setInterval(updateSessions, 90000);
 		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
 		$('.btn:contains("'+this.value+'")').show();
 		if(this.value==''){
@@ -108,6 +131,11 @@ $('label[for=id_time]').hide();
 	setTimeout(function(){
 		$('.alert').hide()
 	}, 5000);
+
+  updateInterval = setInterval(updateSessions, 30000);
+  updateSessions();
+
+
     
 });
 

@@ -244,6 +244,8 @@ class MultiSessionHistoricalForm(forms.Form):
         })
     )
 
+    parent = forms.CharField(label='Pick-up person')
+
     students = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
 
     def __init__(self, *args, **kwargs):
