@@ -498,10 +498,9 @@ def csv_export(request, month, year):
 
                 fullname = f'{s.student__last_name}, {s.student__first_name}'
                 if 'parent_upper' in s._fields:
-                    if s.parent_upper is None:
-                        s.parent_upper = "UNKNOWN"
-                    fullname += f' ({s.parent_upper.title()})'
-                    sid += "_" + s.parent_upper.replace(" ", "")
+                    parent_upper = "UNKNOWN" if s.parent_upper is None else s.parent_upper
+                    fullname += f' ({parent_upper.title()})'
+                    sid += "_" + parent_upper.replace(" ", "")
                 accountID = 'Aftercare'
                 accountName = 'Aftercare'
                 adjustmentCode = '2'
