@@ -7,6 +7,8 @@ from django.db.models import Case, Value, When, BooleanField
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+from decimal import Decimal
+
 
 def ceil_dt(dt, delta):
     return dt + (datetime.min - timezone.make_naive(dt)) % delta
@@ -238,7 +240,7 @@ class StudentSessionsGroup(models.Model):
             for s in self.sessions.all():
                 duration += s.duration
                 overtime += s.overtime
-            duration = duration - 0.25
+            duration = duration - Decimal(0.25)
             if duration > 0:
                 self.duration = ceil(duration)
             else:
