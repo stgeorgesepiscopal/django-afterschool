@@ -209,7 +209,7 @@ class MultiSessionGradesForm(MultiSessionForm):
 
     def __init__(self, *args, **kwargs):
         try:
-            grades = (kwargs.pop('grades')).split(',')
+            grades = [int(x) for x in (kwargs.pop('grades')).split(',')]
         except:
             grades = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8]
         super(MultiSessionGradesForm, self).__init__(*args, **kwargs)
