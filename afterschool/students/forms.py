@@ -221,9 +221,16 @@ class MultiSessionGradesForm(MultiSessionForm):
         self.fields["students"].queryset = Student.objects.filter(grade__in=grades).exclude(
             sessions__in=open_sessions).order_by('grade', 'last_name')
         if -1 in grades:
-            self.fields["time"].initial = timezone.localtime().strftime('%X')
+            if timezone.localtime().weekday() == 2:
+                self.fields["time"].initial = timezone.localtime().replace(hour=14, minute=50).strftime('%X')
+            else:
+                self.fields["time"].initial = timezone.localtime().replace(hour=15, minute=15).strftime('%X')
         else:
-            pass
+            if timezone.localtime().weekday() == 2:
+                self.fields["time"].initial = timezone.localtime().replace(hour=15, minute=10).strftime('%X')
+            else:
+                self.fields["time"].initial = timezone.localtime().replace(hour=16, minute=00).strftime('%X')
+
 
 
 class MultiSessionHistoricalForm(forms.Form):
@@ -252,7 +259,7 @@ class MultiSessionHistoricalForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.fields["students"].queryset = Student.objects.all()
-        self.fields["start_time"].initial = "15:00:00"
+        self.fields["start_time"].initial = "16:00:00"
         self.fields["end_time"].initial = "18:00:00"
 
     def save(self, commit=True):
@@ -285,10 +292,8 @@ class MultiSessionEndForm(forms.Form):
             start__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)), end__isnull=True)
 
     def save(self, commit=True):
-        if timezone.localtime().hour >= 18:
-            rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
-        else:
-            rightnow = ceil_dt(timezone.now(), timedelta(minutes=15))
+        rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
+
         student_names = []
         for s in self.cleaned_data['sessions']:
             s.end = rightnow
