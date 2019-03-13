@@ -238,7 +238,8 @@ class StudentSessionsGroup(models.Model):
             for s in self.sessions.all():
                 duration += s.duration
                 overtime += s.overtime
-            if duration > 0.25:
+            duration = duration - 0.25
+            if duration > 0:
                 self.duration = ceil(duration)
             else:
                 self.duration = 0

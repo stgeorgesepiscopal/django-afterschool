@@ -23,3 +23,7 @@ def floor_dt(dt, delta):
     :return:
     """
     return ceil_dt(dt, delta) - delta
+
+
+def calculate_hours(session_group):
+    pass
