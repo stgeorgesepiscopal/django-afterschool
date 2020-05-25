@@ -305,8 +305,8 @@ class MultiSessionEndForm(forms.Form):
 
 class ScanForm(forms.Form):
     # time = forms.TimeField()
-    student = forms.ModelChoiceField(queryset=Student.objects.all())
-    staff = forms.ModelChoiceField(queryset=Staff.objects.all())
+    student = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+    staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
     scanners = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
     temperature = forms.DecimalField(label='Temperature (degrees Fahrenheit')
     result = forms.TypedChoiceField(label='Result', choices=Scan.SCREENING_CHOICES)
