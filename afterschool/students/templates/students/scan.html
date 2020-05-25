@@ -76,8 +76,8 @@ function doChange(){
   $('#scanner_search_div #absent .btn:not(:contains("'+v+'"))').hide();
 		$('#scanner_search_div .btn:contains("'+v+'")').show();
 		if(v==''){
-			$('#person_search_div #present .btn').show();
-			$('#person_search_div #absent .btn').hide();
+			$('#scanner_search_div #present .btn').show();
+			$('#scanner_search_div #absent .btn').hide();
 		}
 
 	$('#scanner_search_div .btn-group-vertical').empty();
@@ -91,7 +91,7 @@ function doChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#present').append($div);
+		$('#scanner_search_div #present').append($div);
 		//console.log(this.value);
 	});
 	$('select#id_scanners option:not(:selected)').each(function(){
@@ -102,8 +102,8 @@ function doChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#absent').append($div);
-		$('#absent .btn:not(:contains("'+$('#scanner_search').value+'"))').hide();
+		$('#scanner_search_div #absent').append($div);
+		$('#scanner_search_div #absent .btn:not(:contains("'+$('#scanner_search').value+'"))').hide();
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
@@ -114,11 +114,11 @@ function doChange(){
 function doPeopleChange(){
 
    var v = $('#person_search').val()
-  $('#person_search_div #absent .btn:not(:contains("'+v+'"))').hide();
+  $('#person_search_div #person_absent .btn:not(:contains("'+v+'"))').hide();
 		$('#person_search_div .btn:contains("'+v+'")').show();
 		if(v==''){
-			$('#person_search_div #present .btn').show();
-			$('#person_search_div #absent .btn').hide();
+			$('#person_search_div #person_present .btn').show();
+			$('#person_search_div #person_absent .btn').hide();
 		}
 
 	$('#person_search_div .btn-group-vertical').empty();
@@ -132,7 +132,7 @@ function doPeopleChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#person_present').append($div);
+		$('#person_search_div #person_present').append($div);
 		//console.log(this.value);
 	});
 	$('select#id_student option:not(:selected)').each(function(){
@@ -143,8 +143,8 @@ function doPeopleChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#person_absent').append($div);
-		$('#person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+		$('#person_search_div #person_absent').append($div);
+		$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
@@ -157,7 +157,7 @@ function doPeopleChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#person_present').append($div);
+		$('#person_search_div #person_present').append($div);
 		//console.log(this.value);
 	});
 	$('select#id_staff option:not(:selected)').each(function(){
@@ -168,8 +168,8 @@ function doPeopleChange(){
 			$(this).remove();
 		});
 		$div.html(this.text);
-		$('#person_absent').append($div);
-		$('#person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+		$('#person_search_div #person_absent').append($div);
+		$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
