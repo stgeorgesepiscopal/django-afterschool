@@ -201,8 +201,8 @@ class ScanView(FormView):
         return super(ScanView, self).__init__(**kwargs)
 
     def form_valid(self, form):
-        obj = form.save(commit=False)
-        messages.success(self.request, '<h3>Scanned: ' + str(ss.name for ss in obj.scanners.all()) + '</h3>', extra_tags='safe')
+        s = form.save(commit=False)
+        messages.success(self.request, '<h3>' + s + '</h3>', extra_tags='safe')
         return super(ScanView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
