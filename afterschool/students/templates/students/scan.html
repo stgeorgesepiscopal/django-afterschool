@@ -39,9 +39,9 @@ function updateScanners(){
 	      for (let d of data){
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
 	        $('select#id_scanners').append(option);
-	        doChange();
-        }
 
+        }
+        doChange();
       }
     });
 
@@ -87,7 +87,9 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
+			try {
+			  $('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
+      } catch (e) { console.log(e) }
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -98,7 +100,9 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
+			try {
+			  $('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
+      } catch (e) { console.log(e) }
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -128,7 +132,8 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
+			try {
+			  $('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();} catch(e) {console.log(e); }
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -139,7 +144,9 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
+			try {
+			  $('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change(); } catch(e) { console.log(e); }
+
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -153,7 +160,9 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
+			try {
+			  $('select#id_staff option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
+      } catch (e) { console.log(e)}
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -164,7 +173,9 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
+			try {
+			  $('select#id_staff option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
+      } catch (e) { console.log(e); }
 			$(this).remove();
 		});
 		$div.html(this.text);
