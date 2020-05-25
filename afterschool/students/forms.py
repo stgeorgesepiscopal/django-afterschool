@@ -316,9 +316,8 @@ class ScanForm(forms.Form):
         self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
 
     def save(self, commit=True):
-        rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
-        self.timestamp = rightnow
-        self.save()
+        self.timestamp = timezone.now()
+        super(ScanForm, self).save(commit)
         return self.scanners
 
 
