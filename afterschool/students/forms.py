@@ -330,7 +330,12 @@ class ScanForm(forms.Form):
         new_scan.scanners.set(data['scanners'])
         new_scan.save()
 
-        return str(new_scan)
+        try:
+            return str(new_scan)
+        except Exception as e:
+            logger.debug(e)
+            return "Scanned"
+
 
 
 class MultiSessionEndStaffForm(MultiSessionEndForm):
