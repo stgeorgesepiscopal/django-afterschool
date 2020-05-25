@@ -103,7 +103,7 @@ function doChange(){
 		});
 		$div.html(this.text);
 		$('#scanner_search_div #absent').append($div);
-		$('#scanner_search_div #absent .btn:not(:contains("'+$('#scanner_search').value+'"))').hide();
+		$('#scanner_search_div #absent .btn:not(:contains("'+$('#scanner_search').val()+'"))').hide();
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
@@ -144,7 +144,7 @@ function doPeopleChange(){
 		});
 		$div.html(this.text);
 		$('#person_search_div #person_absent').append($div);
-		$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
@@ -169,11 +169,12 @@ function doPeopleChange(){
 		});
 		$div.html(this.text);
 		$('#person_search_div #person_absent').append($div);
-		$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
 	});
+	$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
 //$('#person_search').keyup();
 };
 
