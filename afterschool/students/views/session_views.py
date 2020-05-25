@@ -9,6 +9,7 @@ from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGro
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, MultiSessionEndStaffForm,
                      WhereIsForm, ImportSchedulesForm, MultiSessionHistoricalForm,
+                     ScanForm,
                      )
 from django.urls import reverse_lazy
 from django.urls import reverse
@@ -193,7 +194,7 @@ class SessionMultiEndView(FormView):
 
 
 class ScanView(FormView):
-    form_class = MultiSessionEndForm
+    form_class = ScanForm
     template_name = "students/scan.html"
 
     def __init__(self, **kwargs):
