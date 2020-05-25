@@ -73,7 +73,7 @@ function updatePeople(){
 
 function doChange(){
 
-	$('.btn-group-vertical').empty();
+	$('#scanner_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
 	$('select#id_scanners option:selected').each(function(){
@@ -106,14 +106,14 @@ function doChange(){
 
 function doPeopleChange(){
 
-	$('.btn-group-vertical').empty();
+	$('#person_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
 	$('select#id_student option:selected').each(function(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -124,7 +124,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -138,7 +138,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -149,7 +149,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -181,9 +181,9 @@ $(function() {
 	$('label[for=id_student]').hide();
 	$('label[for=id_staff]').hide();
 
-	$('select#id_student').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div_person" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
+	$('select#id_student').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
 
-	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="scanner_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
+	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="scanner_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="scanner_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
 
 	$('#id_timestamp').addClass('form-control border border-primary');
 	//$('#id_timestamp').addClass('form-control');
