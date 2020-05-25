@@ -223,8 +223,6 @@ $('label[for=id_timestamp]').hide();
 		}
 	});
 
-	doChange();
-	doPeopleChange();
 
 	$('select#id_scanners').change(doChange);
 	$('select#id_student').change(doPeopleChange);
@@ -234,11 +232,8 @@ $('label[for=id_timestamp]').hide();
 		$('.alert').hide()
 	}, 5000);
 
-  updateInterval = setInterval(updateScanners, 30000);
   updateScanners();
   updatePeople();
-
-
 
 });
 

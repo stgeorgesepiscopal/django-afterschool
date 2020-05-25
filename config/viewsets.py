@@ -54,7 +54,7 @@ class PeopleViewSet(viewsets.ViewSet):
 
     def list(self, request):
         staff_queryset = Staff.objects.all()
-        student_queryset = Student.objects.all()
+        student_queryset = Student.objects.filter(grade__lt=9)
 
         search_string = request.query_params.get('search', None)
         if search_string is not None:

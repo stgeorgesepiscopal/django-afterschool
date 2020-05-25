@@ -313,6 +313,7 @@ class ScanForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ScanForm, self).__init__(*args, **kwargs)
+        self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
 
     def save(self, commit=True):
         rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
