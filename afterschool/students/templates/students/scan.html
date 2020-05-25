@@ -87,7 +87,7 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -98,7 +98,7 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
