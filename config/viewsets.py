@@ -3,7 +3,7 @@ from rest_framework import viewsets
 
 from datetime import datetime
 
-from config.serializers import StudentSessionSerializer
+from config.serializers import StudentSessionSerializer, StudentSerializer, StaffSerializer
 
 from afterschool.students.models import StudentSession, Student, Staff, Scan
 
