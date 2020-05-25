@@ -87,7 +87,7 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -98,7 +98,7 @@ function doChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -128,7 +128,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -139,7 +139,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -153,7 +153,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
@@ -164,7 +164,7 @@ function doPeopleChange(){
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
 		$div.click(function(){
-			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$('select#id_staff option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
 			$(this).remove();
 		});
 		$div.html(this.text);
