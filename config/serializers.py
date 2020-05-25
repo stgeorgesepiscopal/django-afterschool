@@ -17,6 +17,7 @@ class StudentSimpleSerializer(serializers.Serializer):
 
 class StaffSerializer(serializers.Serializer):
     name = serializers.CharField()
+    pk = serializers.IntegerField()
 
     class Meta:
         model = Staff
