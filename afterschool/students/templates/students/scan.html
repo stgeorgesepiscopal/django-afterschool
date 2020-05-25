@@ -47,6 +47,27 @@ function updateScanners(){
 
   }
 
+function updatePeople(){
+	  $.ajax("/api/people/", {
+	    success: function(data){
+
+	      $('select#id_student').empty();
+	      for (let d of data['students']){
+	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        $('select#id_student').append(option);
+	        doChange();
+        }
+        for (let d of data['staff']){
+	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        $('select#id_staff').append(option);
+	        doChange();
+        }
+
+      }
+    });
+
+  }
+
 function doChange(){
 
 	$('.btn-group-vertical').empty();
@@ -80,6 +101,64 @@ function doChange(){
 $('#scanner_search').keyup();
 };
 
+function doPeopleChange(){
+
+	$('.btn-group-vertical').empty();
+	//$('#present').append('<h1>Present</h1>');
+	//$('#search').val('');
+	$('select#id_student option:selected').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_present').append($div);
+		//console.log(this.value);
+	});
+	$('select#id_student option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_absent').append($div);
+		$('#person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+		//$('.btn:contains("'+$('#search').value+'")').show();
+		//$($div).hide()
+		//console.log(this.value);
+	});
+	$('select#id_staff option:selected').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_present').append($div);
+		//console.log(this.value);
+	});
+	$('select#id_staff option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_absent').append($div);
+		$('#person_absent .btn:not(:contains("'+$('#person_search').value+'"))').hide();
+		//$('.btn:contains("'+$('#search').value+'")').show();
+		//$($div).hide()
+		//console.log(this.value);
+	});
+$('#person_search').keyup();
+};
+
 $(function() {
 	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
     return function( elem ) {
@@ -88,17 +167,24 @@ $(function() {
 	});
 
 	$('select#id_scanners').hide();
+	$('select#id_student').hide();
+	$('select#id_staff').hide();
 	$('#id_temperature').addClass('form-control border border-primary');
 	//$('#id_timestamp').addClass('form-control');
   var temperature_label = $('label[for=id_temperature]').text();
 	$('#id_temperature').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">'+temperature_label+'</span></div>');
 	$('label[for=id_temperature]').hide();
 	$('label[for=id_scanners]').hide();
+	$('label[for=id_student]').hide();
+	$('label[for=id_staff]').hide();
+
+	$('select#id_student').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div_person" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
+
 	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="scanner_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
 
 	$('#id_timestamp').addClass('form-control border border-primary');
 	//$('#id_timestamp').addClass('form-control');
-	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">End Time</span></div>');
+	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Time</span></div>');
 $('label[for=id_timestamp]').hide();
 
 	/*	$('#id_no_charge').bootstrapToggle({
@@ -122,9 +208,23 @@ $('label[for=id_timestamp]').hide();
 		}
 	});
 
+	$('#person_search').keyup(function(){
+    clearInterval(updateInterval);
+    updateInterval = setInterval(updateScanners, 90000);
+		$('#person_absent .btn:not(:contains("'+this.value+'"))').hide();
+		$('.btn:contains("'+this.value+'")').show();
+		if(this.value==''){
+			$('#person_present .btn').show();
+			$('#person_absent .btn').hide();
+		}
+	});
+
 	doChange();
+	doPeopleChange();
 
 	$('select#id_scanners').change(doChange);
+	$('select#id_student').change(doPeopleChange);
+	$('select#id_staff').change(doPeopleChange);
 
 	setTimeout(function(){
 		$('.alert').hide()
