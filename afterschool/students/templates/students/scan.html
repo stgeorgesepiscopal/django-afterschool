@@ -77,7 +77,7 @@ function doChange(){
 		if(v==''){
 			$('#scanner_search_div #present .btn').show();
 			$('#scanner_search_div #absent .btn').hide();
-		} else {
+		}
 
       $('#scanner_search_div .btn-group-vertical').empty();
       //$('#present').append('<h1>Present</h1>');
@@ -117,7 +117,10 @@ function doChange(){
         //$($div).hide()
         //console.log(this.value);
       });
-    }
+    if(v==''){
+			$('#scanner_search_div #present .btn').show();
+			$('#scanner_search_div #absent .btn').hide();
+		}
 //$('#scanner_search').keyup();
 };
 
