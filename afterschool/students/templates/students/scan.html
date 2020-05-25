@@ -49,20 +49,19 @@ function updateScanners(){
 
 function updatePeople(){
 	  $.ajax("/api/people/", {
-	    data: {
-	      search: $('#person_search').val()
-      },
 	    success: function(data){
 
 	      $('select#id_student').empty();
 	      $('select#id_staff').empty();
 	      for (let d of data['students']){
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        option.prop('selected', false).attr('selected', false).change();
 	        $('select#id_student').append(option);
 
         }
         for (let d of data['staff']){
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        option.prop('selected', false).attr('selected', false).change();
 	        $('select#id_staff').append(option);
         }
         doPeopleChange();
@@ -232,16 +231,19 @@ $('label[for=id_timestamp]').hide();
 
 	$('#scanner_search').keyup(function(){
 
-	  updateScanners();
+	  doChange();
 
 
 	});
 
 	$('#person_search').keyup(function(){
 
-	  updatePeople();
+	  doPeopleChange();
 
 	});
+
+	updateScanners();
+	updatePeople();
 
 
 	$('select#id_scanners').change(doChange);
