@@ -202,7 +202,7 @@ class ScanView(FormView):
 
     def form_valid(self, form):
         s = form.save(commit=False)
-        messages.success(self.request, '<h3>' + s + '</h3>', extra_tags='safe')
+        messages.success(self.request, '<h3>' + str(s) + '</h3>', extra_tags='safe')
         return super(ScanView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
