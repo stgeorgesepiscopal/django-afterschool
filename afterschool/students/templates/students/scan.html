@@ -32,7 +32,7 @@
 var updateInterval;
 
 function updateScanners(){
-	  $.ajax("/api/scanners/", {
+	  $.ajax("/api/staff/", {
 	    success: function(data){
 
 	      $('select#id_scanners').empty();
