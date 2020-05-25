@@ -5,6 +5,7 @@ from afterschool.students.models import StudentSession, Student, Staff
 
 class StudentSerializer(serializers.Serializer):
     name = serializers.CharField()
+    pk = serializers.IntegerField()
 
     class Meta:
         model = Student

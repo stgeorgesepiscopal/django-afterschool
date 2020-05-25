@@ -37,11 +37,9 @@ function updateScanners(){
 
 	      $('select#id_scanners').empty();
 	      for (let d of data){
-
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
 	        $('select#id_scanners').append(option);
 	        doChange();
-
         }
 
       }
@@ -74,12 +72,12 @@ function doChange(){
 		});
 		$div.html(this.text);
 		$('#absent').append($div);
-		$('#absent .btn:not(:contains("'+$('#search').value+'"))').hide();
+		$('#absent .btn:not(:contains("'+$('#scanner_search').value+'"))').hide();
 		//$('.btn:contains("'+$('#search').value+'")').show();
 		//$($div).hide()
 		//console.log(this.value);
 	});
-$('#search').keyup();
+$('#scanner_search').keyup();
 };
 
 $(function() {
@@ -96,7 +94,7 @@ $(function() {
 	$('#id_temperature').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">'+temperature_label+'</span></div>');
 	$('label[for=id_temperature]').hide();
 	$('label[for=id_scanners]').hide();
-	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
+	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="scanner_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
 
 	$('#id_timestamp').addClass('form-control border border-primary');
 	//$('#id_timestamp').addClass('form-control');
@@ -113,7 +111,7 @@ $('label[for=id_timestamp]').hide();
 		// $('label[for=id_no_charge]').hide();
 
 
-	$('#search').keyup(function(){
+	$('#scanner_search').keyup(function(){
     clearInterval(updateInterval);
     updateInterval = setInterval(updateScanners, 90000);
 		$('#absent .btn:not(:contains("'+this.value+'"))').hide();

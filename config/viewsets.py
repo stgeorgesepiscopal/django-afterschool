@@ -1,5 +1,6 @@
 from django.utils import timezone
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from datetime import datetime
 
@@ -47,3 +48,21 @@ class StaffViewSet(viewsets.ModelViewSet):
             return queryset.filter(name__icontains=search_string)
         else:
             return queryset
+
+
+class PeopleViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        staff_queryset = Staff.objects.all()
+        student_queryset = Student.objects.all()
+
+        search_string = request.query_params.get('search', None)
+        if search_string is not None:
+            staff_queryset = staff_queryset.filter(name__icontains=search_string)
+            student_queryset = student_queryset.filter(name__icontains=search_string)
+
+        staff_serializer = StaffSerializer(staff_queryset, many=True)
+        student_serializer = StudentSerializer(student_queryset, many=True)
+
+        return Response({'staff': staff_serializer.data, 'students': student_serializer.data})
+
