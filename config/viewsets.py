@@ -35,6 +35,7 @@ class StudentsViewSet(viewsets.ModelViewSet):
         else:
             return queryset
 
+
 class StaffViewSet(viewsets.ModelViewSet):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
@@ -43,6 +44,6 @@ class StaffViewSet(viewsets.ModelViewSet):
         queryset = Staff.objects.all()
         search_string = self.request.query_params.get('search', None)
         if search_string is not None:
-            return queryset.filter(name__contains=search_string)
+            return queryset.filter(name__icontains=search_string)
         else:
             return queryset

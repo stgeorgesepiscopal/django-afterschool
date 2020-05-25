@@ -4,6 +4,8 @@ from afterschool.students.models import StudentSession, Student, Staff
 
 
 class StudentSerializer(serializers.Serializer):
+    name = serializers.CharField()
+
     class Meta:
         model = Student
         fields = ('pk', 'name',)
@@ -14,6 +16,8 @@ class StudentSimpleSerializer(serializers.Serializer):
 
 
 class StaffSerializer(serializers.Serializer):
+    name = serializers.CharField()
+
     class Meta:
         model = Staff
         fields = ('pk', 'name',)
