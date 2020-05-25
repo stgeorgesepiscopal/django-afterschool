@@ -77,42 +77,47 @@ function doChange(){
 		if(v==''){
 			$('#scanner_search_div #present .btn').show();
 			$('#scanner_search_div #absent .btn').hide();
-		}
+		} else {
 
-	$('#scanner_search_div .btn-group-vertical').empty();
-	//$('#present').append('<h1>Present</h1>');
-	//$('#search').val('');
-	$('select#id_scanners option:selected').each(function(){
-	  console.log("selected scanners")
-	  console.log(this);
+      $('#scanner_search_div .btn-group-vertical').empty();
+      //$('#present').append('<h1>Present</h1>');
+      //$('#search').val('');
+      $('select#id_scanners option:selected').each(function () {
+        console.log("selected scanners")
+        console.log(this);
 
-		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
-		$div.click(function(){
-			try {
-			  $('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();
-      } catch (e) { console.log(e) }
-			$(this).remove();
-		});
-		$div.html(this.text);
-		$('#scanner_search_div #present').append($div);
-		//console.log(this.value);
-	});
-	$('select#id_scanners option:not(:selected)').each(function(){
+        var $div = $("<div>", {'class': 'btn btn-lg btn-outline-success', 'data-id': this.value});
+        $div.click(function () {
+          try {
+            $('select#id_scanners option[value=' + $(this).data('id') + ']').prop("selected", false).attr('selected', false).change();
+          } catch (e) {
+            console.log(e)
+          }
+          $(this).remove();
+        });
+        $div.html(this.text);
+        $('#scanner_search_div #present').append($div);
+        //console.log(this.value);
+      });
+      $('select#id_scanners option:not(:selected)').each(function () {
 
-		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
-		$div.click(function(){
-			try {
-			  $('select#id_scanners option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change();
-      } catch (e) { console.log(e) }
-			$(this).remove();
-		});
-		$div.html(this.text);
-		$('#scanner_search_div #absent').append($div);
-		$('#scanner_search_div #absent .btn:not(:contains("'+$('#scanner_search').val()+'"))').hide();
-		//$('.btn:contains("'+$('#search').value+'")').show();
-		//$($div).hide()
-		//console.log(this.value);
-	});
+        var $div = $("<div>", {'class': 'btn btn-lg btn-outline-danger', 'data-id': this.value});
+        $div.click(function () {
+          try {
+            $('select#id_scanners option[value=' + $(this).data('id') + ']').prop("selected", true).attr('selected', true).change();
+          } catch (e) {
+            console.log(e)
+          }
+          $(this).remove();
+        });
+        $div.html(this.text);
+        $('#scanner_search_div #absent').append($div);
+        $('#scanner_search_div #absent .btn:not(:contains("' + $('#scanner_search').val() + '"))').hide();
+        //$('.btn:contains("'+$('#search').value+'")').show();
+        //$($div).hide()
+        //console.log(this.value);
+      });
+    }
 //$('#scanner_search').keyup();
 };
 
@@ -192,7 +197,7 @@ function doPeopleChange(){
 		//console.log(this.value);
 	});
 
-	if ( $('select#id_student option:selected').length > 0 || $('select#id_staff option:selected').length ) {
+	if ( $('select#id_student option:selected').length > 0 || $('select#id_staff option:selected').length > 0 || $('#person_search').val().length < 1) {
     $('#person_search_div #person_absent .btn').hide();
   } else {
 	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
