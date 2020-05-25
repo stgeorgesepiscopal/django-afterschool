@@ -316,9 +316,11 @@ class ScanForm(forms.Form):
         self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
 
     def save(self, commit=True):
-        self.timestamp = timezone.now()
-        super(ScanForm, self).save(commit)
-        return self.scanners
+        new_scan = Scan.objects.create(**self.cleaned_data)
+        new_scan.timestamp = timezone.now()
+        new_scan.save()
+
+        return new_scan.scanners
 
 
 class MultiSessionEndStaffForm(MultiSessionEndForm):
