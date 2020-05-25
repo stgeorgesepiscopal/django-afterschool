@@ -72,6 +72,13 @@ function updatePeople(){
   }
 
 function doChange(){
+  var v = $('#scanner_search').val()
+  $('#scanner_search_div #absent .btn:not(:contains("'+v+'"))').hide();
+		$('#scanner_search_div .btn:contains("'+v+'")').show();
+		if(v==''){
+			$('#person_search_div #present .btn').show();
+			$('#person_search_div #absent .btn').hide();
+		}
 
 	$('#scanner_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
@@ -105,6 +112,14 @@ function doChange(){
 };
 
 function doPeopleChange(){
+
+   var v = $('#person_search').val()
+  $('#person_search_div #absent .btn:not(:contains("'+v+'"))').hide();
+		$('#person_search_div .btn:contains("'+v+'")').show();
+		if(v==''){
+			$('#person_search_div #present .btn').show();
+			$('#person_search_div #absent .btn').hide();
+		}
 
 	$('#person_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
@@ -204,23 +219,13 @@ $('label[for=id_timestamp]').hide();
 
 	  updateScanners();
 
-		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
-		$('.btn:contains("'+this.value+'")').show();
-		if(this.value==''){
-			$('#present .btn').show();
-			$('#absent .btn').hide();
-		}
+
 	});
 
 	$('#person_search').keyup(function(){
 
 	  updatePeople();
-		$('#person_absent .btn:not(:contains("'+this.value+'"))').hide();
-		$('.btn:contains("'+this.value+'")').show();
-		if(this.value==''){
-			$('#person_present .btn').show();
-			$('#person_absent .btn').hide();
-		}
+
 	});
 
 
