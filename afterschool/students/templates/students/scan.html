@@ -83,6 +83,8 @@ function doChange(){
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
 	$('select#id_scanners option:selected').each(function(){
+	  console.log("selected scanners")
+	  console.log(this);
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
@@ -128,6 +130,8 @@ function doPeopleChange(){
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
 	$('select#id_student option:selected').each(function(){
+	  console.log("selected students")
+	  console.log(this);
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
@@ -156,6 +160,8 @@ function doPeopleChange(){
 		//console.log(this.value);
 	});
 	$('select#id_staff option:selected').each(function(){
+	  console.log("selected staff")
+	  console.log(this);
 
 		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
 		$div.click(function(){
