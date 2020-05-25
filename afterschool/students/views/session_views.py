@@ -20,6 +20,8 @@ from django.contrib import messages
 from django.utils import timezone, dateparse
 from django.db import transaction
 
+import logging
+
 from django.db.models import Min, Max, Count, Sum
 from django.db.models.functions import Upper
 
@@ -27,6 +29,7 @@ from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
 
+logger = logging.getLogger(__name__)
 
 class SessionListView(ListView):
     model = StudentSession
@@ -202,7 +205,10 @@ class ScanView(FormView):
 
     def form_valid(self, form):
         s = form.save(commit=False)
-        messages.success(self.request, '<h3>' + str(s) + '</h3>', extra_tags='safe')
+        try:
+            messages.success(self.request, '<h3>' + str(s) + '</h3>', extra_tags='safe')
+        except Exception as e:
+            logger.debug(e)
         return super(ScanView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
