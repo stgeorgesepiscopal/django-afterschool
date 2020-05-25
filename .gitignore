@@ -198,6 +198,8 @@ cmake-build-debug/
 
 # IntelliJ
 out/
+.idea/*.iml
+.idea/misc.xml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

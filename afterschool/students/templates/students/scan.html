@@ -1,0 +1,165 @@
+{% extends "students/session_base.html" %}
+{% load static i18n %}
+{% block title %}
+    Health Scan
+{% endblock %}
+
+{% block nav %}
+  {% if request.user.is_authenticated %}
+    {{ block.super }}
+
+  {% else %}
+<div class="row"><div class="w-100" style="background-color: #1a2857"><img src="{% static 'images/logo.png' %}" class="mx-auto my-1 py-2 d-block"/></div></div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+	<h1>Scan <input class="btn btn-primary btn-lg float-right" type="submit" value="Scan" /></h1>
+<h2>{{ current_time }}</h2>
+    {{ form.as_p }}
+    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Scan" />
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+
+var updateInterval;
+
+function updateScanners(){
+	  $.ajax("/api/scanners/", {
+	    success: function(data){
+
+	      $('select#id_scanners').empty();
+	      for (let d of data){
+
+	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        $('select#id_scanners').append(option);
+	        doChange();
+
+        }
+
+      }
+    });
+
+  }
+
+function doChange(){
+
+	$('.btn-group-vertical').empty();
+	//$('#present').append('<h1>Present</h1>');
+	//$('#search').val('');
+	$('select#id_scanners option:selected').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",false).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#present').append($div);
+		//console.log(this.value);
+	});
+	$('select#id_scanners option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
+		$div.click(function(){
+			$('option[value='+$(this).data('id')+']').prop("selected",true).change();
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#absent').append($div);
+		$('#absent .btn:not(:contains("'+$('#search').value+'"))').hide();
+		//$('.btn:contains("'+$('#search').value+'")').show();
+		//$($div).hide()
+		//console.log(this.value);
+	});
+$('#search').keyup();
+};
+
+$(function() {
+	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+	});
+
+	$('select#id_scanners').hide();
+	$('#id_temperature').addClass('form-control border border-primary');
+	//$('#id_timestamp').addClass('form-control');
+  var temperature_label = $('label[for=id_temperature]').text();
+	$('#id_temperature').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">'+temperature_label+'</span></div>');
+	$('label[for=id_temperature]').hide();
+	$('label[for=id_scanners]').hide();
+	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Child\'s Name &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="search" class="form-control border border-primary" autocomplete="off"></input></div><div id="test_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
+
+	$('#id_timestamp').addClass('form-control border border-primary');
+	//$('#id_timestamp').addClass('form-control');
+	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">End Time</span></div>');
+$('label[for=id_timestamp]').hide();
+
+	/*	$('#id_no_charge').bootstrapToggle({
+      on: 'Waive Fees for Session',
+      off: 'Charge Normally',
+      onstyle: 'danger',
+      offstyle: 'success',
+    }); */
+		$('.toggle').addClass('w-100');
+		// $('label[for=id_no_charge]').hide();
+
+
+	$('#search').keyup(function(){
+    clearInterval(updateInterval);
+    updateInterval = setInterval(updateScanners, 90000);
+		$('#absent .btn:not(:contains("'+this.value+'"))').hide();
+		$('.btn:contains("'+this.value+'")').show();
+		if(this.value==''){
+			$('#present .btn').show();
+			$('#absent .btn').hide();
+		}
+	});
+
+	doChange();
+
+	$('select#id_scanners').change(doChange);
+
+	setTimeout(function(){
+		$('.alert').hide()
+	}, 5000);
+
+  updateInterval = setInterval(updateScanners, 30000);
+  updateScanners();
+
+
+
+});
+
+</script>
+{% endblock %}
+
+{% block extrahead %}       {# Extra Resources Start #}
+{{ form.media }}            {# Form required JS and CSS #}
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <style type="text/css">
+  .toggle > .toggle-group {
+    background:white;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+    color:#666;
+}
+
+.toggle.off {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+.toggle-handle {
+    background-color: white;
+    border: thin rgba(0, 0, 0, .25) solid;
+}
+  </style>
+{% endblock %}              {# Extra Resources End #}

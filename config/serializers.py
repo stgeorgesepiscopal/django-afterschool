@@ -1,12 +1,26 @@
 from rest_framework import serializers
 
-from afterschool.students.models import StudentSession, Student
+from afterschool.students.models import StudentSession, Student, Staff
+
 
 class StudentSerializer(serializers.Serializer):
+    class Meta:
+        model = Student
+        fields = ('pk', 'name',)
+
+
+class StudentSimpleSerializer(serializers.Serializer):
     name = serializers.CharField()
 
+
+class StaffSerializer(serializers.Serializer):
+    class Meta:
+        model = Staff
+        fields = ('pk', 'name',)
+
+
 class StudentSessionSerializer(serializers.HyperlinkedModelSerializer):
-    student = StudentSerializer()
+    student = StudentSimpleSerializer()
     class Meta:
         model = StudentSession
         fields = ('pk', 'student',)

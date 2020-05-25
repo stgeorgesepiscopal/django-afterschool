@@ -2,7 +2,7 @@ from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput, Date
 
 from django import forms
 from django.utils import timezone
-from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass
+from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass, Staff, Scan
 from .utils import ceil_dt, floor_dt
 
 from django.db.models import Case, Value, When, BooleanField
@@ -301,6 +301,24 @@ class MultiSessionEndForm(forms.Form):
             s.save()
             student_names += [s.student.name]
         return student_names
+
+
+class ScanForm(forms.Form):
+    # time = forms.TimeField()
+    students = forms.ModelChoiceField(queryset=Student.objects.all())
+    staff = forms.ModelChoiceField(queryset=Staff.objects.all())
+    scanners = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
+    temperature = forms.DecimalField(label='Temperature (degrees Fahrenheit')
+    result = forms.TypedChoiceField(label='Result', choices=Scan.SCREENING_CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super(ScanForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
+        self.timestamp = rightnow
+        super(ScanForm, self).save()
+        return self.scanners
 
 
 class MultiSessionEndStaffForm(MultiSessionEndForm):

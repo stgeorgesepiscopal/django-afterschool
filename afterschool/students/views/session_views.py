@@ -192,6 +192,29 @@ class SessionMultiEndView(FormView):
         return reverse("students:session_end_multiple")
 
 
+class ScanView(FormView):
+    form_class = MultiSessionEndForm
+    template_name = "students/scan.html"
+
+    def __init__(self, **kwargs):
+        return super(ScanView, self).__init__(**kwargs)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        for s in obj:
+            messages.success(self.request, '<h3>Scanned: ' + str(s) + '</h3>', extra_tags='safe')
+        return super(ScanView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScanView, self).get_context_data(**kwargs)
+        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        context.update(more_context)
+        return context
+
+    def get_success_url(self):
+        return reverse("students:scan")
+
+
 class SessionMultiEndStaffView(SessionMultiEndView):
     form_class = MultiSessionEndStaffForm
     template_name = "students/session_end_multiple.html"

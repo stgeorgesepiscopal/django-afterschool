@@ -162,7 +162,7 @@ class Scan(models.Model):
     temperature = models.DecimalField(null=False, max_digits=6, decimal_places=1, default=98.6)
     student = models.ForeignKey(Student, related_name='scans', on_delete=models.SET_NULL, null=True, blank=True)
     staff = models.ForeignKey(Staff, related_name='scans', on_delete=models.SET_NULL, null=True, blank=True)
-    scanner = models.ForeignKey(Staff, related_name='records', on_delete=models.SET_NULL, null=True)
+    scanners = models.ManyToManyField(Staff, related_name='scans_recorded', on_delete=models.SET_NULL, null=True)
     result = models.SmallIntegerField(choices=SCREENING_CHOICES)
 
     class Meta:
@@ -172,6 +172,7 @@ class Scan(models.Model):
 
     def __str__(self):
         return self.student.name
+
 
 class StudentSession(models.Model):
     start = models.DateTimeField()
