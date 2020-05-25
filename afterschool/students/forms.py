@@ -316,6 +316,14 @@ class ScanForm(forms.Form):
         self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
 
     def save(self, commit=True):
+        if self.cleaned_data['student'].count() > 0:
+            self.cleaned_data['student'] = self.cleaned_data['student'].first()
+        else:
+            self.cleaned_data['student'] = None
+        if self.cleaned_data['staff'].count() > 0:
+            self.cleaned_data['staff'] = self.cleaned_data['staff'].first()
+        else:
+            self.cleaned_data['staff'] = None
         new_scan = Scan.objects.create(**self.cleaned_data)
         new_scan.timestamp = timezone.now()
         new_scan.save()
