@@ -126,6 +126,7 @@ function doPeopleChange(){
 			$('#person_search_div #person_absent .btn').hide();
 		}
 
+
 	$('#person_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
@@ -190,7 +191,12 @@ function doPeopleChange(){
 		//$($div).hide()
 		//console.log(this.value);
 	});
-	$('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
+
+	if ( $('select#id_student option:selected').length > 0 || $('select#id_staff option:selected').length ) {
+    $('#person_search_div #person_absent .btn').hide();
+  } else {
+	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
+  }
 //$('#person_search').keyup();
 };
 
