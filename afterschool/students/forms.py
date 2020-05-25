@@ -318,7 +318,7 @@ class ScanForm(forms.Form):
     def save(self, commit=True):
         rightnow = ceil_dt(timezone.now(), timedelta(minutes=1))
         self.timestamp = rightnow
-        super(ScanForm, self).save()
+        self.save()
         return self.scanners
 
 
