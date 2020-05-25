@@ -330,7 +330,7 @@ class ScanForm(forms.Form):
         new_scan.scanners.set(data['scanners'])
         new_scan.save()
 
-        return new_scan
+        return str(new_scan)
 
 
 class MultiSessionEndStaffForm(MultiSessionEndForm):
