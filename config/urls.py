@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from afterschool.students.views.session_views import (SessionMultiEndView,
                                                       SessionMultiCreateView, SessionTodayView, SessionDayView,
                                                       WhereIsView, SessionDayGroupView,
-                                                      SessionCalendarView, csv_export, ScanView
+                                                      SessionCalendarView, csv_export, ScanView, CheckoutView
                                                       )
 
 from config.routers import router
@@ -36,6 +36,9 @@ urlpatterns = [
                   path("scan",  # NOQA
                        ScanView.as_view(),
                        name="scan_kiosk"),
+                  path("carpool",  # NOQA
+                       CheckoutView.as_view(),
+                       name="carpool"),
                   path("start",  # NOQA
                        login_required(SessionMultiCreateView.as_view()),
                        name="start"),
