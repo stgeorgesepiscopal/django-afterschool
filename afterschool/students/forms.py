@@ -343,7 +343,7 @@ class CheckoutForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)
-        self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
+        self.fields["students"].queryset = Student.objects.filter(grade__lt=9)
 
     def save(self, commit=True):
         data = self.cleaned_data
