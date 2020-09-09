@@ -353,7 +353,7 @@ class CheckoutForm(forms.Form):
             ses.save()
             sessions.add(ses)
         try:
-            return str(s) for s in sessions
+            return sessions
         except Exception as e:
             logger.debug(e)
             return "Scanned"
