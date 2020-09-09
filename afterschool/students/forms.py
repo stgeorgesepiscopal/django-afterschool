@@ -351,7 +351,7 @@ class CheckoutForm(forms.Form):
         for s in data['students']:
             ses = Checkout.objects.create(timestamp=timezone.now(), student=s)
             ses.save()
-            sessions.add(ses)
+            sessions.append(ses)
         try:
             return sessions
         except Exception as e:

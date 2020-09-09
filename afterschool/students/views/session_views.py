@@ -244,7 +244,7 @@ class CheckoutView(FormView):
         return context
 
     def get_success_url(self):
-        return reverse("students:carpool")
+        return reverse("carpool")
 
 
 class SessionMultiEndStaffView(SessionMultiEndView):
