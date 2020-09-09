@@ -35,12 +35,12 @@ function updatePeople(){
 	  $.ajax("/api/people/", {
 	    success: function(data){
 
-	      $('select#id_student').empty();
+	      $('select#id_students').empty();
 
 	      for (let d of data['students']){
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
 	        option.prop('selected', false).attr('selected', false).change();
-	        $('select#id_student').append(option);
+	        $('select#id_students').append(option);
 
         }
 
@@ -140,12 +140,12 @@ $('label[for=id_timestamp]').hide();
 
 	});
 
-	updateScanners();
+	
 	updatePeople();
 
 
 	
-	$('select#id_student').change(doPeopleChange);
+	$('select#id_students').change(doPeopleChange);
 	
 	setTimeout(function(){
 		$('.alert').hide()
