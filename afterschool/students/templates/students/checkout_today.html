@@ -1,0 +1,45 @@
+{% extends "students/session_base.html" %}
+
+{% block title %}
+Carpool checkouts 
+{% endblock %}
+
+{% block content %}
+    <h1>{% with s=checkout_list.first %}
+      {{ s.timestamp|date:"l d M Y"}}
+      {% endwith %}
+  
+      <small class="float-right">[ {{ sessions|first|last|length }}  <small class="text-muted"> / {{ checkout_list|length }} </small> ]</small></h1>
+  <table class="table"><thead><tr><th><small>#</small></th></th><th>Student</th><th>Timestamp</th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
+
+      {% for session in checkout_list %}
+        
+          <tr class="table-light">
+          <td><small>{{ forloop.counter }}</small></td>
+          <td>{{ session.student }}</td>
+          <td>{{ session.timestamp }}</td>
+          <td></td> </tr>
+
+
+    {% empty %}
+        <li>No sessions yet.</li>
+    {% endfor %}
+
+  </table>
+{% endblock %}
+
+{% comment %}
+
+  {%  regroup session_list by complete as sessions %}
+    {% for sessiongroup in sessions %}
+      {% for session in sessiongroup.list %}
+        {% if sessiongroup.grouper is False %}
+          <tr class="table-light"><td>{{ forloop.counter }}</td><td>{{ session.student }}</td><td>{{ session.start }}</td><td></td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} ({{ session.overtime }} minutes overtime){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td></td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        {% else %}
+          <tr class="table-success"><td>{{ forloop.counter }}</td><td>{{ session.student }}</td><td>{{ session.start }}</td><td>{{ session.end }}</td><td>{% if session.duration %}{{ session.duration }}{% if session.overtime > 0 %} (+{{ session.overtime }} minutes OT){% endif %}{% else %}{{ session.duration_property }}{% endif %}</td><td>{{ session.parent }}</td><td><a href={% url "students:session_update" session.pk %}>Update</a></td> </tr>
+        {% endif %}
+      {% endfor %}
+    {% empty %}
+        <li>No sessions yet.</li>
+    {% endfor %}
+{% endcomment %}

@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
-from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGroup
+from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGroup, Checkout
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, MultiSessionEndStaffForm,
                      WhereIsForm, ImportSchedulesForm, MultiSessionHistoricalForm,
@@ -284,6 +284,32 @@ class SessionTodayView(ListView):
         return super(SessionTodayView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)
 
 
+class CheckoutTodayView(ListView):
+    model = Checkout
+    template_name = "students/checkout_today.html"
+    paginate_by = 2000
+    context_object_name = "checkout_list"
+    allow_empty = True
+    page_kwarg = 'page'
+    paginate_orphans = 0
+
+    def __init__(self, **kwargs):
+        return super(SessionTodayView, self).__init__(**kwargs)
+
+    def get_queryset(self):
+        # s = super(SessionListView, self).get_queryset()
+        return Checkout.objects.filter(
+            timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
+            'student__last_name', 'student__first_name', 'timestamp')
+
+    def get_context_data(self, *args, **kwargs):
+        ret = super(CheckoutTodayView, self).get_context_data(*args, **kwargs)
+        return ret
+
+    def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
+        return super(CheckoutTodayView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)
+
+
 class SessionDayView(SessionTodayView):
 
     def get_queryset(self):
@@ -298,6 +324,7 @@ class SessionDayView(SessionTodayView):
         ret = super(SessionTodayView, self).get_context_data(*args, **kwargs)
         #print(ret)
         return ret
+
 
 
 class SessionDayGroupView(SessionDayView):
