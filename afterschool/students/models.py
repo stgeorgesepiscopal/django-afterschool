@@ -178,7 +178,7 @@ class Scan(models.Model):
 class Checkout(models.Model):
 
     timestamp = models.DateTimeField()
-    student = models.ForeignKey(Student, related_name='scans', on_delete=models.SET_NULL, null=True, blank=True)
+    student = models.ForeignKey(Student, related_name='checkouts', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = 'checkout'
@@ -187,7 +187,7 @@ class Checkout(models.Model):
 
     def __str__(self):
         return (f"{self.student.name} ({self.student.gradestr})" if self.student else '') 
-        
+
 
 class StudentSession(models.Model):
     start = models.DateTimeField()
