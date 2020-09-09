@@ -294,7 +294,7 @@ class CheckoutTodayView(ListView):
     paginate_orphans = 0
 
     def __init__(self, **kwargs):
-        return super(SessionTodayView, self).__init__(**kwargs)
+        return super(CheckoutTodayView, self).__init__(**kwargs)
 
     def get_queryset(self):
         # s = super(SessionListView, self).get_queryset()
