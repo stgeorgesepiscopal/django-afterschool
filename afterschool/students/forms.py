@@ -2,7 +2,7 @@ from bootstrap_datepicker_plus import TimePickerInput, DateTimePickerInput, Date
 
 from django import forms
 from django.utils import timezone
-from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass, Staff, Scan
+from .models import DayofWeek, Student, Family, StudentSession, ScheduledClass, Staff, Scan, Checkout
 from .utils import ceil_dt, floor_dt
 
 from django.db.models import Case, Value, When, BooleanField
@@ -332,6 +332,28 @@ class ScanForm(forms.Form):
 
         try:
             return str(new_scan)
+        except Exception as e:
+            logger.debug(e)
+            return "Scanned"
+
+
+class CheckoutForm(forms.Form):
+    # time = forms.TimeField()
+    students = forms.ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
+    
+    def __init__(self, *args, **kwargs):
+        super(CheckoutForm, self).__init__(*args, **kwargs)
+        self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
+
+    def save(self, commit=True):
+        data = self.cleaned_data
+        sessions = []
+        for s in data['students']:
+            ses = Checkout.objects.create(timestamp=timezone.now(), student=s)
+            ses.save()
+            sessions.add(ses)
+        try:
+            return str(s) for s in sessions
         except Exception as e:
             logger.debug(e)
             return "Scanned"

@@ -1,0 +1,182 @@
+{% extends "students/session_base.html" %}
+{% load static i18n %}
+{% block title %}
+    Carpool Call
+{% endblock %}
+
+{% block nav %}
+  {% if request.user.is_authenticated %}
+    {{ block.super }}
+
+  {% else %}
+<div class="row"><div class="w-100" style="background-color: #1a2857"></div></div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+	<h1>Call for <input class="btn btn-primary btn-lg float-right" type="submit" value="Call" /></h1>
+<h2>{{ current_time }}</h2>
+    {{ form.as_p }}
+    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" />
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+
+var updateInterval;
+
+function updatePeople(){
+	  $.ajax("/api/people/", {
+	    success: function(data){
+
+	      $('select#id_student').empty();
+
+	      for (let d of data['students']){
+	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
+	        option.prop('selected', false).attr('selected', false).change();
+	        $('select#id_student').append(option);
+
+        }
+
+        doPeopleChange();
+      }
+    });
+
+  }
+
+function doPeopleChange(){
+
+   var v = $('#person_search').val()
+  $('#person_search_div #person_absent .btn:not(:contains("'+v+'"))').hide();
+		$('#person_search_div .btn:contains("'+v+'")').show();
+		if(v==''){
+			$('#person_search_div #person_present .btn').show();
+			$('#person_search_div #person_absent .btn').hide();
+		}
+
+
+	$('#person_search_div .btn-group-vertical').empty();
+	//$('#present').append('<h1>Present</h1>');
+	//$('#search').val('');
+	$('select#id_students option:selected').each(function(){
+	  console.log("selected students")
+	  console.log(this);
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
+		$div.click(function(){
+			try {
+			  $('select#id_students option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();} catch(e) {console.log(e); }
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_search_div #person_present').append($div);
+		//console.log(this.value);
+	});
+	$('select#id_students option:not(:selected)').each(function(){
+
+		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
+		$div.click(function(){
+			try {
+			  $('select#id_students option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change(); } catch(e) { console.log(e); }
+
+			$(this).remove();
+		});
+		$div.html(this.text);
+		$('#person_search_div #person_absent').append($div);
+
+		//$('.btn:contains("'+$('#search').value+'")').show();
+		//$($div).hide()
+		//console.log(this.value);
+	});
+
+	
+
+	if ( $('select#id_students option:selected').length > 0 || $('#person_search').val().length < 1) {
+    $('#person_search_div #person_absent .btn').hide();
+  } else {
+	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
+  }
+//$('#person_search').keyup();
+};
+
+$(function() {
+	$.expr[":"].contains = $.expr.createPseudo(function(arg) {
+    return function( elem ) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+	});
+	 $('select#id_students').empty();
+
+	$('select#id_students').hide();
+
+	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Students &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
+
+	$('#id_timestamp').addClass('form-control border border-primary');
+	//$('#id_timestamp').addClass('form-control');
+	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Time</span></div>');
+$('label[for=id_timestamp]').hide();
+
+	/*	$('#id_no_charge').bootstrapToggle({
+      on: 'Waive Fees for Session',
+      off: 'Charge Normally',
+      onstyle: 'danger',
+      offstyle: 'success',
+    }); */
+		$('.toggle').addClass('w-100');
+		// $('label[for=id_no_charge]').hide();
+
+
+	
+
+	$('#person_search').keyup(function(){
+
+	  doPeopleChange();
+
+	});
+
+	updateScanners();
+	updatePeople();
+
+
+	
+	$('select#id_student').change(doPeopleChange);
+	
+	setTimeout(function(){
+		$('.alert').hide()
+	}, 5000);
+
+  //updateScanners();
+  //updatePeople();
+
+});
+
+</script>
+{% endblock %}
+
+{% block extrahead %}       {# Extra Resources Start #}
+{{ form.media }}            {# Form required JS and CSS #}
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <style type="text/css">
+  .toggle > .toggle-group {
+    background:white;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+    color:#666;
+}
+
+.toggle.off {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+.toggle-handle {
+    background-color: white;
+    border: thin rgba(0, 0, 0, .25) solid;
+}
+  </style>
+{% endblock %}              {# Extra Resources End #}

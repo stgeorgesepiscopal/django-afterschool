@@ -9,7 +9,7 @@ from ..models import StudentSession, Student, ScheduledClass, StudentSessionsGro
 from ..forms import (SessionForm, MultiSessionForm, MultiSessionGradesForm,
                      MultiSessionEndForm, MultiSessionEndStaffForm,
                      WhereIsForm, ImportSchedulesForm, MultiSessionHistoricalForm,
-                     ScanForm,
+                     ScanForm, CheckoutForm
                      )
 from django.urls import reverse_lazy
 from django.urls import reverse
@@ -219,6 +219,32 @@ class ScanView(FormView):
 
     def get_success_url(self):
         return reverse("students:scan")
+
+
+class CheckoutView(FormView):
+    form_class = CheckoutForm
+    template_name = "students/checkout.html"
+
+    def __init__(self, **kwargs):
+        return super(CheckoutView, self).__init__(**kwargs)
+
+    def form_valid(self, form):
+        s = form.save(commit=False)
+        try:
+            for ss in s:
+                messages.success(self.request, '<h3>' + str(ss) + '</h3>', extra_tags='safe')
+        except Exception as e:
+            logger.debug(e)
+        return super(CheckoutView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CheckoutView, self).get_context_data(**kwargs)
+        more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
+        context.update(more_context)
+        return context
+
+    def get_success_url(self):
+        return reverse("students:carpool")
 
 
 class SessionMultiEndStaffView(SessionMultiEndView):

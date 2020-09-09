@@ -175,6 +175,20 @@ class Scan(models.Model):
                dict(self.SCREENING_CHOICES)[int(self.result)] + ' by ' + '/'.join([scanner.name for scanner in self.scanners.all()])
 
 
+class Checkout(models.Model):
+
+    timestamp = models.DateTimeField()
+    student = models.ForeignKey(Student, related_name='scans', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'checkout'
+        verbose_name_plural = 'checkouts'
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return (f"{self.student.name} ({self.student.gradestr})" if self.student else '') 
+        
+
 class StudentSession(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(null=True)

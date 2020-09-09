@@ -3,7 +3,7 @@ from django.urls import path
 from ..views import (SessionListView, SessionCreateView, SessionDetailView,
                      SessionUpdateView, SessionDeleteView, SessionMultiCreateView,
                      SessionMultiEndView, SessionMultiEndStaffView, SessionTodayView, WhereIsView, SessionMultiCreateHistoricalView,
-                     SessionMultiCreateGradesView, ImportSchedulesView, ImportStudentsView, ScanView
+                     SessionMultiCreateGradesView, ImportSchedulesView, ImportStudentsView, ScanView, CheckoutView,
                      )
 from django.contrib.auth.decorators import login_required
 
@@ -39,6 +39,10 @@ urlpatterns = [
     url(r'^scan/$',  # NOQA
         ScanView.as_view(),
         name="scan"),
+    
+    url(r'^carpool/$',  # NOQA
+        CheckoutView.as_view(),
+        name="carpool"),
 
     url(r'^endmultistaff/$',  # NOQA
         login_required(SessionMultiEndStaffView.as_view()),
