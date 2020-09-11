@@ -60,6 +60,10 @@ class PeopleViewSet(viewsets.ViewSet):
         if search_string is not None:
             staff_queryset = staff_queryset.filter(name__icontains=search_string)
             student_queryset = student_queryset.filter(name__icontains=search_string)
+        
+        carpool = request.query_params.get('carpool', None)
+        if carpool is not None:
+            student_queryset = Student.objects.filter(grade__lt=9).exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)))
 
         staff_serializer = StaffSerializer(staff_queryset, many=True)
         student_serializer = StudentSerializer(student_queryset, many=True)

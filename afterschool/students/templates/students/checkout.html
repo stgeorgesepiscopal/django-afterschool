@@ -32,7 +32,7 @@
 var updateInterval;
 
 function updatePeople(){
-	  $.ajax("/api/people/", {
+	  $.ajax("/api/people/?carpool=yes", {
 	    success: function(data){
 
 	      $('select#id_students').empty();
