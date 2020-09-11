@@ -9,7 +9,7 @@ class StudentSerializer(serializers.Serializer):
 
     class Meta:
         model = Student
-        fields = ('pk', 'name',)
+        fields = ('pk', 'name', 'grade')
 
 
 class StudentSimpleSerializer(serializers.Serializer):
