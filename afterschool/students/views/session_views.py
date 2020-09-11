@@ -300,7 +300,7 @@ class CheckoutTodayView(ListView):
         # s = super(SessionListView, self).get_queryset()
         return Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
-            'student__last_name', 'student__first_name', 'timestamp')
+            'student__grade', 'student__last_name', 'student__first_name', 'timestamp')
 
     def get_context_data(self, *args, **kwargs):
         ret = super(CheckoutTodayView, self).get_context_data(*args, **kwargs)
