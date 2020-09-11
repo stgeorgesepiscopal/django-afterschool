@@ -97,7 +97,7 @@ function doPeopleChange(){
 
 	
 
-	if ( $('select#id_students option:selected').length > 0 || $('#person_search').val().length < 1) {
+	if ( $('#person_search').val().length < 1) {
     // $('#person_search_div #person_absent .btn').hide();
   } else {
 	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
