@@ -6,10 +6,12 @@ from afterschool.students.models import StudentSession, Student, Staff
 class StudentSerializer(serializers.Serializer):
     name = serializers.CharField()
     pk = serializers.IntegerField()
+    grade = serializers.IntegerField()
+    gradestr = serializers.CharField()
 
     class Meta:
         model = Student
-        fields = ('pk', 'name', 'grade')
+        fields = ('pk', 'name', 'grade','gradestr')
 
 
 class StudentSimpleSerializer(serializers.Serializer):
