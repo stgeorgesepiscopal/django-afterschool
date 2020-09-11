@@ -339,7 +339,7 @@ class ScanForm(forms.Form):
 
 class CheckoutForm(forms.Form):
     # time = forms.TimeField()
-    students = forms.ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
+    students = forms.ModelMultipleChoiceField(queryset=Student.objects.exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))), required=False)
     
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)
