@@ -300,9 +300,9 @@ class CheckoutTodayView(ListView):
         # s = super(SessionListView, self).get_queryset()
         
         try:
-            grade = dateparse.parse_date(self.request.GET['grade'])
+            grade = self.request.GET['grade']
         except:
-            grade = dateparse.parse_date(self.kwargs['grade'])
+            grade = self.kwargs['grade']
 
         ret = Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
