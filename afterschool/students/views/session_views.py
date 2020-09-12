@@ -309,7 +309,7 @@ class CheckoutTodayView(ListView):
 
         ret = Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
-            'student__grade', 'student__last_name', 'student__first_name', 'timestamp')
+            '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
         
         if grade is not None:
             return ret.filter(student__grade=grade)
