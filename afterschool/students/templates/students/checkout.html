@@ -167,7 +167,7 @@ $(function() {
 	
 
 	$('#person_search').keyup(updatePeopleSearch);
-
+	$('#person_search').focus();
 	
 	updatePeople();
 
@@ -178,6 +178,8 @@ $(function() {
 	setTimeout(function(){
 		$('.alert').hide()
 	}, 5000);
+
+	$('#person_search').focus();
 
   //updateScanners();
   //updatePeople();
