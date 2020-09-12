@@ -39,7 +39,7 @@ Carpool checkouts
   {{ view.kwargs.grade }}
   <nav class="nav nav-pills nav-justified">
   {% for grade_level in grade_levels %}
-        <a class="nav-item nav-link" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
+        <a class="nav-item nav-link {% if grade_level.number == view.kwargs.grade %}active{% endif %}" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
   {% endfor %}
     </nav>
 {% endblock %}
