@@ -86,9 +86,9 @@ function updatePeople(){
 	    success: function(data){
 
         {% if view.kwargs.grade %}
-        const all_grades = true;
-        {% else %}
         const all_grades = false;
+        {% else %}
+        const all_grades = true;
         {% endif %}
 
 	     console.log(data);
