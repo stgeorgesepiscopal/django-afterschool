@@ -25,7 +25,7 @@ Carpool checkouts
         
           <tr class="table-light">
           <td><small>{{ forloop.counter }}</small></td>
-          <td>{{ session.student }}</td>
+          <td>{{ session.student.name }}</td>
           {% if not view.kwargs.grade %}<td>{{ session.student.gradestr }}</td>{% endif %}
           <td>{{ session.timestamp|date:"h:i" }}</td>
           <td></td> </tr>
