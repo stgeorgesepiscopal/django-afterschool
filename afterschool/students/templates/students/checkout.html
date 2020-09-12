@@ -33,6 +33,20 @@
 
 var updateInterval;
 
+const debounce = (func, wait) => {
+  let timeout;
+
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
 function updatePeople(){
 	  $.ajax("/api/people/?carpool=yes", {
 	    success: function(data){
@@ -52,7 +66,7 @@ function updatePeople(){
 
   }
 
-  function updatePeopleSearch(){
+  const updatePeopleSearch = debounce(function(){
 		var text = $('#person_search').val()
 	  $.ajax(`/api/people/?carpoolsearch=${text}`, {
 	    success: function(data){
@@ -70,7 +84,7 @@ function updatePeople(){
       }
     });
 
-  }
+  },250);
 
 function doPeopleChange(){
 
