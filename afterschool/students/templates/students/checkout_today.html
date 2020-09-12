@@ -19,12 +19,12 @@ Carpool checkouts
       {% endwith %}
   
       <small class="float-right">[ <small class="text-muted"> {{ checkout_list|length }} </small> ]</small></h1>
-  <table class="table"><thead><tr><th><small>#</small></th></th><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th>Timestamp</th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
+  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th>Timestamp</th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
 
       {% for session in checkout_list %}
         
-          <tr class="table-light">
-          <td><small>{{ forloop.counter }}</small></td>
+          <tr class="table-light" id="pk_{{session.pk}}">
+          
           <td>{{ session.student.name }}</td>
           {% if not view.kwargs.grade %}<td>{{ session.student.gradestr }}</td>{% endif %}
           <td>{{ session.timestamp|date:"h:i" }}</td>
@@ -60,3 +60,42 @@ Carpool checkouts
         <li>No sessions yet.</li>
     {% endfor %}
 {% endcomment %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+
+var updateInterval;
+
+const debounce = (func, wait) => {
+  let timeout;
+
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+function updatePeople(){
+	  $.ajax("/api/checkouts/{% if view.kwargs.grade %}?grade={{ view.kwargs.grade }}{% endif %}", {
+	    success: function(data){
+
+	     console.log(data);
+
+
+
+       
+      }
+    });
+
+  }
+
+  setInterval(updatePeople, 5000);
+  
+</script>
+  {% endblock %}

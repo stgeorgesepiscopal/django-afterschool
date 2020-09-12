@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from afterschool.students.models import StudentSession, Student, Staff
+from afterschool.students.models import StudentSession, Student, Staff, Checkout
 
 
 class StudentSerializer(serializers.Serializer):
@@ -12,6 +12,18 @@ class StudentSerializer(serializers.Serializer):
     class Meta:
         model = Student
         fields = ('pk', 'name', 'grade','gradestr')
+
+
+class CheckoutSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    timestamp = serializers.DateTimeField()
+    student__name = serializers.CharField()
+    student__grade = serializers.IntegerField()
+    student__gradestr = serializers.CharField()
+
+    class Meta:
+        model = Checkout
+        fields = ('pk', 'timestamp', 'student__name', 'student__grade', 'student__gradestr')
 
 
 class StudentSimpleSerializer(serializers.Serializer):

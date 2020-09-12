@@ -4,9 +4,9 @@ from rest_framework.response import Response
 
 from datetime import datetime
 
-from config.serializers import StudentSessionSerializer, StudentSerializer, StaffSerializer
+from config.serializers import StudentSessionSerializer, StudentSerializer, StaffSerializer, CheckoutSerializer
 
-from afterschool.students.models import StudentSession, Student, Staff, Scan
+from afterschool.students.models import StudentSession, Student, Staff, Scan, Checkout
 
 
 class StudentSessionViewSet(viewsets.ModelViewSet):
@@ -36,6 +36,22 @@ class StudentsViewSet(viewsets.ModelViewSet):
         else:
             return queryset
 
+
+class CheckoutsViewSet(viewsets.ModelViewSet):
+    queryset = Checkout.objects.filter(
+            timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
+            '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
+    serializer_class = CheckoutSerializer
+
+    def get_queryset(self):
+        queryset = Checkout.objects.filter(
+            timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
+            '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
+        search_string = self.request.query_params.get('grade', None)
+        if search_string is not None:
+            return queryset.filter(student__grade=search_string)
+        else:
+            return queryset
 
 class StaffViewSet(viewsets.ModelViewSet):
     queryset = Staff.objects.all()
