@@ -49,7 +49,7 @@ class CheckoutsViewSet(viewsets.ModelViewSet):
             '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
         search_string = self.request.query_params.get('grade', None)
         if search_string is not None:
-            return queryset.filter(student__grade=search_string)
+            return queryset.filter(student__grade=int(search_string))
         else:
             return queryset
 
