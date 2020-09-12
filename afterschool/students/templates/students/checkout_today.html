@@ -36,15 +36,11 @@ Carpool checkouts
     {% endfor %}
 
   </table>
-  <ul class="nav justify-content-center"></ul>
+  <nav class="nav nav-pills nav-justified">
   {% for grade_level in grade_levels %}
-    
-      <li class="nav-item">
-        <a class="nav-link" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
-      </li>
-    
+        <a class="nav-item nav-link" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
   {% endfor %}
-  </ul>
+    </nav>
 {% endblock %}
 
 {% comment %}
