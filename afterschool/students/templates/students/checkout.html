@@ -17,7 +17,10 @@
 
 
 <form action="" style="margin-bottom:60px;" method="post">{% csrf_token %}
-	<input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" />
+	<div class="sticky w-100">
+		<input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" />
+		<div class="input-group input-group-lg my-2"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Students &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div>
+	</div>
     {{ form.as_p }}
     <input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" style="position:fixed; bottom:34px; left:0px;  " />
 </form>
@@ -113,12 +116,14 @@ function doPeopleChange(){
 	});
 
 	
-
+/*
 	if ( $('#person_search').val().length < 1) {
     // $('#person_search_div #person_absent .btn').hide();
   } else {
 	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
-  }
+  } 
+
+*/
 //$('#person_search').keyup();
 };
 
@@ -132,25 +137,21 @@ $(function() {
 
 	$('select#id_students').hide();
 
-	$('select#id_students').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Students &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
+	$('select#id_students').parent().append('<div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
 
-	$('#id_timestamp').addClass('form-control border border-primary');
-	//$('#id_timestamp').addClass('form-control');
-	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Time</span></div>');
+	// $('#id_timestamp').addClass('form-control border border-primary');
+	// $('#id_timestamp').addClass('form-control');
+	// $('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Time</span></div>');
 	$('label[for=id_timestamp]').hide();
 	$('label[for=id_students]').hide();
 
-		$('.toggle').addClass('w-100');
+		// $('.toggle').addClass('w-100');
 		// $('label[for=id_no_charge]').hide();
 
 
 	
 
-	$('#person_search').keyup(function(){
-
-	  doPeopleChange();
-
-	});
+	$('#person_search').keyup(updatePeopleSearch);
 
 	
 	updatePeople();
@@ -190,5 +191,13 @@ $(function() {
     background-color: white;
     border: thin rgba(0, 0, 0, .25) solid;
 }
+
+.sticky {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+}
+
   </style>
 {% endblock %}              {# Extra Resources End #}
