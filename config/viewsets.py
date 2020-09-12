@@ -43,16 +43,16 @@ class CheckoutsViewSet(viewsets.ModelViewSet):
             '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
     serializer_class = CheckoutSerializer
 
-    # def get_queryset(self):
-    #    queryset = Checkout.objects.filter(
-    #        timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
-    #        '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
-    #    return queryset
-        #search_string = self.request.query_params.get('grade', None)
-        #if search_string is not None:
-        #    return queryset.filter(student__grade=int(search_string))
-        #else:
-        #    return queryset
+    def get_queryset(self):
+        queryset = Checkout.objects.filter(
+            timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
+            '-timestamp', 'student__grade', 'student__last_name', 'student__first_name', )
+        # return queryset
+        search_string = self.request.query_params.get('grade', None)
+        if search_string is not None:
+            return queryset.filter(student__grade=int(search_string))
+        else:
+            return queryset
 
 class StaffViewSet(viewsets.ModelViewSet):
     queryset = Staff.objects.all()
