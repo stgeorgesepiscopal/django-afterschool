@@ -309,7 +309,7 @@ class CheckoutTodayView(ListView):
             'student__grade', 'student__last_name', 'student__first_name', 'timestamp')
         
         if start is not None:
-            return ret.filter(grade=grade)
+            return ret.filter(student__grade=grade)
         else:
             return ret
 
