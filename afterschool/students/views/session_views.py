@@ -302,7 +302,10 @@ class CheckoutTodayView(ListView):
         try:
             grade = self.request.GET['grade']
         except:
-            grade = self.kwargs['grade']
+            try:
+                grade = self.kwargs['grade']
+            except:
+                grade = None
 
         ret = Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
