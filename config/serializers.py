@@ -14,10 +14,10 @@ class StudentSerializer(serializers.Serializer):
         fields = ('pk', 'name', 'grade','gradestr')
 
 
-class CheckoutSerializer(serializers.Serializer):
+class CheckoutSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     timestamp = serializers.DateTimeField()
-    student = StudentSimpleSerializer()
+    student = StudentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Checkout
