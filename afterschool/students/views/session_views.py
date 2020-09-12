@@ -317,8 +317,30 @@ class CheckoutTodayView(ListView):
             return ret
 
     def get_context_data(self, *args, **kwargs):
-        ret = super(CheckoutTodayView, self).get_context_data(*args, **kwargs)
-        return ret
+        
+        context = super(CheckoutTodayView, self).get_context_data(**kwargs)
+        more_context = {
+            'grade_levels': [
+                    {'number': '-6': 'label': 'Nursery'},
+                    {'number': '-4': 'label': 'Ones'},
+                    {'number': '-3': 'label': 'Twos'},
+                    {'number': '-2': 'label': 'PreK-3'},
+                    {'number': '-1': 'label': 'PreK'},
+                    {'number': '0': 'label': 'Kinder'},
+                    {'number': '1': 'label': '1st'},
+                    {'number': '2': 'label': '2nd'},
+                    {'number': '3': 'label': '3rd'},
+                    {'number': '4': 'label': '4th'},
+                    {'number': '5': 'label': '5th'},
+                    {'number': '6': 'label': '6th'},
+                    {'number': '7': 'label': '7th'},
+                    {'number': '8': 'label': '8th'},
+                ],
+            
+            }
+        context.update(more_context)
+        return context
+
 
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
         return super(CheckoutTodayView, self).get_paginator(queryset, per_page, orphans=0, allow_empty_first_page=True)

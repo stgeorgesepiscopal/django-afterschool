@@ -4,6 +4,15 @@
 Carpool checkouts 
 {% endblock %}
 
+{% block nav %}
+  {% if request.user.is_authenticated %}
+    {{ block.super }}
+
+  {% else %}
+<div class="row"><div class="w-100" style="background-color: #1a2857"></div></div>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
     <h1>{% with s=checkout_list.first %}
       {{ s.timestamp|date:"l d M Y"}}
@@ -27,6 +36,15 @@ Carpool checkouts
     {% endfor %}
 
   </table>
+  <ul class="nav justify-content-center"></ul>
+  {% for grade_level in grade_levels %}
+    
+      <li class="nav-item">
+        <a class="nav-link" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
+      </li>
+    
+  {% endfor %}
+  </ul>
 {% endblock %}
 
 {% comment %}

@@ -77,7 +77,9 @@ class Student(models.Model):
 
     @property
     def gradestr(self):
-        if self.grade is -4:
+        if self.grade is -6:
+            return 'Nursery'
+        elif self.grade is -4:
             return 'Ones'
         elif self.grade is -3:
             return 'Twos'
