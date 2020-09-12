@@ -52,7 +52,8 @@ function updatePeople(){
 
   }
 
-  function updatePeopleSearch(text){
+  function updatePeopleSearch(){
+		var text = $('#person_search').val()
 	  $.ajax(`/api/people/?carpoolsearch=${text}`, {
 	    success: function(data){
 
