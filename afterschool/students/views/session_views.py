@@ -298,9 +298,20 @@ class CheckoutTodayView(ListView):
 
     def get_queryset(self):
         # s = super(SessionListView, self).get_queryset()
-        return Checkout.objects.filter(
+        
+        try:
+            grade = dateparse.parse_date(self.request.GET['grade'])
+        except:
+            grade = dateparse.parse_date(self.kwargs['grade'])
+
+        ret = Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by(
             'student__grade', 'student__last_name', 'student__first_name', 'timestamp')
+        
+        if start is not None:
+            return ret.filter(grade=grade)
+        else:
+            return ret
 
     def get_context_data(self, *args, **kwargs):
         ret = super(CheckoutTodayView, self).get_context_data(*args, **kwargs)

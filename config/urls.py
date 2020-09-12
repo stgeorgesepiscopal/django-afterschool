@@ -39,6 +39,9 @@ urlpatterns = [
                   path("carpool",  # NOQA
                        CheckoutTodayView.as_view(),
                        name="carpool_today"),
+                  path("carpool/<grade>",  # NOQA
+                       CheckoutTodayView.as_view(),
+                       name="carpool_today_grade"),
                   path("cars",  # NOQA
                        CheckoutView.as_view(),
                        name="carpool"),
