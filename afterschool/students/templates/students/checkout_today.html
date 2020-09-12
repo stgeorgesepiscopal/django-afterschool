@@ -15,7 +15,7 @@ Carpool checkouts
 
 {% block content %}
     <h1>{% with s=checkout_list.first %}
-      {{ s.timestamp|date:"l d M Y"}}
+      {{ s.timestamp|date:"l d M"}}
       {% endwith %}
   
       <small class="float-right">[ <small class="text-muted"> {{ checkout_list|length }} </small> ]</small></h1>
@@ -27,7 +27,7 @@ Carpool checkouts
           <td><small>{{ forloop.counter }}</small></td>
           <td>{{ session.student }}</td>
           <td>{{ session.student.gradestr }}</td>
-          <td>{{ session.timestamp }}</td>
+          <td>{{ session.timestamp|date:"h:i" }}</td>
           <td></td> </tr>
 
 
