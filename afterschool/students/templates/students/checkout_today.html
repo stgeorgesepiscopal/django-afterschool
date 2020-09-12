@@ -18,7 +18,7 @@ Carpool checkouts
       {{ s.timestamp|date:"l d M Y"}}
       {% endwith %}
   
-      <small class="float-right">[ {{ sessions|first|last|length }}  <small class="text-muted"> / {{ checkout_list|length }} </small> ]</small></h1>
+      <small class="float-right">[ {{ checkout_list|first|last|length }}  <small class="text-muted"> / {{ checkout_list|length }} </small> ]</small></h1>
   <table class="table"><thead><tr><th><small>#</small></th></th><th>Student</th><th>Grade</th><th>Timestamp</th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
 
       {% for session in checkout_list %}
@@ -41,7 +41,7 @@ Carpool checkouts
   {% for grade_level in grade_levels %}
         <a class="nav-item nav-link {% if grade_level.number == view.kwargs.grade %}active{% endif %}" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
   {% endfor %}
-  <a class="nav-item nav-link {% if not view.kwargs.grade %}active{% endif %}" href="/carpool/">All</a>
+  <a class="nav-item nav-link {% if not view.kwargs.grade %}active{% endif %}" href="/carpool">All</a>
     </nav>
 {% endblock %}
 
