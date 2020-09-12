@@ -16,7 +16,7 @@ class StudentSerializer(serializers.Serializer):
 
 class CheckoutSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
-    timestamp = serializers.DateTimeField(format="%I:%M")
+    timestamp = serializers.DateTimeField(format="%-I:%M")
     student = StudentSerializer(read_only=True)
 
     class Meta:

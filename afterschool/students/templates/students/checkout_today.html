@@ -19,7 +19,7 @@ Carpool checkouts
       {% endwith %}
   
       <small class="float-right">[ <small class="text-muted"> {{ checkout_list|length }} </small> ]</small></h1>
-  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th>Timestamp</th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
+  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th><i class="fal fa-alarm-clock"></i></th></tr></thead>
 
       {% for session in checkout_list %}
         
@@ -28,7 +28,7 @@ Carpool checkouts
           <td>{{ session.student.name }}</td>
           {% if not view.kwargs.grade %}<td>{{ session.student.gradestr }}</td>{% endif %}
           <td>{{ session.timestamp|date:"h:i" }}</td>
-          <td></td> </tr>
+          </tr>
 
 
     {% empty %}
@@ -85,7 +85,35 @@ function updatePeople(){
 	  $.ajax("/api/checkouts/{% if view.kwargs.grade %}?grade={{ view.kwargs.grade }}{% endif %}", {
 	    success: function(data){
 
+        {% if view.kwargs.grade %}
+        const all_grades = true;
+        {% else %}
+        const all_grades = false;
+        {% endif %}
+
 	     console.log(data);
+       for (let d of data){
+       
+        if( $(`#pk_${d.pk}`).length < 1 ) {
+          var tr = document.createElement('tr');
+          var td_1 = document.createElement('td');
+          td_1.textContent = d.student.name;
+          var td_2 = document.createElement('td');
+          td_2.textContent = d.student.gradestr;
+          var td_3 = document.createElement('td');
+          td3.textContent = d.timestamp;
+          
+          tr.id = `pk_${d.pk}`;
+          tr.appendChild(td_1);
+          if (all_grades) {
+            tr.appendChild(td_2);
+          }
+          tr.appendChild(td_3);
+          $('tbody').prepend(tr);
+
+        }
+
+       }
 
 
 
@@ -96,6 +124,6 @@ function updatePeople(){
   }
 
   setInterval(updatePeople, 5000);
-  
+
 </script>
   {% endblock %}
