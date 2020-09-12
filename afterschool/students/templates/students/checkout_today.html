@@ -41,6 +41,7 @@ Carpool checkouts
   {% for grade_level in grade_levels %}
         <a class="nav-item nav-link {% if grade_level.number == view.kwargs.grade %}active{% endif %}" href="/carpool/{{ grade_level.number }}">{{ grade_level.label }}</a>
   {% endfor %}
+  <a class="nav-item nav-link {% if not view.kwargs.grade %}active{% endif %}" href="/carpool/">All</a>
     </nav>
 {% endblock %}
 
