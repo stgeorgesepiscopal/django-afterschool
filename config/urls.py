@@ -43,7 +43,7 @@ urlpatterns = [
                        CheckoutTodayView.as_view(),
                        name="carpool_today_grade"),
                   path("cars",  # NOQA
-                       CheckoutView.as_view(),
+                       CheckoutView.as_view(location=0),
                        name="carpool"),
                   path("cars/<location>",  # NOQA
                        CheckoutView.as_view(),
