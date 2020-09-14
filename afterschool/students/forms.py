@@ -305,28 +305,25 @@ class MultiSessionEndForm(forms.Form):
 
 class ScanForm(forms.Form):
     # time = forms.TimeField()
-    student = forms.ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
+    #student = forms.ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(), required=False)
-    scanners = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
-    temperature = forms.DecimalField(label='Temperature (degrees Fahrenheit')
-    result = forms.TypedChoiceField(label='Result', choices=Scan.SCREENING_CHOICES)
-
+    #scanners = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
+    temperature = forms.DecimalField(label='Temperature (°F)')
+    preScreenImage = forms.CharField(label='Screening App Image')
+    
     def __init__(self, *args, **kwargs):
         super(ScanForm, self).__init__(*args, **kwargs)
         self.fields["student"].queryset = Student.objects.filter(grade__lt=9)
+        self.fields["staff"].queryset = Staff.objects..exclude(scans__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)))
 
     def save(self, commit=True):
         data = self.cleaned_data
-        if data['student'].count() > 0:
-            data['student'] = data['student'].first()
-        else:
-            data['student'] = None
         if data['staff'].count() > 0:
             data['staff'] = data['staff'].first()
         else:
             data['staff'] = None
         data['timestamp'] = timezone.now()
-        new_scan = Scan.objects.create(student=data['student'], staff=data['staff'], temperature=data['temperature'], timestamp=data['timestamp'], result=data['result'])
+        new_scan = Scan.objects.create(student=None, staff=data['staff'], temperature=data['temperature'], timestamp=data['timestamp'], result=0)
         new_scan.scanners.set(data['scanners'])
         new_scan.save()
 
@@ -341,7 +338,8 @@ class CheckoutForm(forms.Form):
     # time = forms.TimeField()
     students = forms.ModelMultipleChoiceField(queryset=Student.objects.exclude(id__in=Checkout.objects.filter(
             timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).values_list('student', flat=True)), required=False)
-    
+    location = forms.TypedChoiceField(label='Location', choices=Checkout.LOCATION_CHOICES)
+
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)
         self.fields["students"].queryset = Student.objects.filter(grade__lt=9).exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)))
@@ -350,7 +348,7 @@ class CheckoutForm(forms.Form):
         data = self.cleaned_data
         sessions = []
         for s in data['students']:
-            ses = Checkout.objects.create(timestamp=timezone.now(), student=s)
+            ses = Checkout.objects.create(timestamp=timezone.now(), student=s, location=data.location)
             ses.save()
             sessions.append(ses)
         try:

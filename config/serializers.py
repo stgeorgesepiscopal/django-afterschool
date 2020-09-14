@@ -18,10 +18,11 @@ class CheckoutSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     timestamp = serializers.DateTimeField(format="%-I:%M")
     student = StudentSerializer(read_only=True)
+    location_shortname = serializers.CharField()
 
     class Meta:
         model = Checkout
-        fields = ('pk', 'timestamp', 'student')
+        fields = ('pk', 'timestamp', 'student', 'location_shortname')
 
 
 class StudentSimpleSerializer(serializers.Serializer):

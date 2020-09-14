@@ -19,7 +19,7 @@ Carpool checkouts
       {% endwith %}
   
       <small class="float-right">[ <small class="text-muted" id="num_checkouts"> {{ checkout_list|length }} </small> ]</small></h1>
-  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th><i class="fal fa-alarm-clock"></i></th></tr></thead>
+  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th><i class="fal fa-compass"></i></th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
 
       {% for session in checkout_list %}
         
@@ -27,6 +27,7 @@ Carpool checkouts
           
           <td>{{ session.student.name }}</td>
           {% if not view.kwargs.grade %}<td>{{ session.student.gradestr }}</td>{% endif %}
+          <td>{{ session.location_shortname }}</td>
           <td>{{ session.timestamp|date:"g:i" }}</td>
           </tr>
 
@@ -85,11 +86,11 @@ function updatePeople(){
 	  $.ajax("/api/checkouts/{% if view.kwargs.grade %}?grade={{ view.kwargs.grade }}{% endif %}", {
 	    success: function(data){
 
-        {% if view.kwargs.grade %}
+        // {% if view.kwargs.grade %}
         const all_grades = false;
-        {% else %}
+        // {% else %}
         const all_grades = true;
-        {% endif %}
+        // {% endif %}
 
 	     console.log(data);
        for (let d of data){
@@ -102,7 +103,9 @@ function updatePeople(){
           var td_2 = document.createElement('td');
           td_2.textContent = d.student.gradestr;
           var td_3 = document.createElement('td');
-          td_3.textContent = d.timestamp;
+          td_3.textContent = d.location_shortname;
+          var td_4 = document.createElement('td');
+          td_4.textContent = d.timestamp;
           
           tr.id = `pk_${d.pk}`;
           tr.appendChild(td_1);
@@ -110,6 +113,7 @@ function updatePeople(){
             tr.appendChild(td_2);
           }
           tr.appendChild(td_3);
+          tr.appendChild(td_4);
           $('tbody').prepend(tr);
 
         }

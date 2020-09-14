@@ -130,6 +130,7 @@ class Student(models.Model):
 
 class Staff(models.Model):
     name = models.CharField(max_length=60)
+    email = models.CharField(max_length=80)
 
     def __str__(self):
         return self.name
@@ -173,19 +174,58 @@ class Scan(models.Model):
         ordering = ['timestamp']
 
     def __str__(self):
-        return (self.student.name if self.student else self.staff.name) + ' (' + str(self.temperature) + '°F) ' + \
-               dict(self.SCREENING_CHOICES)[int(self.result)] + ' by ' + '/'.join([scanner.name for scanner in self.scanners.all()])
+        return (self.student.name if self.student else self.staff.name) + ' (' + str(self.temperature) + '°F) ' # + \
+               # dict(self.SCREENING_CHOICES)[int(self.result)] + ' by ' + '/'.join([scanner.name for scanner in self.scanners.all()])
 
 
 class Checkout(models.Model):
+    DEFAULT = 0
+    PORTEOUS_NAPOLEON = 1
+    PORTEOUS_CAMP = 2
+    PORTEOUS_PERSHING = 3
+    BOH_CAMP = 4
+    BOH_PERSHING = 5
+    SALEM_CAMP = 6
+    JM_GYM = 7
+
+    LOCATION_CHOICES = (
+        (DEFAULT, ''),
+        (PORTEOUS_NAPOLEON, 'Porteous Front Door'),
+        (PORTEOUS_CAMP, 'Porteous Side Gate'),
+        (PORTEOUS_PERSHING, 'Porteous Commons Gate'),
+        (BOH_CAMP, 'Boh Main Gate'),
+        (BOH_PERSHING, 'Boh Central Gate'),
+        (SALEM_CAMP, 'Salem Church Door'),
+        (JM_GYM, 'Gym Door')
+    )
+
+    LOCATION_SHORTNAMES = {
+        DEFAULT: '',
+        PORTEOUS_NAPOLEON: 'FRONT',
+        PORTEOUS_CAMP: 'SIDE',
+        PORTEOUS_PERSHING: 'COMMONS',
+        BOH_CAMP: 'MAIN',
+        BOH_PERSHING: 'CENTRAL',
+        SALEM_CAMP: 'SALEM',
+        JM_GYM: 'GYM'
+    }
+
 
     timestamp = models.DateTimeField()
     student = models.ForeignKey(Student, related_name='checkouts', on_delete=models.SET_NULL, null=True, blank=True)
+    location = models.SmallIntegerField(choices=LOCATION_CHOICES, default=DEFAULT)
 
     class Meta:
         verbose_name = 'checkout'
         verbose_name_plural = 'checkouts'
         ordering = ['timestamp']
+
+    @property
+    def location_shortname(self):
+        try:
+            return LOCATION_SHORTNAMES[self.location]
+        except:
+            return ''
 
     def __str__(self):
         return (f"{self.student.name} ({self.student.gradestr})" if self.student else '') 
