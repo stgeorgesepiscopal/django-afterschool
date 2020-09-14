@@ -242,6 +242,11 @@ class CheckoutView(FormView):
         more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
         context.update(more_context)
         return context
+    
+    def get_form_kwargs(self):
+        kwargs = super(CheckoutView, self).get_form_kwargs()
+        kwargs['location'] = self.kwargs['location'] or 0
+        return kwargs
 
     def get_success_url(self):
         return reverse("carpool")
