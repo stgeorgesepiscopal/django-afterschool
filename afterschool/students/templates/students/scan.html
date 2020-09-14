@@ -121,6 +121,11 @@ $(function() {
   	var temperature_label = $('label[for=id_temperature]').text();
 	$('#id_temperature').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">'+temperature_label+'</span></div>');
 	$('label[for=id_temperature]').hide();
+
+	var image_label = $('label[for=id_preScreenImage]').text();
+	$('#id_preScreenImage').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white"><a href="https://ready.stgnola.org">'+image_label+'</a></span></div>');
+	$('label[for=id_preScreenImage]').hide();
+
 	$('label[for=id_staff]').hide();
 
 	$('select#id_staff').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
