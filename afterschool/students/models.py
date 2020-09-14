@@ -134,7 +134,7 @@ class Staff(models.Model):
 
     @property
     def scanned_today(self):
-        self.scans.filter(timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).exists()
+        return self.scans.filter(timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).exists()
 
     def __str__(self):
         return self.name
