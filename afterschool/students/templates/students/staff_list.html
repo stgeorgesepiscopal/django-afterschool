@@ -1,0 +1,25 @@
+{% extends "students/staff_base.html" %}
+
+{% block title %}
+    Staff
+{% endblock %}
+
+{% block content %}
+    <h1>Staff <small><small><small><a class="badge badge-success badge-pill float-right" href={% url "students:staff_create" %}>+add new</a></small></small></small></h1>
+    <ul class="list-group">
+    {% for staff in staff_list %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {% if staff.scanned_today %}
+            <span class="badge badge-pill badge-success">✓</span>
+            {% else %}
+            <span class="badge badge-pill badge-danger">No Scan Today</span>
+            {% endif %}
+            <a href={% url "students:staff_detail" staff.pk %}>{{ staff.name }}</a> <span><a href="{% url "students:staff_update" staff.pk %}" class="badge btn btn-sm btn-outline-primary"><i class="fal fa-user-edit"></i></a> <form style="display:inline;" action={% url "students:staff_delete" staff.pk %} method="post" onsubmit="return confirm('Are you sure you want to delete {{ staff.name }}?')">{% csrf_token %}
+          <button type="submit" value="&#215;" class="badge btn btn-sm btn-outline-danger" ><i class="fal fa-trash-alt"></i></button>
+        </form></span></li>
+    {% empty %}
+        <li>No students yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
