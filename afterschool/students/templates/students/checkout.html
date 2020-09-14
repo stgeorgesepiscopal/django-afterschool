@@ -18,13 +18,11 @@
 
 <form action="" style="margin-bottom:80px;" method="post">{% csrf_token %}
 	<div class="sticky w-100">
-		{{ location_name }}
-		
-		<input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" />
+		<input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" id="call_button_top" />
 		<div class="input-group input-group-lg my-2"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Students &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div>
 	</div>
     {{ form.as_p }}
-    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" style="position:fixed; bottom:34px; left:0px;  " />
+    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" id="call_button_bottom" style="position:fixed; bottom:34px; left:0px;  " />
 </form>
 
 {% endblock %}
@@ -173,6 +171,16 @@ $(function() {
 	
 	updatePeople();
 
+	updateLocation();
+	function updateLocation() {
+		var location_name = $('#id_location option:selected')[0].innerText;
+		if (location_name == '') {
+			location_name = 'Carpool';
+		} 
+		$('#call_button_top').value = `Call to ${location_name}`;
+	}
+	$('#id_location').change(updateLocation)
+	
 
 	
 	$('select#id_students').change(doPeopleChange);
