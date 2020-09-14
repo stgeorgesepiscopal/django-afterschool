@@ -235,7 +235,7 @@ class CheckoutView(FormView):
                 messages.success(self.request, '<h3>' + str(ss) + '</h3>', extra_tags='safe')
         except Exception as e:
             logger.debug(e)
-        self.form = form
+        self.success_url = reverse("carpool_location", location=form.cleaned_data['location'])
         return super(CheckoutView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -249,8 +249,7 @@ class CheckoutView(FormView):
         kwargs['location'] = self.kwargs.get('location', 0)
         return kwargs
 
-    def get_success_url(self):
-        return reverse("carpool_location", location=self.form.cleaned_data['location'])
+    
 
 
 class SessionMultiEndStaffView(SessionMultiEndView):
