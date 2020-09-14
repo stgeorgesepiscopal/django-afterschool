@@ -131,6 +131,7 @@ $(function() {
 
 	$('select#id_staff').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
 
+	
 	/*	$('#id_no_charge').bootstrapToggle({
       on: 'Waive Fees for Session',
       off: 'Charge Normally',
@@ -152,7 +153,13 @@ $(function() {
 
 	setTimeout(function(){
 		$('.alert').hide()
-	}, 5000);
+	}, 15000);
+
+	var a = document.createElement('a');
+	a.href= "https://na3.netchexonline.net/n/Login/#/";
+	a.text("Login to Netchex");
+	
+	$('.alert').append(a)
 
   //updateScanners();
   //updatePeople();
