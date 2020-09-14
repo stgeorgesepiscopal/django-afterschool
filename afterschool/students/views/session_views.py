@@ -226,8 +226,6 @@ class CheckoutView(FormView):
     template_name = "students/checkout.html"
 
     def __init__(self, **kwargs):
-        location = kwargs.get('location', 0)
-        kwargs['location'] = location
         return super(CheckoutView, self).__init__(**kwargs)
 
     def form_valid(self, form):
@@ -247,7 +245,7 @@ class CheckoutView(FormView):
     
     def get_form_kwargs(self):
         kwargs = super(CheckoutView, self).get_form_kwargs()
-        kwargs['location'] = self.kwargs['location'] or 0
+        kwargs['location'] = self.kwargs.get('location', 0)
         return kwargs
 
     def get_success_url(self):
