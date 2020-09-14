@@ -19,7 +19,7 @@ Carpool checkouts
       {% endwith %}
   
       <small class="float-right">[ <small class="text-muted" id="num_checkouts"> {{ checkout_list|length }} </small> ]</small></h1>
-  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th><i class="fal fa-compass"></i></th><th><i class="fal fa-alarm-clock"></i></th></tr></thead>
+  <table class="table"><thead><tr><th>Student</th>{% if not view.kwargs.grade %}<th>Grade</th>{% endif %}<th><i class="fal fa-compass"></i></th><th><i class="fal fa-alarm-clock"></i></th></tr></thead><tbody>
 
       {% for session in checkout_list %}
         
@@ -33,10 +33,10 @@ Carpool checkouts
 
 
     {% empty %}
-        <li>No sessions yet.</li>
+        <tr><td></td></tr>
     {% endfor %}
 
-  </table>
+  </tbody></table>
 
   <nav class="nav nav-pills nav-justified">
   {% for grade_level in grade_levels %}
