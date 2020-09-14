@@ -177,7 +177,8 @@ $(function() {
 		if (location_name == '') {
 			location_name = 'Carpool';
 		} 
-		$('#call_button_top').value = `Call to ${location_name}`;
+		$('#call_button_top')[0].value = `Call to ${location_name}`;
+		$('#call_button_bottom')[0].value = `Call to ${location_name}`;
 	}
 	$('#id_location').change(updateLocation)
 	
