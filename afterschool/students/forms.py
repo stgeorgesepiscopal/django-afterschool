@@ -342,7 +342,7 @@ class ScanForm(forms.Form):
     staff = forms.ModelMultipleChoiceField(queryset=Staff.objects.all(), required=False)
     #scanners = forms.ModelMultipleChoiceField(queryset=Staff.objects.all())
     temperature = forms.DecimalField(label='Temperature (°F)')
-    preScreenImage = forms.CharField(label='Screening App Image')
+    # preScreenImage = forms.CharField(label='Screening App Image')
     
     def __init__(self, *args, **kwargs):
         super(ScanForm, self).__init__(*args, **kwargs)
