@@ -348,7 +348,7 @@ class CheckoutForm(forms.Form):
         data = self.cleaned_data
         sessions = []
         for s in data['students']:
-            ses = Checkout.objects.create(timestamp=timezone.now(), student=s, location=data.location)
+            ses = Checkout.objects.create(timestamp=timezone.now(), student=s, location=data['location'])
             ses.save()
             sessions.append(ses)
         try:
