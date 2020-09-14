@@ -86,6 +86,10 @@ class PeopleViewSet(viewsets.ViewSet):
         if carpoolsearch is not None:
             student_queryset = Student.objects.filter(grade__lt=9, name__icontains=carpoolsearch).exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by('last_name','grade')
 
+        scans = request.query_params.get('scans', None)
+        if scans is not None:
+            staff_queryset = Staff.objects.exclude(scans__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).order_by('name')
+
 
         staff_serializer = StaffSerializer(staff_queryset, many=True)
         student_serializer = StudentSerializer(student_queryset, many=True)

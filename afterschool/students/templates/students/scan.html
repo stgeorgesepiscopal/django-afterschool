@@ -33,7 +33,7 @@ var updateInterval;
 
 
 function updatePeople(){
-	  $.ajax("/api/people/", {
+	  $.ajax("/api/people/?scans=true", {
 	    success: function(data){
 
 	      
