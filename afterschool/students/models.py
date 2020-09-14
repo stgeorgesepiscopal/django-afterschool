@@ -200,14 +200,14 @@ class Checkout(models.Model):
     )
 
     LOCATION_SHORTNAMES = {
-        DEFAULT: '',
-        PORTEOUS_NAPOLEON: 'FRONT',
-        PORTEOUS_CAMP: 'SIDE',
-        PORTEOUS_PERSHING: 'COMMONS',
-        BOH_CAMP: 'MAIN',
-        BOH_PERSHING: 'CENTRAL',
-        SALEM_CAMP: 'SALEM',
-        JM_GYM: 'GYM'
+        (DEFAULT, ''),
+        (PORTEOUS_NAPOLEON, 'Front'),
+        (PORTEOUS_CAMP, 'Side'),
+        (PORTEOUS_PERSHING, 'Commons'),
+        (BOH_CAMP, 'Camp'),
+        (BOH_PERSHING, 'Central'),
+        (SALEM_CAMP, 'Salem'),
+        (JM_GYM, 'Gym')
     }
 
 
@@ -223,7 +223,8 @@ class Checkout(models.Model):
     @property
     def location_shortname(self):
         try:
-            return LOCATION_SHORTNAMES[self.location]
+            return dict(self.LOCATION_SHORTNAMES)[int(self.location)]
+            
         except:
             return ''
 
