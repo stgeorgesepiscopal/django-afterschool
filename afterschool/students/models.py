@@ -130,7 +130,7 @@ class Student(models.Model):
 
 class Staff(models.Model):
     name = models.CharField(max_length=60)
-    email = models.CharField(max_length=80)
+    email = models.CharField(max_length=80, null=True, blank=True, default='')
 
     def __str__(self):
         return self.name
