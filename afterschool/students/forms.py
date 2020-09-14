@@ -321,9 +321,9 @@ class ScanForm(forms.Form):
             data['staff'] = data['staff'].first()
         else:
             data['staff'] = None
-        data['timestamp'] = timezone.now()
-        new_scan = Scan.objects.create(student=None, staff=data['staff'], temperature=data['temperature'], timestamp=data['timestamp'], result=0)
-        new_scan.scanners.set(data['scanners'])
+        
+        new_scan = Scan.objects.create(student=None, staff=data['staff'], temperature=data['temperature'], timestamp=timezone.now(), result=0)
+        
         new_scan.save()
 
         try:
