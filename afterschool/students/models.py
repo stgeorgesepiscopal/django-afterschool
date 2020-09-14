@@ -132,6 +132,10 @@ class Staff(models.Model):
     name = models.CharField(max_length=60)
     email = models.CharField(max_length=80, null=True, blank=True, default='')
 
+    @property
+    def scanned_today(self):
+        self.scans.filter(timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1))).exists()
+
     def __str__(self):
         return self.name
 
