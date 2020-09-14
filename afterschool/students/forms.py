@@ -344,15 +344,9 @@ class CheckoutForm(forms.Form):
         super(CheckoutForm, self).__init__(*args, **kwargs)
         self.fields["students"].queryset = Student.objects.filter(grade__lt=9).exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)))
         
-        try:
-            location = self.request.GET['location']
-        except:
-            try:
-                location = self.kwargs['location']
-            except:
-                location = 0
+        l = location or 0
         
-        self.initial["location"] = location
+        self.initial["location"] = l
 
     def save(self, commit=True):
         data = self.cleaned_data
