@@ -45,6 +45,9 @@ urlpatterns = [
                   path("cars",  # NOQA
                        CheckoutView.as_view(),
                        name="carpool"),
+                  path("cars/<location>",  # NOQA
+                       CheckoutView.as_view(),
+                       name="carpool_location"),
                   path("start",  # NOQA
                        login_required(SessionMultiCreateView.as_view()),
                        name="start"),
