@@ -235,7 +235,7 @@ class CheckoutView(FormView):
                 messages.success(self.request, '<h3>' + str(ss) + '</h3>', extra_tags='safe')
         except Exception as e:
             logger.debug(e)
-        self.success_url = reverse("carpool_location", location=form.cleaned_data['location'])
+        self.success_url = reverse("carpool_location", kwargs={'location': form.cleaned_data['location']})
         return super(CheckoutView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
