@@ -242,7 +242,7 @@ class CheckoutView(FormView):
         context = super(CheckoutView, self).get_context_data(**kwargs)
         more_context = {'current_time': datetime.today().strftime('%A, %B %d, %Y')}
         context.update(more_context)
-        more_context = {'location_names': dict(Checkout.LOCATION_CHOICES)[int(kwargs.get('location',0))]}
+        more_context = {'location_name': dict(Checkout.LOCATION_CHOICES)[int(kwargs.get('location',0))]}
         context.update(more_context)
         return context
     
