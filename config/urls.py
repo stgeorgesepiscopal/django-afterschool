@@ -11,6 +11,7 @@ from afterschool.students.views.session_views import (SessionMultiEndView,
                                                       WhereIsView, SessionDayGroupView,
                                                       SessionCalendarView, csv_export, ScanView, CheckoutView, CheckoutTodayView,
                                                       )
+from afterschool.students.views.staff_views import StaffListView
 
 from config.routers import router
 
@@ -72,6 +73,9 @@ urlpatterns = [
                   path("cal",
                        login_required(SessionCalendarView.as_view()),
                        name="calendar"),
+                  path("checkscans",
+                       login_required(StaffListView.as_view()),
+                       name="checkscans"),
                   # Your stuff: custom urls includes go here
                   path("api-auth/", include('rest_framework.urls')),
                   path("api/", include(router.urls)),
