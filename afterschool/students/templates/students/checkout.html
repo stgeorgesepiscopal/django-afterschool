@@ -19,7 +19,7 @@
 <form action="" style="margin-bottom:80px;" method="post">{% csrf_token %}
 	<div class="sticky w-100">
 		{{ location_names }}
-		{{ view.kwargs }}
+		{{ location_names[view.kwargs.location|floatformat:"0"] }}
 		<input class="btn btn-primary w-100 btn-lg" type="submit" value="Call" />
 		<div class="input-group input-group-lg my-2"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Students &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div>
 	</div>
