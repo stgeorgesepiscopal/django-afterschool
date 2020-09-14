@@ -87,6 +87,39 @@ class StudentForm(forms.ModelForm):
         return super(StudentForm, self).save(commit)
 
 
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['name', 'email']
+        exclude = []
+        widgets = None
+        localized_fields = None
+        labels = {}
+        help_texts = {}
+        error_messages = {}
+
+    def __init__(self, *args, **kwargs):
+        return super(StaffForm, self).__init__(*args, **kwargs)
+
+    def is_valid(self):
+        return super(StaffForm, self).is_valid()
+
+    def full_clean(self):
+        return super(StaffForm, self).full_clean()
+
+    def clean_name(self):
+        name = self.cleaned_data.get("name", None)
+        return name
+
+    def clean(self):
+        return super(StaffForm, self).clean()
+
+    def validate_unique(self):
+        return super(StaffForm, self).validate_unique()
+
+    def save(self, commit=True):
+        return super(StaffForm, self).save(commit)
+
 class FamilyForm(forms.ModelForm):
     class Meta:
         model = Family
