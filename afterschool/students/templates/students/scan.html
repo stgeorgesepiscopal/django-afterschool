@@ -31,34 +31,14 @@
 
 var updateInterval;
 
-function updateScanners(){
-	  $.ajax("/api/staff/", {
-	    success: function(data){
-
-	      $('select#id_scanners').empty();
-	      for (let d of data){
-	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
-	        $('select#id_scanners').append(option);
-
-        }
-        doChange();
-      }
-    });
-
-  }
 
 function updatePeople(){
 	  $.ajax("/api/people/", {
 	    success: function(data){
 
-	      $('select#id_student').empty();
+	      
 	      $('select#id_staff').empty();
-	      for (let d of data['students']){
-	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
-	        option.prop('selected', false).attr('selected', false).change();
-	        $('select#id_student').append(option);
 
-        }
         for (let d of data['staff']){
 	        var option = $('<option></option>').attr("value", d['pk']).text(d['name']);
 	        option.prop('selected', false).attr('selected', false).change();
@@ -70,59 +50,6 @@ function updatePeople(){
 
   }
 
-function doChange(){
-  var v = $('#scanner_search').val()
-  $('#scanner_search_div #absent .btn:not(:contains("'+v+'"))').hide();
-		$('#scanner_search_div .btn:contains("'+v+'")').show();
-		if(v==''){
-			$('#scanner_search_div #present .btn').show();
-			$('#scanner_search_div #absent .btn').hide();
-		}
-
-      $('#scanner_search_div .btn-group-vertical').empty();
-      //$('#present').append('<h1>Present</h1>');
-      //$('#search').val('');
-      $('select#id_scanners option:selected').each(function () {
-        console.log("selected scanners")
-        console.log(this);
-
-        var $div = $("<div>", {'class': 'btn btn-lg btn-outline-success', 'data-id': this.value});
-        $div.click(function () {
-          try {
-            $('select#id_scanners option[value=' + $(this).data('id') + ']').prop("selected", false).attr('selected', false).change();
-          } catch (e) {
-            console.log(e)
-          }
-          $(this).remove();
-        });
-        $div.html(this.text);
-        $('#scanner_search_div #present').append($div);
-        //console.log(this.value);
-      });
-      $('select#id_scanners option:not(:selected)').each(function () {
-
-        var $div = $("<div>", {'class': 'btn btn-lg btn-outline-danger', 'data-id': this.value});
-        $div.click(function () {
-          try {
-            $('select#id_scanners option[value=' + $(this).data('id') + ']').prop("selected", true).attr('selected', true).change();
-          } catch (e) {
-            console.log(e)
-          }
-          $(this).remove();
-        });
-        $div.html(this.text);
-        $('#scanner_search_div #absent').append($div);
-        $('#scanner_search_div #absent .btn:not(:contains("' + $('#scanner_search').val() + '"))').hide();
-        //$('.btn:contains("'+$('#search').value+'")').show();
-        //$($div).hide()
-        //console.log(this.value);
-      });
-    if(v==''){
-			$('#scanner_search_div #present .btn').show();
-			$('#scanner_search_div #absent .btn').hide();
-		}
-//$('#scanner_search').keyup();
-};
 
 function doPeopleChange(){
 
@@ -138,36 +65,8 @@ function doPeopleChange(){
 	$('#person_search_div .btn-group-vertical').empty();
 	//$('#present').append('<h1>Present</h1>');
 	//$('#search').val('');
-	$('select#id_student option:selected').each(function(){
-	  console.log("selected students")
-	  console.log(this);
+	
 
-		var $div = $("<div>", {'class':'btn btn-lg btn-outline-success', 'data-id':this.value});
-		$div.click(function(){
-			try {
-			  $('select#id_student option[value='+$(this).data('id')+']').prop("selected",false).attr('selected',false).change();} catch(e) {console.log(e); }
-			$(this).remove();
-		});
-		$div.html(this.text);
-		$('#person_search_div #person_present').append($div);
-		//console.log(this.value);
-	});
-	$('select#id_student option:not(:selected)').each(function(){
-
-		var $div = $("<div>", {'class':'btn btn-lg btn-outline-danger', 'data-id':this.value});
-		$div.click(function(){
-			try {
-			  $('select#id_student option[value='+$(this).data('id')+']').prop("selected",true).attr('selected',true).change(); } catch(e) { console.log(e); }
-
-			$(this).remove();
-		});
-		$div.html(this.text);
-		$('#person_search_div #person_absent').append($div);
-
-		//$('.btn:contains("'+$('#search').value+'")').show();
-		//$($div).hide()
-		//console.log(this.value);
-	});
 	$('select#id_staff option:selected').each(function(){
 	  console.log("selected staff")
 	  console.log(this);
@@ -200,7 +99,7 @@ function doPeopleChange(){
 		//console.log(this.value);
 	});
 
-	if ( $('select#id_student option:selected').length > 0 || $('select#id_staff option:selected').length > 0 || $('#person_search').val().length < 1) {
+	if ( $('select#id_staff option:selected').length > 0 || $('#person_search').val().length < 1) {
     $('#person_search_div #person_absent .btn').hide();
   } else {
 	  $('#person_search_div #person_absent .btn:not(:contains("'+$('#person_search').val()+'"))').hide();
@@ -214,30 +113,17 @@ $(function() {
         return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
     };
 	});
-	 $('select#id_student').empty();
+	
    $('select#id_staff').empty();
-   $('select#id_scanners').empty();
-
-	$('select#id_scanners').hide();
-	$('select#id_student').hide();
-	$('select#id_staff').hide();
+   $('select#id_staff').hide();
 	$('#id_temperature').addClass('form-control border border-primary');
 	//$('#id_timestamp').addClass('form-control');
-  var temperature_label = $('label[for=id_temperature]').text();
+  	var temperature_label = $('label[for=id_temperature]').text();
 	$('#id_temperature').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">'+temperature_label+'</span></div>');
 	$('label[for=id_temperature]').hide();
-	$('label[for=id_scanners]').hide();
-	$('label[for=id_student]').hide();
 	$('label[for=id_staff]').hide();
 
-	$('select#id_student').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
-
-	$('select#id_scanners').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Scanners &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="scanner_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="scanner_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="present"></div><div class="btn-group-vertical col" id="absent"></div></div>');
-
-	$('#id_timestamp').addClass('form-control border border-primary');
-	//$('#id_timestamp').addClass('form-control');
-	$('#id_timestamp').parent().addClass('input-group input-group-lg').prepend('<div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white">Time</span></div>');
-$('label[for=id_timestamp]').hide();
+	$('select#id_staff').parent().append('<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text border border-primary bg-primary text-white" id="basic-addon1">Person &nbsp;<i class="fal fa-search fa-flip-horizontal"></i> </span></div><input id="person_search" class="form-control border border-primary" autocomplete="off"></input></div><div id="person_search_div" class="row align-items-start"><div class="btn-group-vertical col" id="person_present"></div><div class="btn-group-vertical col" id="person_absent"></div></div>');
 
 	/*	$('#id_no_charge').bootstrapToggle({
       on: 'Waive Fees for Session',
@@ -248,26 +134,14 @@ $('label[for=id_timestamp]').hide();
 		$('.toggle').addClass('w-100');
 		// $('label[for=id_no_charge]').hide();
 
-
-	$('#scanner_search').keyup(function(){
-
-	  doChange();
-
-
-	});
-
 	$('#person_search').keyup(function(){
 
 	  doPeopleChange();
 
 	});
 
-	updateScanners();
 	updatePeople();
 
-
-	$('select#id_scanners').change(doChange);
-	$('select#id_student').change(doPeopleChange);
 	$('select#id_staff').change(doPeopleChange);
 
 	setTimeout(function(){
