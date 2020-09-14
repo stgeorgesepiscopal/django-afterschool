@@ -341,12 +341,10 @@ class CheckoutForm(forms.Form):
     location = forms.TypedChoiceField(label='Location', choices=Checkout.LOCATION_CHOICES)
 
     def __init__(self, *args, **kwargs):
+        location = kwargs.pop('location', 0)
         super(CheckoutForm, self).__init__(*args, **kwargs)
         self.fields["students"].queryset = Student.objects.filter(grade__lt=9).exclude(checkouts__timestamp__gt=timezone.make_aware(datetime.today().replace(hour=0, minute=1)))
-        
-        l = 1
-        
-        self.initial["location"] = l
+        self.initial["location"] = location
 
     def save(self, commit=True):
         data = self.cleaned_data
