@@ -18,6 +18,7 @@ class StaffListView(ListView):
     allow_empty = True
     page_kwarg = 'page'
     paginate_orphans = 0
+    ordering = ['name']
 
     def __init__(self, **kwargs):
         return super(StaffListView, self).__init__(**kwargs)
