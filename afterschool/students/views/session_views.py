@@ -206,7 +206,10 @@ class ScanView(FormView):
     def form_valid(self, form):
         s = form.save(commit=False)
         try:
-            messages.success(self.request, '<h3>' + str(s) + '</h3>', extra_tags='safe')
+            if Decimal(s.temperature) > Decimal(99.9):
+                messages.error(self.request, '<h3>Wait!</h3><span>Please contact Nurse Penny to help decide if you should be at work today.</span><h4>' + str(s) + '</h4>', extra_tags='safe'))
+            else:
+                messages.success(self.request, '<h3>You\'re done!</h3><span>' + str(s) + '</span>', extra_tags='safe')
         except Exception as e:
             logger.debug(e)
         return super(ScanView, self).form_valid(form)

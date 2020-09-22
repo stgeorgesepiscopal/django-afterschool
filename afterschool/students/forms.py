@@ -360,7 +360,7 @@ class ScanForm(forms.Form):
         new_scan.save()
 
         try:
-            return str(new_scan)
+            return new_scan
         except Exception as e:
             logger.debug(e)
             return "Scanned"
