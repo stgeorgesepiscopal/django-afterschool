@@ -148,7 +148,8 @@ class StaffCreateView(CreateView):
         return super(StaffCreateView, self).get_template_names()
 
     def get_success_url(self):
-        return reverse("students:student_detail", args=(self.object.pk,))
+        #return reverse("students:student_detail", args=(self.object.pk,))
+        return reverse("students:staff_list")
 
 
 class StaffUpdateView(UpdateView):
@@ -217,7 +218,8 @@ class StaffUpdateView(UpdateView):
         return super(StaffUpdateView, self).get_template_names()
 
     def get_success_url(self):
-        return reverse("students:student_detail", args=(self.object.pk,))
+        #return reverse("students:student_detail", args=(self.object.pk,))
+        return reverse("students:staff_list")
 
 
 class StaffDeleteView(DeleteView):
