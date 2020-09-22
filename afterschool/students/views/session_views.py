@@ -1,6 +1,8 @@
 import csv, calendar, re
 from io import TextIOWrapper
 
+from decimal import *
+
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
