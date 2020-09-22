@@ -178,7 +178,7 @@ class Scan(models.Model):
         ordering = ['timestamp']
 
     def __str__(self):
-        return (self.student.name if self.student else self.staff.name) + ' (' + str(self.temperature) + '°F) ' # + \
+        return (self.student.name if self.student else self.staff.name) + ' (' + str(self.temperature) + '°F ' + self.timestamp.strftime('%x') + ') ' # + \
                # dict(self.SCREENING_CHOICES)[int(self.result)] + ' by ' + '/'.join([scanner.name for scanner in self.scanners.all()])
 
 
