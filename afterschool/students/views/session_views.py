@@ -211,6 +211,7 @@ class ScanView(FormView):
             else:
                 messages.success(self.request, '<h3>You\'re done!</h3><span>' + str(s) + '</span>', extra_tags='safe')
         except Exception as e:
+            messages.error(self.request, str(e), extra_tags='safe')
             logger.debug(e)
         return super(ScanView, self).form_valid(form)
 
