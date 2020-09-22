@@ -17,10 +17,10 @@
 
 
 <form action="" method="post">{% csrf_token %}
-	<h1>Scan <input class="btn btn-primary btn-lg float-right" type="submit" value="Scan" /></h1>
+	<h1>Staff Self-Screening </h1>
 <h2>{{ current_time }}</h2>
     {{ form.as_p }}
-    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Scan" />
+    <input class="btn btn-primary w-100 btn-lg" type="submit" value="Submit" />
 </form>
 
 {% endblock %}
